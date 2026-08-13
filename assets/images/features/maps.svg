@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-label="Maps">
+  <circle cx="60" cy="60" r="56" fill="#1a0407" stroke="#f6c453" stroke-width="3"/>
+  <path d="M40 38 L80 38 L80 80 L40 80 Z" fill="none" stroke="#f6c453" stroke-width="3"/>
+  <path d="M40 58 L80 58 M60 38 L60 80" stroke="#f6c453" stroke-width="2"/>
+  <circle cx="60" cy="58" r="5" fill="#f6c453"/>
+</svg>
