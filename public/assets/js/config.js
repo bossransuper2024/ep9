@@ -12,8 +12,8 @@
       tagline: "Eternity calls. Answer it.",
       brandShort: "RAN GS",
       brandLong: "ETERNITY",
-      logo: "/assets/logo.png",
-      favicon: "/assets/logo.png",
+      logo: "assets/logo.png",
+      favicon: "assets/logo.png",
       version: "EP9",
       year: "2026"
     },
@@ -21,14 +21,14 @@
       title: "RAN ONLINE",
       subtitle: "ETERNITY EP9",
       description: "A new era of RAN Online arrives. Build your legend, claim the battlefield, and answer the call of Eternity.",
-      bg: "/assets/hero-bg.png",
+      bg: "assets/hero-bg.png",
       ctaPlay: "WATCH TRAILER",
       ctaPlayUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ",
       ctaDownload: "DOWNLOAD NOW"
     },
     music: {
       enabled: true,
-      src: "/assets/audio/ran-eternity-mixed-clean.mp3",
+      src: "assets/audio/ran-eternity-mixed-clean.mp3",
       title: "RAN GS Eternity",
       autoplay: false
     },
@@ -51,13 +51,13 @@
       ]
     },
     classes: [
-      { name: "BRAWLER", role: "Melee DPS", spec: "Fist-form striker", difficulty: 2, img: "/assets/class-brawler.png", playstyle: "A close-range pressure class built around fast engages, chase pressure and punishing enemies who overextend. Brawler performs best when forcing small skirmishes instead of standing in the middle of a full ranged fight.", pvpAdvantage: "Strong duelist with reliable gap-close pressure and high burst when targets are isolated.", pvpDisadvantage: "Struggles when kited by coordinated ranged classes or locked down before reaching the backline." },
-      { name: "ARCHER", role: "Ranged DPS", spec: "Sniper / scout", difficulty: 3, img: "/assets/class-archer.png", playstyle: "A spacing-based marksman that wins by controlling distance, poking safely and finishing weakened enemies before they can reset. Archer rewards map awareness, target selection and clean movement.", pvpAdvantage: "Excellent range, safe poke and strong pick potential against low-health targets.", pvpDisadvantage: "Vulnerable when melee classes close the gap or when caught without room to reposition." },
-      { name: "SWORDSMAN", role: "Tank / DPS", spec: "Frontline stopper", difficulty: 2, img: "/assets/class-swordsman.png", playstyle: "A durable frontline class that protects space, absorbs pressure and creates openings for the team. Swordsman is ideal for players who want to anchor pushes, peel for allies and survive extended fights.", pvpAdvantage: "High survivability and strong frontline control make it reliable in group clashes.", pvpDisadvantage: "Lower chase speed and burst compared with pure DPS classes, so mobile targets can escape." },
-      { name: "SHAMAN", role: "Support", spec: "Elemental binder", difficulty: 4, img: "/assets/class-shaman.png", playstyle: "A tactical support class focused on sustain, buffs and fight control. Shaman shines when playing behind the frontline, keeping key allies alive and turning long fights through timing and positioning.", pvpAdvantage: "Valuable in organized PvP because utility and sustain can swing extended team fights", pvpDisadvantage: "Needs protection and careful positioning; focused burst or silence pressure can shut it down quickly." },
-      { name: "EXTREME", role: "Hybrid", spec: "Heavy ordnance", difficulty: 3, img: "/assets/class-extreme.png", playstyle: "A flexible combatant with heavy pressure tools and enough utility to adapt between offense and disruption. Extreme is best for players who like switching targets and creating chaos during crowded fights.", pvpAdvantage: "Versatile damage profile and disruptive pressure work well in messy group battles.", pvpDisadvantage: "Can feel less specialized than pure classes, and poor cooldown timing leaves it exposed." },
-      { name: "GUNNER", role: "Ranged DPS", spec: "Tech-augment vanguard", difficulty: 3, img: "/assets/class-gunner.png", playstyle: "A ranged damage dealer built around steady pressure, burst windows and disciplined positioning. Gunner thrives when firing from protected angles and punishing enemies who commit too deep.", pvpAdvantage: "Strong sustained ranged damage and good backline threat in team fights.", pvpDisadvantage: "Needs space and protection; collapses quickly when surrounded or forced into close combat." },
-      { name: "ASSASSIN", role: "Burst DPS", spec: "Shadow operative", difficulty: 5, img: "/assets/class-assassin.png", playstyle: "A high-risk burst class that specializes in flanking, target deletion and escaping before the enemy can respond. Assassin rewards patience, timing and reading the fight before committing.", pvpAdvantage: "Exceptional burst and backline threat against supports, archers and isolated carries.", pvpDisadvantage: "Punishing to misplay; if the opening burst fails, it can be controlled and eliminated fast." }
+      { name: "BRAWLER", role: "Melee DPS", spec: "Fist-form striker", difficulty: 2, img: "assets/class-brawler.png", playstyle: "A close-range pressure class built around fast engages, chase pressure and punishing enemies who overextend. Brawler performs best when forcing small skirmishes instead of standing in the middle of a full ranged fight.", pvpAdvantage: "Strong duelist with reliable gap-close pressure and high burst when targets are isolated.", pvpDisadvantage: "Struggles when kited by coordinated ranged classes or locked down before reaching the backline." },
+      { name: "ARCHER", role: "Ranged DPS", spec: "Sniper / scout", difficulty: 3, img: "assets/class-archer.png", playstyle: "A spacing-based marksman that wins by controlling distance, poking safely and finishing weakened enemies before they can reset. Archer rewards map awareness, target selection and clean movement.", pvpAdvantage: "Excellent range, safe poke and strong pick potential against low-health targets.", pvpDisadvantage: "Vulnerable when melee classes close the gap or when caught without room to reposition." },
+      { name: "SWORDSMAN", role: "Tank / DPS", spec: "Frontline stopper", difficulty: 2, img: "assets/class-swordsman.png", playstyle: "A durable frontline class that protects space, absorbs pressure and creates openings for the team. Swordsman is ideal for players who want to anchor pushes, peel for allies and survive extended fights.", pvpAdvantage: "High survivability and strong frontline control make it reliable in group clashes.", pvpDisadvantage: "Lower chase speed and burst compared with pure DPS classes, so mobile targets can escape." },
+      { name: "SHAMAN", role: "Support", spec: "Elemental binder", difficulty: 4, img: "assets/class-shaman.png", playstyle: "A tactical support class focused on sustain, buffs and fight control. Shaman shines when playing behind the frontline, keeping key allies alive and turning long fights through timing and positioning.", pvpAdvantage: "Valuable in organized PvP because utility and sustain can swing extended team fights", pvpDisadvantage: "Needs protection and careful positioning; focused burst or silence pressure can shut it down quickly." },
+      { name: "EXTREME", role: "Hybrid", spec: "Heavy ordnance", difficulty: 3, img: "assets/class-extreme.png", playstyle: "A flexible combatant with heavy pressure tools and enough utility to adapt between offense and disruption. Extreme is best for players who like switching targets and creating chaos during crowded fights.", pvpAdvantage: "Versatile damage profile and disruptive pressure work well in messy group battles.", pvpDisadvantage: "Can feel less specialized than pure classes, and poor cooldown timing leaves it exposed." },
+      { name: "GUNNER", role: "Ranged DPS", spec: "Tech-augment vanguard", difficulty: 3, img: "assets/class-gunner.png", playstyle: "A ranged damage dealer built around steady pressure, burst windows and disciplined positioning. Gunner thrives when firing from protected angles and punishing enemies who commit too deep.", pvpAdvantage: "Strong sustained ranged damage and good backline threat in team fights.", pvpDisadvantage: "Needs space and protection; collapses quickly when surrounded or forced into close combat." },
+      { name: "ASSASSIN", role: "Burst DPS", spec: "Shadow operative", difficulty: 5, img: "assets/class-assassin.png", playstyle: "A high-risk burst class that specializes in flanking, target deletion and escaping before the enemy can respond. Assassin rewards patience, timing and reading the fight before committing.", pvpAdvantage: "Exceptional burst and backline threat against supports, archers and isolated carries.", pvpDisadvantage: "Punishing to misplay; if the opening burst fails, it can be controlled and eliminated fast." }
     ],
     combat: {
       intro: "Competitive PvP modes and flagship PvE pillars. Eternity rewards aggression — but only the disciplined survive Forbidden Tower and Outer Wall.",
@@ -85,7 +85,7 @@
       ]
     },
     download: {
-      bg: "/assets/hero-bg.png",
+      bg: "assets/hero-bg.png",
       title: "GET IN THE",
       accent: "FIGHT.",
       intro: "Choose your platform and language. Full clients include all EP9 content.",

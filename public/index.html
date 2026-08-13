@@ -3,8 +3,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title id="page-title">RAN GS Eternity EP9 — Eternity calls. Answer it.</title>
-  <script src="/assets/js/scroll-reset.js"></script>
-  <link id="page-favicon" rel="icon" href="/assets/logo.png">
+  <script src="assets/js/scroll-reset.js"></script>
+  <link id="page-favicon" rel="icon" href="assets/logo.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -13,14 +13,14 @@
     *, *::before, *::after { box-sizing: border-box; }
     html { scroll-behavior: smooth; scroll-padding-top: 92px; }
     html, body { margin: 0; padding: 0; }
-    body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; cursor: url("/assets/cursors/normal.cur"), auto; }
-    a { color: inherit; transition: color .2s; cursor: url("/assets/cursors/normal.cur"), auto !important; }
-    a:hover { color: var(--accent); cursor: url("/assets/cursors/attack.cur"), pointer !important; }
-    a:active { cursor: url("/assets/cursors/attack.cur"), pointer !important; }
-    button { font-family: inherit; transition: filter .2s, transform .2s, box-shadow .2s, background .2s; cursor: url("/assets/cursors/normal.cur"), auto !important; }
-    button:hover { cursor: url("/assets/cursors/attack.cur"), pointer !important; }
+    body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; overflow-x: hidden; cursor: url("assets/cursors/normal.cur"), auto; }
+    a { color: inherit; transition: color .2s; cursor: url("assets/cursors/normal.cur"), auto !important; }
+    a:hover { color: var(--accent); cursor: url("assets/cursors/attack.cur"), pointer !important; }
+    a:active { cursor: url("assets/cursors/attack.cur"), pointer !important; }
+    button { font-family: inherit; transition: filter .2s, transform .2s, box-shadow .2s, background .2s; cursor: url("assets/cursors/normal.cur"), auto !important; }
+    button:hover { cursor: url("assets/cursors/attack.cur"), pointer !important; }
     button:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(255,214,10,.25); }
-    button:active { transform: translateY(0); cursor: url("/assets/cursors/attack.cur"), pointer !important; }
+    button:active { transform: translateY(0); cursor: url("assets/cursors/attack.cur"), pointer !important; }
     .music-control { position: fixed; left: 20px; bottom: 20px; z-index: 70; pointer-events: none; }
     .music-toggle { pointer-events: auto; min-width: 176px; height: 52px; padding: 8px 14px 8px 10px; display: inline-flex; align-items: center; gap: 10px; border: 1px solid rgba(255,214,10,.45); background: rgba(8,12,24,.82); color: #fff; backdrop-filter: blur(12px); box-shadow: 0 14px 34px rgba(0,0,0,.32); clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px); }
     .music-icon { width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent); color: #0A1020; font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; line-height: 1; }
@@ -32,7 +32,7 @@
     .music-bars i:nth-child(2) { animation-delay: .16s; }
     .music-bars i:nth-child(3) { animation-delay: .32s; }
     .music-toggle.is-playing .music-bars i { opacity: 1; animation-play-state: running; }
-    .download-art-bg { position: absolute; inset: 0; background-image: url("/assets/hero-bg.png"); background-size: cover; background-position: center; opacity: .72; filter: brightness(.88) saturate(1.24) contrast(1.1); transform: scale(1.05); animation: downloadArtDrift 18s ease-in-out infinite alternate; }
+    .download-art-bg { position: absolute; inset: 0; background-image: url("assets/hero-bg.png"); background-size: cover; background-position: center; opacity: .72; filter: brightness(.88) saturate(1.24) contrast(1.1); transform: scale(1.05); animation: downloadArtDrift 18s ease-in-out infinite alternate; }
     @keyframes musicBar { from { height: 5px; } to { height: 18px; } }
     @keyframes downloadArtDrift { from { transform: scale(1.05) translate3d(-1%, 0, 0); } to { transform: scale(1.12) translate3d(1%, -1%, 0); } }
     .bg-fx { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
@@ -115,12 +115,12 @@
     ::selection { background: var(--accent); color: #0A1020; }
     main { display: block; position: relative; z-index: 1; }
   </style>
-  <script src="/assets/js/config.js"></script>
-  <script src="/assets/js/generated.js"></script>
-  <script defer="" src="/assets/js/react.production.min.js"></script>
-  <script defer="" src="/assets/js/react-dom.production.min.js"></script>
-  <script defer="" src="/assets/js/downloads.js"></script>
-  <script defer="" src="/assets/js/site.js"></script>
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script defer="" src="assets/js/react.production.min.js"></script>
+  <script defer="" src="assets/js/react-dom.production.min.js"></script>
+  <script defer="" src="assets/js/downloads.js"></script>
+  <script defer="" src="assets/js/site.js"></script>
 </head>
 <body>
   <div id="root"></div>

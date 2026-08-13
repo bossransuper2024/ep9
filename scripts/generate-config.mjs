@@ -1,5 +1,5 @@
 /* ============================================================================
- * generate-config.mjs — parses config.ini => public/assets/js/generated.js
+ * generate-config.mjs — parses config.ini => publicassets/js/generated.js
  * Single source of truth: edit config.ini, then run `npm run build`.
  * ========================================================================== */
 import fs from 'node:fs';
@@ -41,8 +41,8 @@ export function build(ini) {
       tagline: get(ini, 'SITE', 'Tagline', 'Eternity calls. Answer it.'),
       brandShort: get(ini, 'SITE', 'BrandShort', 'RAN GS'),
       brandLong: get(ini, 'SITE', 'BrandLong', 'ETERNITY'),
-      logo: get(ini, 'SITE', 'Logo', '/assets/logo.png'),
-      favicon: get(ini, 'SITE', 'Favicon', '/assets/logo.png'),
+      logo: get(ini, 'SITE', 'Logo', 'assets/logo.png'),
+      favicon: get(ini, 'SITE', 'Favicon', 'assets/logo.png'),
       version: get(ini, 'SITE', 'Version', 'EP9'),
       year: get(ini, 'SITE', 'Year', '2026')
     },
@@ -50,7 +50,7 @@ export function build(ini) {
       title: get(ini, 'HERO', 'Title', 'RAN ONLINE'),
       subtitle: get(ini, 'HERO', 'Subtitle', 'ETERNITY EP9'),
       description: get(ini, 'HERO', 'Description', ''),
-      bg: get(ini, 'HERO', 'Background', '/assets/hero-bg.png'),
+      bg: get(ini, 'HERO', 'Background', 'assets/hero-bg.png'),
       ctaPlay: get(ini, 'HERO', 'CtaPlay', 'WATCH TRAILER'),
       ctaPlayUrl: get(ini, 'HERO', 'CtaPlayUrl', ''),
       ctaDownload: get(ini, 'HERO', 'CtaDownload', 'DOWNLOAD NOW')

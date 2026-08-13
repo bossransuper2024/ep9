@@ -68,7 +68,7 @@
       }
     },
       e("div", { style: { display: "flex", alignItems: "center", gap: 14 } },
-        e("img", { src: site.logo || "/assets/logo.png", alt: "", style: { height: 38, width: "auto" } }),
+        e("img", { src: site.logo || "assets/logo.png", alt: "", style: { height: 38, width: "auto" } }),
         e("div", { style: { display: "flex", flexDirection: "column", lineHeight: 1 } },
           e("span", { style: { fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: 3, color: "var(--accent)" } }, site.brandShort || "RAN GS"),
           e("span", { style: { fontFamily: "'Rajdhani', sans-serif", fontSize: 18, fontWeight: 700, letterSpacing: 2, color: "#fff" } }, site.brandLong || "ETERNITY")
@@ -182,7 +182,7 @@
     return e("section", {
       style: { position: "relative", minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", overflow: "hidden", padding: "120px 48px" }
     },
-      e("div", { style: { position: "absolute", inset: 0, backgroundImage: "url(" + (h.bg || "/assets/hero-bg.png") + ")", backgroundSize: "cover", backgroundPosition: "center", opacity: .35, filter: "blur(6px) saturate(1.2)" } }),
+      e("div", { style: { position: "absolute", inset: 0, backgroundImage: "url(" + (h.bg || "assets/hero-bg.png") + ")", backgroundSize: "cover", backgroundPosition: "center", opacity: .35, filter: "blur(6px) saturate(1.2)" } }),
       e("div", { style: { position: "absolute", inset: 0, background: "linear-gradient(180deg, var(--bg) 0%, rgba(10,16,32,.4) 40%, var(--bg) 100%)" } }),
       e("div", { style: { position: "relative", display: "grid", gridTemplateColumns: "1.1fr .9fr", gap: 40, alignItems: "center", maxWidth: 1280, margin: "0 auto", width: "100%" } },
         e("div", null,
@@ -205,7 +205,7 @@
           e("div", { style: { position: "absolute", width: 360, height: 360, borderRadius: "50%", border: "1px dashed rgba(255,214,10,.3)", animation: "spin 60s linear infinite" } }),
           e("div", { style: { position: "absolute", width: 280, height: 280, borderRadius: "50%", border: "1px solid rgba(255,214,10,.18)" } }),
           e("div", {
-            style: { width: 320, height: 320, backgroundImage: "url(" + (h.bg || "/assets/hero-bg.png") + ")", backgroundSize: "cover", backgroundPosition: "center 25%", borderRadius: "50%", filter: "drop-shadow(0 30px 60px rgba(255,214,10,.25))", animation: "float 6s ease-in-out infinite" }
+            style: { width: 320, height: 320, backgroundImage: "url(" + (h.bg || "assets/hero-bg.png") + ")", backgroundSize: "cover", backgroundPosition: "center 25%", borderRadius: "50%", filter: "drop-shadow(0 30px 60px rgba(255,214,10,.25))", animation: "float 6s ease-in-out infinite" }
           })
         )
       )
@@ -542,7 +542,7 @@
     var cm = C.community || {};
     var stats = cm.stats || [];
     return e("section", { id: "community", style: { position: "relative", padding: "120px 48px", borderTop: "1px solid rgba(255,255,255,.06)", overflow: "hidden" } },
-      e("div", { style: { position: "absolute", inset: 0, backgroundImage: "url(/assets/discord-bg.png)", backgroundSize: "cover", backgroundPosition: "center", opacity: .55 } }),
+      e("div", { style: { position: "absolute", inset: 0, backgroundImage: "url(assets/discord-bg.png)", backgroundSize: "cover", backgroundPosition: "center", opacity: .55 } }),
       e("div", { style: { position: "absolute", inset: 0, background: "linear-gradient(90deg, var(--bg) 0%, rgba(10,16,32,.7) 50%, var(--bg) 100%)" } }),
       e("div", { style: { position: "relative", display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 60, alignItems: "center" } },
         e("div", null,
@@ -612,7 +612,7 @@
       e("div", { style: { display: "grid", gridTemplateColumns: "1.5fr 1fr 1fr 1fr", gap: 60, marginBottom: 50 } },
         e("div", null,
           e("div", { style: { display: "flex", alignItems: "center", gap: 14, marginBottom: 18 } },
-            e("img", { src: site.logo || "/assets/logo.png", alt: "", style: { height: 50 } }),
+            e("img", { src: site.logo || "assets/logo.png", alt: "", style: { height: 50 } }),
             e("div", { style: { display: "flex", flexDirection: "column", lineHeight: 1.1 } },
               e("span", { style: { fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 3, color: "var(--accent)" } }, site.brandShort || "RAN GS"),
               e("span", { style: { fontFamily: "'Rajdhani', sans-serif", fontSize: 22, fontWeight: 700, letterSpacing: 2, color: "#fff" } }, site.brandLong || "ETERNITY")
