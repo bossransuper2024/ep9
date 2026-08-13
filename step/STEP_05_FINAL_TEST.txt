@@ -1,0 +1,56 @@
+STEP 05 — FINAL AUDIT + BUILD + README
+
+Continue:
+E:\website\_ep9
+
+This is the final step.
+
+Do a complete audit.
+
+Confirm:
+1. Website is located in E:\website\_ep9
+2. Step instructions are in E:\website\_ep9\step
+3. config.ini exists at E:\website\_ep9\config.ini
+4. No database is used
+5. No RAN server connection exists
+6. No API/backend is required
+7. No login/register exists
+8. Server name comes from config.ini
+9. Server information comes from config.ini
+10. Hero content comes from config.ini
+11. Exactly 3 download options work
+12. Social links work
+13. Contact links work
+14. Features work
+15. News works
+16. Footer works
+17. Optional empty links are handled correctly
+18. No undefined/null is visible
+19. No obvious console errors
+20. No broken assets
+21. Production build succeeds
+22. Mobile layout works
+
+Test the config workflow by changing several values in config.ini and rebuilding.
+
+Create:
+E:\website\_ep9\README.md
+
+README must explain:
+- What the website is
+- That it is static/informational only
+- Where config.ini is
+- How to change server name
+- How to change server information
+- How to change the 3 download links
+- How to change Discord/Facebook/social links
+- How to add features
+- How to add news
+- How to replace images
+- How to run development
+- How to build production
+- Where the production output is
+
+Fix remaining issues yourself. Do not just report problems. Actually fix them.
+
+The final production build must succeed.

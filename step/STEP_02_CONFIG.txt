@@ -1,0 +1,71 @@
+STEP 02 — CENTRAL CONFIG.INI SYSTEM
+
+Continue the existing project:
+E:\website\_ep9
+
+Do not rebuild from scratch.
+
+Create:
+E:\website\_ep9\config.ini
+
+This is the MOST IMPORTANT requirement.
+
+The website must be reusable for different RAN Online servers.
+
+All server-specific information that normally changes between servers must come from ONE config.ini.
+
+Include at least:
+
+[SERVER]
+Name=My RAN Online
+ShortName=MYRAN
+Version=EP9
+Tagline=Return to the Battlefield
+Description=Experience a new RAN Online adventure.
+Logo=/assets/images/logo.png
+Favicon=/assets/images/favicon.ico
+
+[SERVER_INFO]
+Type=Classic
+MaxLevel=260
+MaxRebirth=30
+ExpRate=10x
+DropRate=5x
+
+[DOWNLOAD]
+Download1=https://example.com/download1
+Download1Label=Google Drive
+Download2=https://example.com/download2
+Download2Label=MediaFire
+Download3=https://example.com/download3
+Download3Label=Direct Download
+
+[COMMUNITY]
+Facebook=
+FacebookGroup=
+Discord=
+Youtube=
+Tiktok=
+
+[CONTACT]
+Email=
+Website=
+
+[HERO]
+Title=MY RAN ONLINE
+Subtitle=Return to the Battlefield
+Description=Your next RAN Online adventure starts here.
+Background=/assets/images/hero.jpg
+
+[FOOTER]
+Copyright=2026 My RAN Online. All Rights Reserved.
+
+Implement a real config loader. If the chosen frontend cannot directly read .ini at runtime, use a practical build-time configuration approach while keeping config.ini as the single editable source.
+
+Replace hard-coded server information in the UI with config values.
+
+Test by changing server name, tagline, max level, download URL and Discord URL, then build again and verify the website uses the changed values.
+
+No undefined/null values should appear.
+
+Finish this step completely.

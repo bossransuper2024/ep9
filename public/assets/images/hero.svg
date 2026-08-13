@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" width="1600" height="900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Hero background">
+  <defs>
+    <radialGradient id="haze" cx="50%" cy="35%" r="75%">
+      <stop offset="0" stop-color="#5a141b"/>
+      <stop offset="45%" stop-color="#24070b"/>
+      <stop offset="100%" stop-color="#0a0204"/>
+    </radialGradient>
+    <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f6c453" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#f6c453" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#haze)"/>
+  <polygon points="800,0 860,900 740,900" fill="url(#beam)"/>
+  <g stroke="#7d1118" stroke-width="2" opacity="0.35">
+    <path d="M0 650 Q400 600 800 660 T1600 640" fill="none"/>
+    <path d="M0 720 Q400 670 800 730 T1600 710" fill="none"/>
+  </g>
+  <g fill="#f6c453" opacity="0.25">
+    <circle cx="220" cy="180" r="2"/>
+    <circle cx="420" cy="120" r="1.5"/>
+    <circle cx="1200" cy="200" r="2"/>
+    <circle cx="1380" cy="120" r="1.5"/>
+    <circle cx="980" cy="90" r="1.5"/>
+    <circle cx="640" cy="80" r="1.5"/>
+  </g>
+</svg>

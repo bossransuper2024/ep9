@@ -1,0 +1,46 @@
+STEP 01 — PROJECT SETUP + BASE WEBSITE
+
+Project:
+E:\website\_ep9
+
+Build a static/informational RAN Online website.
+
+Reference:
+https://www.rangs-eternity.com/#home
+
+Use the reference for general structure/content inspiration, but implement our own UI and code. Do not clone the site.
+
+IMPORTANT:
+- No database
+- No SQL Server
+- No RAN game-server connection
+- No API/backend
+- No login/register
+- No live player count
+- No live server status
+- Website only displays server information
+
+Create the project foundation and main page structure.
+
+Use a practical modern frontend stack such as React + Vite if appropriate.
+
+Create:
+- Navbar
+- Hero/home
+- Server information
+- Features
+- Download
+- News/announcements
+- Community/social
+- Contact
+- Footer
+
+Make it responsive for desktop, tablet and mobile.
+
+Create organized assets under public/assets/images/ and public/assets/icons/. Use placeholders where artwork is unavailable. Do not leave broken images.
+
+The actual website project must be created in E:\website\_ep9. Do not put website source inside the step folder.
+
+Install dependencies, run/build the project, and fix build errors.
+
+Finish this step completely before moving on.

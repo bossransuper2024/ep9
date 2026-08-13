@@ -1,0 +1,54 @@
+STEP 04 — UI POLISH + RESPONSIVE + PERFORMANCE
+
+Continue:
+E:\website\_ep9
+
+Do not rebuild unnecessarily.
+
+Use the existing implementation and improve it to production quality.
+
+Reference:
+https://www.rangs-eternity.com/#home
+
+Keep our implementation original.
+
+Improve:
+- Hero
+- Navbar
+- Typography
+- Buttons
+- Cards
+- Server information
+- Features
+- Download
+- News
+- Community
+- Contact
+- Footer
+
+Use a premium RAN Online/MMORPG style:
+- Dark cinematic background
+- Crimson/red and gold accents
+- Gaming typography
+- Premium cards
+- Subtle glow
+- Glass/metal details
+- Tasteful hover animations
+- Smooth section transitions
+
+Do not overdo animations.
+
+Ensure proper desktop, laptop, tablet and mobile layouts. Mobile must be intentionally designed.
+
+Optimize performance:
+- Avoid unnecessary dependencies
+- Lazy-load large images where appropriate
+- Avoid heavy effects
+- Remove unused code
+- Avoid unnecessary requests
+
+Check broken images, broken links, overflow, bad mobile spacing and console errors.
+
+Build the production project and fix all errors.
+
+Finish this step completely.

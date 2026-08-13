@@ -1,0 +1,15 @@
+{
+  "name": "ran-ep9-website",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Static RAN Online EP9 website driven entirely by a single config.ini (no build framework required).",
+  "scripts": {
+    "genconfig": "node scripts/generate-config.mjs",
+    "build": "node scripts/generate-config.mjs && node scripts/build-static.mjs",
+    "dev": "node scripts/generate-config.mjs && node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs"
+  },
+  "devDependencies": {}
+}
+

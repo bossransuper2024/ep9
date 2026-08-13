@@ -1,0 +1,69 @@
+STEP 03 — CONFIGURABLE FEATURES, NEWS AND ALL CONTENT
+
+Continue:
+E:\website\_ep9
+
+Do not rebuild from scratch.
+
+Make the remaining server content configurable through config.ini.
+
+FEATURES:
+Support multiple configurable features.
+
+Example:
+
+[FEATURE_1]
+Title=EP9 Gameplay
+Description=Experience classic RAN Online gameplay.
+Icon=/assets/images/features/ep9.png
+
+[FEATURE_2]
+Title=Balanced PvP
+Description=Competitive gameplay.
+Icon=/assets/images/features/pvp.png
+
+Support at least 6 features and make it possible to add more using FEATURE_3, FEATURE_4, etc.
+
+NEWS:
+
+[NEWS_1]
+Title=Open Beta
+Date=August 20, 2026
+Description=Open Beta is now available.
+Image=/assets/images/news/news1.jpg
+Link=#
+
+[NEWS_2]
+Title=Official Launch
+Date=August 25, 2026
+Description=Prepare for the official launch.
+Image=/assets/images/news/news2.jpg
+Link=#
+
+Make it possible to add NEWS_3, NEWS_4, etc.
+
+Make sure these are all configurable:
+- Server name
+- Hero content
+- Server information
+- 3 download links and labels
+- Features
+- News
+- Facebook
+- Facebook Group
+- Discord
+- YouTube
+- TikTok
+- Email
+- Website
+- Footer
+- Logos/images
+- Other server-specific text
+
+Optional empty social/contact links should be hidden rather than shown as broken links.
+
+No database or server connection is allowed.
+
+Build and test everything after implementation.
+
+Finish this step completely.
