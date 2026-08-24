@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>News — Ran Online EP9</title>
+  <meta name="description" content="Latest Ran Online EP9 announcements, events and guides.">
+
+  <!-- Open Graph / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="News — Ran Online EP9">
+  <meta property="og:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta property="og:image" content="https://ep9ranonline.com/assets/logo.png">
+  <meta property="og:url" content="https://ep9ranonline.com/news.html">
+  <meta property="og:site_name" content="Ran Online EP9">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="News — Ran Online EP9">
+  <meta name="twitter:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta name="twitter:image" content="https://ep9ranonline.com/assets/logo.png">
+
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Bossran-style light list skin for the News page (loaded AFTER style.css). -->
+  <link rel="stylesheet" href="assets/css/news.css">
+</head>
+<!-- data-page=news flags this as the standalone News list page so main.js
+     renders ONLY the news list (no Main Page sections, nav menu, or music). -->
+<body data-page="news">
+  <div id="news-page">
+    <main id="main-content">
+    <!-- Minimal top bar: brand + HOME (no Main Page nav menu) -->
+    <header class="nav news-nav" id="news-top">
+      <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <a class="brand" href="index.html">
+          <img src="assets/logo.png" alt="Ran Online EP9">
+          <span><b>RAN ONLINE EP9</b><small>NEWS</small></span>
+        </a>
+        <a class="btn" href="index.html">HOME</a>
+      </div>
+    </header>
+    <!-- News list (category filter + grid + pagination) — Main Page content is
+         NOT here. Each row is a real <a> to its standalone content page. -->
+    <section class="section" id="news">
+      <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
+      <div class="bg-fx-overlay" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="eyebrow">NEWS</span>
+        <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+        <p class="section-intro" id="news-intro"></p>
+        <!-- Bossran-style category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
+             Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
+             the client-side filtering (no backend required). -->
+        <div class="news-tabs news-filter" id="news-tabs"></div>
+        <div class="news-grid" id="news-grid"></div>
+        <div class="news-pagination" id="news-pagination"></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/main.js"></script>
+  <!-- Backward-compat: forward legacy deep links (?slug= / ?kind=&i=) to the
+       new standalone article pages (news/<slug>.html). The list itself is
+       rendered entirely by main.js above. -->
+  <script>
+  (function () {
+    var p = new URLSearchParams(window.location.search);
+    var slug = p.get("slug");
+    if (!slug && p.get("i") != null) {
+      var C = window.SITE_CONFIG || {};
+      var data = (C.news || {});
+      var kind = p.get("kind") || "a";
+      var arr = kind === "e" ? data.event : kind === "g" ? data.tutorial : data.announcement;
+      var it = (arr || [])[Number(p.get("i"))];
+      slug = it && it.slug;
+    }
+    if (slug) window.location.replace("news/" + encodeURIComponent(slug) + ".html");
+  })();
+  </script>
+</body>
+</html>

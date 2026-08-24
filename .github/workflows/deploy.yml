@@ -1,6 +1,5 @@
-# Deploy the static site (public/) to GitHub Pages via Actions.
-# No build framework needed: the site is plain HTML/JS and the /public
-# folder is already the deployable site (index.html + /assets).
+# Deploy the static site (dist/) to GitHub Pages via Actions.
+# The production build outputs to dist/ (index.html + /assets).
 name: Deploy to GitHub Pages
 
 on:
@@ -29,15 +28,16 @@ jobs:
         with:
           node-version: 20
 
-      # Regenerate public/assets/js/generated.js from config.ini so that any
-      # change to config.ini is reflected on the live site without a manual build.
-      - name: Regenerate config (config.ini -> public/assets/js/generated.js)
-        run: npm run genconfig
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build production site
+        run: npm run build
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: public
+          path: dist
 
   deploy:
     needs: build

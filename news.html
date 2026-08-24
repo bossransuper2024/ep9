@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>News — Ran Online EP9</title>
+  <meta name="description" content="Latest Ran Online EP9 announcements and events.">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Bossran-style light list skin for the News page (loaded AFTER style.css). -->
+  <link rel="stylesheet" href="assets/css/news.css">
+</head>
+<!-- data-page=news flags this as the standalone News page so main.js renders
+     ONLY the news list (no Main Page sections, nav menu, or music). -->
+<body data-page="news">
+  <div id="news-page">
+    <!-- Minimal top bar: brand + HOME (no Main Page nav menu) -->
+    <header class="nav news-nav" id="news-top">
+      <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <a class="brand" href="index.html">
+          <img src="assets/logo.png" alt="Ran Online EP9">
+          <span><b>RAN ONLINE EP9</b><small>NEWS</small></span>
+        </a>
+        <a class="btn" href="index.html">HOME</a>
+      </div>
+    </header>
+    <!-- News list (tabs + grid + pagination) — Main Page content is NOT here -->
+    <section class="section" id="news">
+      <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
+      <div class="wrap">
+        <span class="eyebrow">NEWS</span>
+        <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+        <p class="section-intro" id="news-intro"></p>
+        <div class="news-tabs" id="news-tabs">
+          <button class="is-active" data-kind="a" id="news-tab-a">Announcement</button>
+          <button data-kind="e" id="news-tab-e">Event</button>
+        </div>
+        <div class="news-grid" id="news-grid"></div>
+        <div class="news-pagination" id="news-pagination"></div>
+      </div>
+    </section>
+
+    <!-- Standalone article panel (opens when a row is clicked; this is a real
+         page section, not a duplicate of the Main Page). Hidden until opened.
+         When open, body.is-reading hides the list above so only the article +
+         its Back link are shown (Back label reflects the clicked type). -->
+    <section class="section news-article-section" id="news-article" hidden>
+      <div class="wrap" style="max-width:820px;">
+        <a class="reader-nav" href="news.html" id="article-back" data-back="news">&larr; BACK TO NEWS</a>
+        <article class="reader-article" id="article-body" style="padding-top:24px;"></article>
+      </div>
+    </section>
+  </div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/main.js"></script>
+  <!-- News-page controller: handles ?kind=&i=&page= deep links and renders the
+       selected article into #article-body as a standalone page (no overlay). -->
+  <script>
+  (function () {
+    var C = window.SITE_CONFIG || {};
+    var news = (C.news || {});
+    var data = { a: news.announcement || [], e: news.event || [] };
+    var cfg = C.newsConfig || {};
+
+    function esc(s) { return (s == null) ? "" : String(s); }
+    function inline(t) {
+      return t
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/__(.+?)__/g, "<u>$1</u>")
+        .replace(/~~(.+?)~~/g, "<s>$1</s>")
+        .replace(/\*(.+?)\*/g, "<em>$1</em>");
+    }
+    function renderText(raw) {
+      var blocks = [];
+      (raw || "").split(/\n/).forEach(function (line) {
+        line = line.replace(/\r/g, "");
+        if (!line.trim()) return;
+        if (/^[-•]\s+/.test(line)) blocks.push({ type: "li", text: inline(line.replace(/^[-•]\s+/, "")) });
+        else blocks.push({ type: "p", text: inline(line) });
+      });
+      return blocks;
+    }
+    function loadTxt(name, cb) {
+      if (!name) return cb(null);
+      var url = name.indexOf("/") !== -1 ? name : "assets/content/" + name;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) cb(xhr.status === 200 ? xhr.responseText : null);
+      };
+      xhr.send();
+    }
+
+    function showArticle(kind, i) {
+      var item = (data[kind] || [])[Number(i)];
+      if (!item) return;
+      var body = document.getElementById("article-body");
+      if (!body) return;
+      var cat = (item.cat || (kind === "a" ? "ANNOUNCEMENT" : "EVENT")).toUpperCase();
+      var date = ((cfg && cfg.showDate === false) || !item.date) ? "" : esc(item.date);
+      var catHtml = ((cfg && cfg.showCategory === false)) ? "" :
+        '<span class="reader-tag">' + cat + '</span>';
+      var dateHtml = date ? '<span class="reader-date">' + date + '</span>' : "";
+      var meta = '<div class="reader-meta">' + catHtml + dateHtml + '</div>';
+      var title = '<h1 class="reader-title">' + esc(item.title || "") + '</h1>';
+
+      function fill(text) {
+        var blocks = text
+          ? renderText(text)
+          : (item.description ? [{ type: "p", text: item.description }] : [{ type: "p", text: "Details coming soon." }]);
+        var imgHtml = "";
+        if (item.image && (cfg && cfg.showImagesInArticle !== false)) {
+          var src = item.image;
+          if (src.indexOf("://") === -1 && src.indexOf("/") !== 0) src = "assets/content/" + src;
+          imgHtml = '<figure class="reader-figure"><img src="' + esc(src) + '" alt="' + esc(item.title || "") + '" loading="lazy"></figure>';
+        }
+        body.innerHTML = meta + title + imgHtml + blocks.map(function (b) {
+          if (b.type === "li") return '<div class="txt-list"><div class="txt-bullet">' + b.text + '</div></div>';
+          return '<p class="txt-para">' + b.text + '</p>';
+        }).join("");
+
+        // In "read mode" only the article + Back link are shown: lock the list
+        // (body.is-reading hides the list section above), and label the Back
+        // link to match the clicked type (Announcement vs Event → its list tab).
+        if (document.body) document.body.classList.add("is-reading");
+        var back = document.getElementById("article-back");
+        var isEvent = kind === "e";
+        var listHref = "news.html?kind=" + encodeURIComponent(kind) + "&page=" + (window.renderNewsToPage ? "1" : "1");
+        if (back) {
+          back.href = "news.html?kind=" + encodeURIComponent(kind);
+          back.setAttribute("data-back", isEvent ? "event" : "announcement");
+          back.innerHTML = "&larr; BACK TO " + (isEvent ? "EVENTS" : "ANNOUNCEMENTS");
+        }
+        // Sync the list's active tab so returning lands on the right list.
+        var tab = document.querySelector('.news-tabs button[data-kind="' + (isEvent ? "e" : "a") + '"]');
+        if (tab) {
+          document.querySelectorAll(".news-tabs button").forEach(function (b) { b.classList.remove("is-active"); });
+          tab.classList.add("is-active");
+        }
+        var sec = document.getElementById("news-article");
+        if (sec) { sec.hidden = false; window.scrollTo({ top: 0 }); }
+        history.replaceState(null, "", "news.html?kind=" + encodeURIComponent(kind) + "&i=" + encodeURIComponent(i));
+      }
+      if (item.text) fill(item.text);
+      else if (item.context) loadTxt(item.context, fill);
+      else fill(null);
+    }
+
+    function init() {
+      var p = new URLSearchParams(window.location.search);
+      var kind = p.get("kind") || "a";
+      var i = p.get("i");
+      var article = document.getElementById("news-article");
+      if (i != null) {
+        showArticle(kind, i);
+      } else if (article) {
+        // No article requested: ensure the full list is shown (e.g. after using
+        // the dynamic Back link, which carries ?kind= but no ?i=).
+        article.hidden = true;
+        if (document.body) document.body.classList.remove("is-reading");
+      }
+    }
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+    else init();
+  })();
+  </script>
+</body>
+</html>
+

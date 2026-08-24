@@ -3,14 +3,17 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Static RAN Online EP9 website driven entirely by a single config.ini (no build framework required).",
+  "description": "Premium static Ran Online EP9 site — vanilla HTML/CSS/JS driven by config.ini + CSV/JS data. No React, no bundler.",
   "scripts": {
     "genconfig": "node scripts/generate-config.mjs",
+    "gennews": "node scripts/gen-news-pages.mjs",
     "genplaceholders": "node scripts/generate-placeholders.mjs",
-    "build": "node scripts/generate-config.mjs && node scripts/build-static.mjs",
-    "dev": "node scripts/generate-config.mjs && node scripts/serve.mjs",
-    "preview": "node scripts/serve.mjs"
+    "build": "node scripts/generate-config.mjs && node scripts/gen-news-pages.mjs && node scripts/build-static.mjs",
+    "dev": "node scripts/generate-config.mjs && node scripts/gen-news-pages.mjs && node scripts/serve.mjs",
+    "preview": "node scripts/serve.mjs",
+    "test": "node scripts/verify-site.mjs"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "sharp": "^0.35.3"
+  }
 }
-
