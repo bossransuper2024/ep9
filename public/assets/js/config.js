@@ -152,13 +152,6 @@
       ],
       items: null
     },
-    // Categories hidden across the News list, the Main Page preview and the
-    // standalone article pages (mirrors [NEWS_CONFIG] HiddenCategories).
-    hiddenCategories: ["NEWS", "GUIDE"],
-    newsFilter: [
-      { key: "all", label: "All" },
-      { key: "announcement", label: "Announcement" }
-    ],
     // Centralized News configuration. Single source of truth for list/pagination
     // behavior — change itemsPerPage (10/20) and it updates automatically.
     newsConfig: {
@@ -172,6 +165,16 @@
       previousLabel: "Previous",
       nextLabel: "Next"
     },
+    // Category filter shown on the News list page. The order here
+    // is the order the filter chips appear (ALL first, then each category).
+    // Categories listed in HiddenCategories are removed from the chip row.
+    newsFilter: [
+      { key: "all", label: "All" },
+      { key: "news", label: "News" },
+      { key: "announcement", label: "Announcement" },
+      { key: "guide", label: "Guide" }
+    ],
+    hiddenCategories: ["GUIDE"],
     services: {
       bg: "assets/hero-bg-07.png",
       title: "OUR",

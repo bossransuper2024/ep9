@@ -476,10 +476,78 @@
     "items": [
       {
         "id": "3",
+        "uid": "g3",
+        "slug": "safe-trading-with-middleman",
+        "type": "GUIDE",
+        "cat": "GUIDE",
+        "date": "September 5, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "Safe Trading with Middleman",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "tutorial-middleman.txt",
+        "hide": false,
+        "text": "Safe Trading with a Middleman\r\n\r\nAlways use a __verified middleman__ for big trades. It only takes a minute and prevents scams.\r\n\r\n**The process**\r\n\r\n- Both players agree on a verified middleman\r\n- The seller hands the item to the middleman\r\n- The buyer sends payment to the middleman\r\n- The middleman releases item and payment at the same time\r\n\r\n~~Never trade directly with someone you don't trust.~~ Even friends can be compromised — use a middleman for high-value deals.\r\n\r\nOpen a ticket in our Discord to request a middleman."
+      },
+      {
+        "id": "3",
+        "uid": "e3",
+        "slug": "founding-member-giveaway",
+        "type": "NEWS",
+        "cat": "NEWS",
+        "date": "September 20, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "Founding Member Giveaway",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "event-giveaway.txt",
+        "hide": false,
+        "text": "Founding Member Giveaway\r\nTo celebrate launch week, we're giving away exclusive founder cosmetics and a starter gear pack to the first 500 registered players.\r\n- Create your account and reach level 30 before the deadline\r\n- Founder titles are permanent and account-bound\r\n- Winners are announced in the Discord community\r\nDon't miss your chance to wear the badge of a founding member. Good luck!\r\n"
+      },
+      {
+        "id": "2",
+        "uid": "e2",
+        "slug": "double-exp-weekend",
+        "type": "NEWS",
+        "cat": "NEWS",
+        "date": "September 15, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "Double EXP Weekend",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "event-double-exp.txt",
+        "hide": false,
+        "text": "Double EXP Weekend\r\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\r\n- Event runs Friday 6PM through Sunday midnight (server time)\r\n- Applies to all PvE and quest EXP gains\r\n- Premium members get an extra +20% on top\r\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!\r\n"
+      },
+      {
+        "id": "3",
         "uid": "a3",
         "slug": "community-event-tyranny-wars",
         "type": "ANNOUNCEMENT",
         "cat": "ANNOUNCEMENT",
+        "date": "September 10, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "Community Event: Tyranny Wars",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "news-tyranny-wars.txt",
+        "hide": false,
+        "text": "Community Event: Tyranny Wars\r\n\r\nThe first season of Tyranny Wars begins. For the first time, __even guilds from the same school can clash__ for territory and supremacy.\r\n\r\n**How it works**\r\n\r\n- Form or join a warband\r\n- Capture territory nodes across the map\r\n- Hold them to earn weekly supremacy points\r\n\r\n~~Solo players cannot register alone.~~ Actually, solo registration is allowed — bring your best build.\r\n\r\nRewards scale with your rank at the end of the season. Good luck, commander."
+      },
+      {
+        "id": "1",
+        "uid": "e1",
+        "slug": "community-event-tyranny-wars",
+        "type": "NEWS",
+        "cat": "NEWS",
         "date": "September 10, 2026",
         "eventDate": "",
         "author": "Admin",
@@ -509,6 +577,40 @@
         "text": "Patch Notes — v1.1\r\n\r\nThis patch focuses on balance, rewards and security.\r\n\r\n**Highlights**\r\n\r\n- Drop-rate tuning across all dungeon tiers\r\n- New daily login rewards\r\n- Improved anti-cheat detection\r\n\r\n**Bug Fixes**\r\n\r\n- Fixed a rare crash on class selection\r\n- Resolved an issue where __trade windows could desync__\r\n- Patched the ~~dupe exploit~~ that affected a small number of accounts\r\n\r\nThank you for reporting issues on our Discord. Keep them coming!"
       },
       {
+        "id": "2",
+        "uid": "g2",
+        "slug": "beginner-class-guide",
+        "type": "GUIDE",
+        "cat": "GUIDE",
+        "date": "August 28, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "Beginner Class Guide",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "tutorial-classes.txt",
+        "hide": false,
+        "text": "Beginner Class Guide\r\n\r\nNot sure where to start? Here's a quick breakdown of the seven classes.\r\n\r\n**Melee**\r\n\r\n- Sword Warrior — high burst, close range\r\n- Blade Specialist — fast, mobile duelist\r\n\r\n**Ranged**\r\n\r\n- Archer — sustained damage from afar\r\n- Mage — area control and crowd control\r\n\r\n**Support**\r\n\r\n- Priest — healing and buffs\r\n- Bard — utility and team scaling\r\n\r\n__Pick what fits your playstyle, not just the meta.__\r\n\r\nExperiment in the training grounds before committing your build."
+      },
+      {
+        "id": "1",
+        "uid": "g1",
+        "slug": "how-to-install",
+        "type": "GUIDE",
+        "cat": "GUIDE",
+        "date": "August 25, 2026",
+        "eventDate": "",
+        "author": "Admin",
+        "title": "How to Install",
+        "image": "",
+        "link": "",
+        "description": "",
+        "context": "tutorial-install.txt",
+        "hide": false,
+        "text": "How to Install the EP9 Client\r\n\r\nFollow these steps to get into the game.\r\n\r\n**Step 1 — Download**\r\n\r\n- Get the full client from the Download section\r\n- Choose the mirror closest to your region\r\n\r\n**Step 2 — Extract**\r\n\r\n- Unzip the archive to a folder you can find easily\r\n- __Do not__ place it inside Program Files (Windows can block writes)\r\n\r\n**Step 3 — Launch**\r\n\r\n- Run the launcher as administrator\r\n- Let it patch to the latest version\r\n\r\n~~If you see a virus warning, ignore it.~~ Modern launchers are signed — if your antivirus flags it, add an exception.\r\n\r\nYou're ready to play. See you in-game!"
+      },
+      {
         "id": "1",
         "uid": "a1",
         "slug": "open-beta",
@@ -533,8 +635,16 @@
       "label": "All"
     },
     {
+      "key": "news",
+      "label": "News"
+    },
+    {
       "key": "announcement",
       "label": "Announcement"
+    },
+    {
+      "key": "guide",
+      "label": "Guide"
     }
   ],
   "newsConfig": {

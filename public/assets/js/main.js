@@ -399,7 +399,9 @@
         var ex = previewCache[idx] || item.description || "";
         if (ex) excerpt = '<span class="row-exc">— ' + esc(ex) + "</span>";
       }
-      var href = "news.html?slug=" + encodeURIComponent(item.slug || item.uid || idx);
+      // Use hash-based navigation for consolidated articles in news.html
+      var articleId = item.slug || item.uid || ("news-" + idx);
+      var href = "news.html#" + encodeURIComponent(articleId);
       return '<a class="news-row reveal" href="' + href + '">' +
         '<div class="row-head">' + cat + date + (meta ? '<span class="row-dot">•</span>' + meta : "") + '</div>' +
         '<div class="row-main"><span class="row-title">' + esc(item.title) + "</span>" + excerpt +
@@ -459,6 +461,90 @@
       });
     }
     tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) window.renderNewsToPage(b.dataset.filter, 0); });
+
+    // ---- Article View Handler ----
+    // Handle hash-based article navigation (news.html#article-id)
+    function showArticle(articleId) {
+      var article = document.getElementById(articleId);
+      if (!article) return false;
+      
+      // Hide news list, show articles section
+      var newsSection = document.getElementById('news');
+      var articlesSection = document.getElementById('news-articles');
+      var body = document.body;
+      
+      if (newsSection) newsSection.style.display = 'none';
+      if (articlesSection) articlesSection.style.display = 'block';
+      if (body) body.classList.add('show-article');
+      
+      // Scroll to the article
+      article.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      
+      // Update URL without triggering scroll
+      if (history.replaceState) {
+        history.replaceState(null, null, '#' + articleId);
+      }
+      
+      return true;
+    }
+    
+    function showNewsList() {
+      var newsSection = document.getElementById('news');
+      var articlesSection = document.getElementById('news-articles');
+      var body = document.body;
+      
+      if (newsSection) newsSection.style.display = 'block';
+      if (articlesSection) articlesSection.style.display = 'none';
+      if (body) body.classList.remove('show-article');
+      
+      // Clear hash
+      if (history.replaceState) {
+        history.replaceState(null, null, window.location.pathname + window.location.search);
+      }
+      
+      // Scroll to top of news section
+      if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    
+    // Handle back button clicks in articles
+    document.addEventListener('click', function (e) {
+      var backLink = e.target.closest('.article-back[data-back="news"]');
+      if (backLink) {
+        e.preventDefault();
+        showNewsList();
+      }
+    });
+    
+    // Handle hash change for article navigation
+    window.addEventListener('hashchange', function () {
+      var hash = window.location.hash.slice(1); // remove #
+      if (hash) {
+        // Check if it's an article ID
+        var article = document.getElementById(hash);
+        if (article && article.classList.contains('news-article')) {
+          showArticle(hash);
+        }
+      } else {
+        // No hash - show news list
+        showNewsList();
+      }
+    });
+    
+    // Check for initial hash on load
+    var initialHash = window.location.hash.slice(1);
+    if (initialHash) {
+      // Small delay to ensure DOM is ready
+      setTimeout(function () {
+        var article = document.getElementById(initialHash);
+        if (article && article.classList.contains('news-article')) {
+          showArticle(initialHash);
+        }
+      }, 0);
+    }
+
+    // Make functions globally accessible for external use
+    window.showNewsArticle = showArticle;
+    window.showNewsList = showNewsList;
     var pag = el("news-pagination");
     if (pag) pag.addEventListener("click", function (e) {
       var b = e.target.closest(".page-btn"); if (!b || b.disabled) return;
