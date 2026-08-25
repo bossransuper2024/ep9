@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>News — Ran Online EP9</title>
+  <meta name="description" content="Latest Ran Online EP9 announcements, events and guides.">
+
+  <!-- Open Graph / Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="News — Ran Online EP9">
+  <meta property="og:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta property="og:image" content="https://ep9ranonline.com/assets/logo.png">
+  <meta property="og:url" content="https://ep9ranonline.com/news.html">
+  <meta property="og:site_name" content="Ran Online EP9">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="News — Ran Online EP9">
+  <meta name="twitter:description" content="Latest Ran Online EP9 announcements, events and guides.">
+  <meta name="twitter:image" content="https://ep9ranonline.com/assets/logo.png">
+
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <!-- Bossran-style light list skin for the News page (loaded AFTER style.css). -->
+  <link rel="stylesheet" href="assets/css/news.css">
+</head>
+<!-- data-page=news flags this as the standalone News list page so main.js
+     renders ONLY the news list (no Main Page sections, nav menu, or music). -->
+<body data-page="news">
+  <div id="news-page">
+    <main id="main-content">
+    <!-- Minimal top bar: brand + HOME (no Main Page nav menu) -->
+    <header class="nav news-nav" id="news-top">
+      <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:16px;">
+        <a class="brand" href="index.html">
+          <img src="assets/logo.png" alt="Ran Online EP9">
+          <span><b>RAN ONLINE EP9</b><small>NEWS</small></span>
+        </a>
+        <a class="btn" href="index.html">HOME</a>
+      </div>
+    </header>
+    <!-- News list (category filter + grid + pagination) — Main Page content is
+         NOT here. Each row is a real <a> to its standalone content page. -->
+    <section class="section" id="news">
+      <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
+      <div class="bg-fx-overlay" aria-hidden="true"></div>
+      <div class="wrap">
+        <span class="eyebrow">NEWS</span>
+        <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+        <p class="section-intro" id="news-intro"></p>
+        <!-- Bossran-style category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
+             Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
+             the client-side filtering (no backend required). -->
+        <div class="news-tabs news-filter" id="news-tabs"></div>
+        <div class="news-grid" id="news-grid"></div>
+        <div class="news-pagination" id="news-pagination"></div>
+      </div>
+    </section>
+
+    <!-- Article Content Sections - All news content consolidated here -->
+    <section id="news-articles" class="news-articles-section" style="display:none;">
+      <div class="wrap">
+        <!-- Article: Community Event: Tyranny Wars -->
+        <article id="community-event-tyranny-wars" class="news-article" data-category="announcement" data-date="September 10, 2026">
+          <header class="article-header">
+            <span class="article-cat">ANNOUNCEMENT</span>
+            <h1 class="article-title">Community Event: Tyranny Wars</h1>
+            <div class="article-meta">
+              <span class="article-date">September 10, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>The first season of Tyranny Wars begins. For the first time, <u>even guilds from the same school can clash</u> for territory and supremacy.</p>
+            <p><strong>How it works</strong></p>
+            <ul>
+              <li>Form or join a warband</li>
+              <li>Capture territory nodes across the map</li>
+              <li>Hold them to earn weekly supremacy points</li>
+            </ul>
+            <p><del>Solo players cannot register alone.</del> Actually, solo registration is allowed — bring your best build.</p>
+            <p>Rewards scale with your rank at the end of the season. Good luck, commander.</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Patch Notes v1.1 -->
+        <article id="patch-notes-v1-1" class="news-article" data-category="announcement" data-date="September 1, 2026">
+          <header class="article-header">
+            <span class="article-cat">ANNOUNCEMENT</span>
+            <h1 class="article-title">Patch Notes — v1.1</h1>
+            <div class="article-meta">
+              <span class="article-date">September 1, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>This patch focuses on balance, rewards and security.</p>
+            <p><strong>Highlights</strong></p>
+            <ul>
+              <li>Drop-rate tuning across all dungeon tiers</li>
+              <li>New daily login rewards</li>
+              <li>Improved anti-cheat detection</li>
+            </ul>
+            <p><strong>Bug Fixes</strong></p>
+            <ul>
+              <li>Fixed a rare crash on class selection</li>
+              <li>Resolved an issue where <strong>trade windows could desync</strong></li>
+              <li>Patched the <del>dupe exploit</del> that affected a small number of accounts</li>
+            </ul>
+            <p>Thank you for reporting issues on our Discord. Keep them coming!</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Open Beta -->
+        <article id="open-beta" class="news-article" data-category="announcement" data-date="August 20, 2026">
+          <header class="article-header">
+            <span class="article-cat">ANNOUNCEMENT</span>
+            <h1 class="article-title">Open Beta</h1>
+            <div class="article-meta">
+              <span class="article-date">August 20, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>Open Beta is LIVE! Jump in and claim your starter pack before the servers fill up.</p>
+            <p><strong>Important:</strong> Please read the rules before playing.</p>
+            <p><em>This welcome bonus is only available during Open Beta.</em></p>
+            <p><del>The old legacy launcher is no longer supported.</del> Use the new EP9 client.</p>
+            <p><strong>Server Features</strong></p>
+            <ul>
+              <li>Free to Play</li>
+              <li>Auto Skill System</li>
+              <li>Daily Rewards</li>
+              <li>Custom Events</li>
+            </ul>
+            <p>See you on the battlefield, soldier.</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Double EXP Weekend (Event) -->
+        <article id="double-exp-weekend" class="news-article" data-category="news" data-date="August 25, 2026">
+          <header class="article-header">
+            <span class="article-cat">NEWS</span>
+            <h1 class="article-title">Double EXP Weekend</h1>
+            <div class="article-meta">
+              <span class="article-date">August 25, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>Log in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.</p>
+            <ul>
+              <li>Event runs Friday 6PM through Sunday midnight (server time)</li>
+              <li>Applies to all PvE and quest EXP gains</li>
+              <li>Premium members get an extra +20% on top</li>
+            </ul>
+            <p>Stack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Founding Member Giveaway (Event) -->
+        <article id="founding-member-giveaway" class="news-article" data-category="news" data-date="September 20, 2026">
+          <header class="article-header">
+            <span class="article-cat">NEWS</span>
+            <h1 class="article-title">Founding Member Giveaway</h1>
+            <div class="article-meta">
+              <span class="article-date">September 20, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>To celebrate launch week, we're giving away exclusive founder cosmetics and a starter gear pack to the first 500 registered players.</p>
+            <ul>
+              <li>Create your account and reach level 30 before the deadline</li>
+              <li>Founder titles are permanent and account-bound</li>
+              <li>Winners are announced in the Discord community</li>
+            </ul>
+            <p>Don't miss your chance to wear the badge of a founding member. Good luck!</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: How to Install (Guide) -->
+        <article id="how-to-install" class="news-article" data-category="guide" data-date="August 25, 2026">
+          <header class="article-header">
+            <span class="article-cat">GUIDE</span>
+            <h1 class="article-title">How to Install</h1>
+            <div class="article-meta">
+              <span class="article-date">August 25, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>Follow these steps to get into the game.</p>
+            <p><strong>Step 1 — Download</strong></p>
+            <ul>
+              <li>Get the full client from the Download section</li>
+              <li>Choose the mirror closest to your region</li>
+            </ul>
+            <p><strong>Step 2 — Extract</strong></p>
+            <ul>
+              <li>Unzip the archive to a folder you can find easily</li>
+              <li><strong>Do not</strong> place it inside Program Files (Windows can block writes)</li>
+            </ul>
+            <p><strong>Step 3 — Launch</strong></p>
+            <ul>
+              <li>Run the launcher as administrator</li>
+              <li>Let it patch to the latest version</li>
+            </ul>
+            <p>If you see a virus warning, ignore it. Modern launchers are signed — if your antivirus flags it, add an exception.</p>
+            <p>You're ready to play. See you in-game!</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Beginner Class Guide (Guide) -->
+        <article id="beginner-class-guide" class="news-article" data-category="guide" data-date="August 28, 2026">
+          <header class="article-header">
+            <span class="article-cat">GUIDE</span>
+            <h1 class="article-title">Beginner Class Guide</h1>
+            <div class="article-meta">
+              <span class="article-date">August 28, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>Not sure where to start? Here's a quick breakdown of the seven classes.</p>
+            <p><strong>Melee</strong></p>
+            <ul>
+              <li>Sword Warrior — high burst, close range</li>
+              <li>Blade Specialist — fast, mobile duelist</li>
+            </ul>
+            <p><strong>Ranged</strong></p>
+            <ul>
+              <li>Archer — sustained damage from afar</li>
+              <li>Mage — area control and crowd control</li>
+            </ul>
+            <p><strong>Support</strong></p>
+            <ul>
+              <li>Priest — healing and buffs</li>
+              <li>Bard — utility and team scaling</li>
+            </ul>
+            <p><em>Pick what fits your playstyle, not just the meta.</em></p>
+            <p>Experiment in the training grounds before committing your build.</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+
+        <!-- Article: Safe Trading with a Middleman (Guide) -->
+        <article id="safe-trading-with-middleman" class="news-article" data-category="guide" data-date="September 5, 2026">
+          <header class="article-header">
+            <span class="article-cat">GUIDE</span>
+            <h1 class="article-title">Safe Trading with a Middleman</h1>
+            <div class="article-meta">
+              <span class="article-date">September 5, 2026</span>
+              <span class="article-sep">•</span>
+              <span class="article-author">By Admin</span>
+            </div>
+          </header>
+          <div class="article-content">
+            <p>Trade safely using a trusted middleman.</p>
+            <p><strong>How it works:</strong></p>
+            <ul>
+              <li>Both parties agree on a verified middleman</li>
+              <li>Seller gives items to middleman</li>
+              <li>Buyer confirms payment to middleman</li>
+              <li>Middleman releases items to buyer</li>
+            </ul>
+            <p>Always verify the middleman's credentials before trading. Check our <a href="#services">Services</a> section for verified middlemen.</p>
+          </div>
+          <footer class="article-footer">
+            <a href="#" class="article-back" data-back="news">← Back to News</a>
+          </footer>
+        </article>
+      </div>
+    </section>
+  </main>
+</div>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <script src="assets/js/main.js"></script>
+  <!-- Backward-compat: forward legacy deep links (?slug= / ?kind=&i=) to the
+       new standalone article pages (news/<slug>.html). The list itself is
+       rendered entirely by main.js above. -->
+  <script>
+  (function () {
+    var p = new URLSearchParams(window.location.search);
+    var slug = p.get("slug");
+    if (!slug && p.get("i") != null) {
+      var C = window.SITE_CONFIG || {};
+      var data = (C.news || {});
+      var kind = p.get("kind") || "a";
+      var arr = kind === "e" ? data.event : kind === "g" ? data.tutorial : data.announcement;
+      var it = (arr || [])[Number(p.get("i"))];
+      slug = it && it.slug;
+    }
+    if (slug) window.location.replace("news/" + encodeURIComponent(slug) + ".html");
+  })();
+  </script>
+</body>
+</html>

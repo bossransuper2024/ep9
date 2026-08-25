@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Content Editor — RAN EP9 (internal)</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/generated.js"></script>
+  <style>
+    :root { --editor-bg: #070B14; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--editor-bg); color: var(--text); font-family: var(--font-body); line-height: 1.5; min-height: 100vh; padding: 22px clamp(14px, 4vw, 40px) 80px; }
+    .ed-head { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; border-bottom: 1px solid var(--line); padding-bottom: 16px; margin-bottom: 22px; }
+    .ed-head h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(22px, 4vw, 34px); margin: 0; text-transform: uppercase; letter-spacing: .5px; color: var(--accent); }
+    .ed-head .hint { color: var(--text-faint); font-size: 12px; font-family: var(--font-mono); letter-spacing: 1px; }
+    .ed-grid { display: grid; grid-template-columns: 320px 1fr; gap: 22px; align-items: start; }
+    @media (max-width: 900px) { .ed-grid { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel-solid); border: 1px solid var(--line-strong); border-radius: var(--radius); padding: 18px; }
+    .panel h2 { font-family: var(--font-mono); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-dim); margin: 0 0 14px; }
+    .field { margin-bottom: 14px; }
+    .field label { display: block; font-size: 12px; color: var(--text-dim); margin-bottom: 6px; letter-spacing: .5px; }
+    .field input, .field select, .field textarea { width: 100%; background: rgba(7,11,20,.7); border: 1px solid var(--line-strong); border-radius: 10px; color: var(--text); padding: 10px 12px; font-family: inherit; font-size: 14px; }
+    .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+    .tbtn { font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; padding: 9px 12px; border: 1px solid var(--line-strong); background: rgba(8,12,24,.6); color: var(--text); border-radius: 9px; cursor: pointer; transition: border-color .15s, color .15s, opacity .15s; }
+    .tbtn:hover { border-color: var(--accent); color: var(--accent); }
+    .tbtn:disabled { opacity: .35; cursor: not-allowed; }
+    .tbtn.strong { font-weight: 700; }
+    .tbtn.em { font-style: italic; }
+    .tbtn.under { text-decoration: underline; }
+    .tbtn.strike { text-decoration: line-through; }
+    .seg { display: inline-flex; border: 1px solid var(--line-strong); border-radius: 9px; overflow: hidden; }
+    .seg button { border: none; background: transparent; color: var(--text-dim); padding: 9px 16px; cursor: pointer; font-family: var(--font-mono); font-size: 12px; letter-spacing: 1px; text-transform: uppercase; }
+    .seg button.active { background: var(--accent); color: #0A1020; font-weight: 700; }
+    #editor { width: 100%; min-height: 420px; resize: vertical; background: rgba(7,11,20,.7); border: 1px solid var(--line-strong); border-radius: 10px; color: var(--text); padding: 14px; font-family: var(--font-mono); font-size: 14px; line-height: 1.7; }
+    #editor:disabled { opacity: .5; }
+    .preview-wrap { background: var(--bg-2); border: 1px solid var(--line-strong); border-radius: 10px; padding: 4px 10px; min-height: 420px; }
+    .preview-wrap[hidden] { display: none; }
+
+    /* Live mode: show editor and preview side by side */
+    @media (min-width: 1000px) {
+      body:has(#modeSeg button[data-mode="live"].active) .ed-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      body:has(#modeSeg button[data-mode="live"].active) .panel:first-of-type {
+        position: sticky; top: 22px; max-height: calc(100vh - 44px); overflow: auto;
+      }
+      body:has(#modeSeg button[data-mode="live"].active) #editor,
+      body:has(#modeSeg button[data-mode="live"].active) #preview {
+        min-height: calc(100vh - 200px);
+      }
+    }
+    #postList { list-style: none; margin: 0; padding: 0; max-height: 360px; overflow: auto; }
+    #postList li { padding: 11px 12px; border: 1px solid var(--line); border-radius: 9px; margin-bottom: 8px; cursor: pointer; transition: border-color .15s, background .15s; }
+    #postList li:hover { border-color: var(--accent); background: rgba(var(--accent-rgb),.05); }
+    #postList li.active { border-color: var(--accent); background: rgba(var(--accent-rgb),.1); }
+    #postList .pl-title { font-weight: 600; display: block; }
+    #postList .pl-meta { font-size: 11px; color: var(--text-faint); font-family: var(--font-mono); letter-spacing: 1px; text-transform: uppercase; }
+    #postList .pl-kind { color: var(--accent); }
+    .status { position: fixed; left: 0; right: 0; bottom: 0; background: rgba(7,11,20,.96); border-top: 1px solid var(--line-strong); padding: 11px clamp(14px,4vw,40px); font-family: var(--font-mono); font-size: 12.5px; letter-spacing: .5px; color: var(--text-dim); display: flex; align-items: center; gap: 12px; z-index: 50; }
+    .status .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--text-faint); box-shadow: 0 0 8px rgba(255,255,255,.3); }
+    .status.ok .dot { background: var(--good); box-shadow: 0 0 8px rgba(var(--good-rgb),.7); }
+    .status.warn .dot { background: var(--danger); box-shadow: 0 0 8px rgba(var(--danger-rgb),.7); }
+    .status .spacer { margin-left: auto; }
+    .note { font-size: 12px; color: var(--text-faint); margin-top: 10px; line-height: 1.5; }
+    .muted { color: var(--text-faint); font-size: 12px; }
+  </style>
+</head>
+<body>
+  <div class="ed-head">
+    <h1>Content Editor</h1>
+    <span class="hint">INTERNAL · direct URL only · no server write (static host → export &amp; download)</span>
+  </div>
+
+  <div class="ed-grid">
+    <div>
+      <div class="panel" style="margin-bottom:18px;">
+        <h2>Posts</h2>
+        <div class="toolbar">
+          <button class="tbtn" id="btnOpen" type="button">Open</button>
+          <button class="tbtn" id="btnNew" type="button">New Post</button>
+        </div>
+        <input id="search" type="text" placeholder="Filter by title…" style="margin-bottom:10px;">
+        <ul id="postList"></ul>
+        <p class="muted" id="listCount"></p>
+      </div>
+
+      <div class="panel">
+        <h2>Metadata</h2>
+        <div class="field"><label>Type</label><select id="fType" disabled><option value="announcement">Announcement</option><option value="event">Event</option></select></div>
+        <div class="field"><label>Date</label><input id="fDate" type="text" placeholder="e.g. August 20, 2026" disabled></div>
+        <div class="field"><label>Title</label><input id="fTitle" type="text" placeholder="Post title" disabled></div>
+        <div class="field"><label>Image URL (hero, optional)</label><input id="fImage" type="text" placeholder="assets/... or https://…" disabled></div>
+        <div class="field"><label>Link (optional)</label><input id="fLink" type="text" placeholder="#" disabled></div>
+        <div class="field"><label>Description (short excerpt)</label><textarea id="fDesc" rows="2" placeholder="Short summary shown in the list" disabled></textarea></div>
+        <div class="field">
+          <label>Content File (.txt name)</label>
+          <input id="fFile" type="text" placeholder="e.g. news-open-beta" disabled>
+          <p class="note">Filename only, no extension/path. On <b>New Post</b> this becomes the new <code>.txt</code>. Existing files load from <code>assets/content/</code> and are never overwritten automatically — use Save/Export.</p>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="panel">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:14px;">
+          <div class="seg" id="modeSeg">
+            <button type="button" data-mode="edit" class="active">Edit</button>
+            <button type="button" data-mode="live">Live</button>
+            <button type="button" data-mode="preview">Preview</button>
+          </div>
+          <div class="toolbar" style="margin:0;" id="rtToolbar">
+            <button class="tbtn strong" data-rt="b" type="button" title="Bold (**text**)">B</button>
+            <button class="tbtn em" data-rt="i" type="button" title="Italic (*text*)">I</button>
+            <button class="tbtn under" data-rt="u" type="button" title="Underline (__text__)">U</button>
+            <button class="tbtn strike" data-rt="s" type="button" title="Strikethrough (~~text~~)">S</button>
+            <button class="tbtn" data-rt="p" type="button" title="Paragraph">¶ Para</button>
+            <button class="tbtn" data-rt="bullet" type="button" title="Bullet list">• Bullet</button>
+            <button class="tbtn" data-rt="img" type="button" title="Image">🖼 Image</button>
+            <button class="tbtn" data-rt="quote" type="button" title="Quote ([quote]...[/quote])">💬 Quote</button>
+            <button class="tbtn" data-rt="callout" type="button" title="Callout box ([callout]...[/callout])">📣 Callout</button>
+            <button class="tbtn" data-rt="code" type="button" title="Inline code ([code]...[/code])">💻 Code</button>
+            <button class="tbtn" data-rt="table" type="button" title="Table ([table]...[/table])">📊 Table</button>
+            <button class="tbtn" data-rt="col" type="button" title="2 Columns ([col]...[/col])">⏸ 2 Col</button>
+            <button class="tbtn" data-rt="col3" type="button" title="3 Columns ([col3]...[/col3])">⏸ 3 Col</button>
+            <button class="tbtn" data-rt="hr" type="button" title="Horizontal rule ([hr])">— HR</button>
+            <button class="tbtn" data-rt="br" type="button" title="Line break ([br])">⏎ BR</button>
+          </div>
+        </div>
+
+        <textarea id="editor" placeholder="Select a post and press Open, or start a New Post…" disabled></textarea>
+        <div class="preview-wrap" id="preview" hidden></div>
+
+        <div class="toolbar" style="margin-top:16px;">
+          <button class="tbtn" id="btnUpdate" type="button" disabled>Update (download .txt)</button>
+          <button class="tbtn" id="btnDelete" type="button" disabled>Delete (export)</button>
+          <button class="tbtn" id="btnExport" type="button" disabled>Export metadata</button>
+          <button class="tbtn" id="btnClear" type="button">Clear</button>
+        </div>
+        <p class="note">
+          <b>Supported formatting</b> (matches the live reader): <code>**bold**</code>,
+          <code>*italic*</code>, <code>__underline__</code>, <code>~~strike~~</code>, and
+          <code>- </code> bullet lines. Blank lines separate paragraphs. Other markdown
+          (headings, links, images, quotes) is intentionally <b>not</b> supported by the reader.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="status" id="status">
+    <span class="dot"></span>
+    <span id="statusText">Ready. Select “Open” to load existing posts, or “New Post”.</span>
+    <span class="spacer"></span>
+    <span class="muted" id="modeLabel">mode: idle</span>
+  </div>
+
+  <script>
+  (function () {
+    "use strict";
+    var C = window.SITE_CONFIG || {};
+    var cfg = C.newsConfig || {};
+
+    /* ----------------------------------------------------------------------
+     * Reader-faithful parsing — copied verbatim from public/news.html so the
+     * Preview is byte-for-byte what the real reader renders. The image syntax
+     * ([img]url[img][auto|WxH]) is also mirrored in main.js / news.html inline()
+     * to keep Preview and the live reader identical. Inline images now support
+     * the same bare-filename normalization as hero images (assets/content/ prefix).
+     * -------------------------------------------------------------------- */
+    function esc(s) { return (s == null) ? "" : String(s); }
+    /* mini-markdown for article .txt files:
+   **b** __u__ ~~s~~ *i* "- item"
+   [img]url[img][auto|WxH] - inline images
+   [col]...[/col] - column (flex basis 50%)
+   [col3]...[/col3] - 3-column grid
+   [table]...[/table] - simple tables (pipe-separated)
+   [code]...[/code] - inline code
+   [quote]...[/quote] - blockquote
+   [callout]...[/callout] - highlighted callout box
+   [hr] - horizontal rule
+   [br] - line break
+*/
+    /* mini-markdown for article .txt files:
+   **b** __u__ ~~s~~ *i* "- item"
+   [img]url[img][auto|WxH] - inline images
+   [col]...[/col] - column (flex basis 50%)
+   [col3]...[/col3] - 3-column grid
+   [table]...[/table] - simple tables (pipe-separated)
+   [code]...[/code] - inline code
+   [quote]...[/quote] - blockquote
+   [callout]...[/callout] - highlighted callout box
+   [hr] - horizontal rule
+   [br] - line break
+*/
+    function inline(t) {
+      return t
+        .replace(/\[img\](.*?)\[img\](?:\[(auto|\d+x\d+)\])?/g, function (_m, url, size) {
+          url = String(url).replace(/"/g, '"');
+          if (url.indexOf('://') === -1 && url.indexOf('/') !== 0) url = 'assets/content/' + url;
+          var dim = '';
+          if (size && size !== 'auto') { var p = size.split('x'); dim = ' width="' + p[0] + '" height="' + p[1] + '"'; }
+          return '<img class="txt-img" src="' + url + '" alt=""' + dim + '>';
+        })
+        .replace(/\[table\]([\s\S]*?)\[\/table\]/g, function (_m, content) {
+          var rows = content.trim().split('\n');
+          var html = '<table class="txt-table">';
+          rows.forEach(function (row, i) {
+            var cells = row.split('|').map(function (c) { return c.trim(); });
+            var tag = i === 0 ? 'th' : 'td';
+            html += '<tr>';
+            cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+            html += '</tr>';
+          });
+          html += '</table>';
+          return html;
+        })
+        .replace(/\[callout\]([\s\S]*?)\[\/callout\]/g, '<div class="txt-callout">$1</div>')
+        .replace(/\[quote\]([\s\S]*?)\[\/quote\]/g, '<blockquote class="txt-quote">$1</blockquote>')
+        .replace(/\[code\](.*?)\[\/code\]/g, '<code class="txt-code">$1</code>')
+        .replace(/\[col\]([\s\S]*?)\[\/col\]/g, '<div class="txt-col">$1</div>')
+        .replace(/\[col3\]([\s\S]*?)\[\/col3\]/g, '<div class="txt-col3">$1</div>')
+        .replace(/\[hr\]/g, '<hr class="txt-hr">')
+        .replace(/\[br\]/g, '<br>')
+        .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+        .replace(/__(.+?)__/g, "<u>$1</u>")
+        .replace(/~~(.+?)~~/g, "<del>$1</del>")
+        .replace(/\*(.+?)\*/g, "<em>$1</em>");
+    }
+    function renderText(raw) {
+      var blocks = [];
+      (raw || "").split(/\n/).forEach(function (line) {
+        line = line.replace(/\r/g, "");
+        if (!line.trim()) return;
+        if (/^[-•]\s+/.test(line)) blocks.push({ type: "li", text: inline(line.replace(/^[-•]\s+/, "")) });
+        else blocks.push({ type: "p", text: inline(line) });
+      });
+      return blocks;
+    }
+    function loadTxt(name, cb) {
+      if (!name) return cb(null);
+      var url = name.indexOf("/") !== -1 ? name : "assets/content/" + name;
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", url, true);
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) cb(xhr.status === 200 ? xhr.responseText : null);
+      };
+      xhr.send();
+    }
+    /* Replicates news.html showArticle() fill() output for the body. */
+    function previewHtml(item, text) {
+      var kind = (item && item.__kind) || "a";
+      var cat = (item && item.cat) || (kind === "e" ? "EVENT" : "ANNOUNCEMENT");
+      cat = String(cat).toUpperCase();
+      var date = ((cfg && cfg.showDate === false) || !(item && item.date)) ? "" : esc(item && item.date);
+      var catHtml = ((cfg && cfg.showCategory === false)) ? "" : '<span class="reader-tag">' + cat + '</span>';
+      var dateHtml = date ? '<span class="reader-date">' + date + '</span>' : "";
+      var meta = '<div class="reader-meta">' + catHtml + dateHtml + '</div>';
+      var title = '<h1 class="reader-title">' + esc(item && item.title || "") + '</h1>';
+      var blocks = text
+        ? renderText(text)
+        : (item && item.description ? [{ type: "p", text: inline(item.description) }] : [{ type: "p", text: "Details coming soon." }]);
+      var imgHtml = "";
+      if (item && item.image && (cfg && cfg.showImagesInArticle !== false)) {
+        var src = item.image;
+        if (src.indexOf("://") === -1 && src.indexOf("/") !== 0) src = "assets/content/" + src;
+        imgHtml = '<figure class="reader-figure"><img src="' + esc(src) + '" alt="' + esc(item && item.title || "") + '" loading="lazy"></figure>';
+      }
+      return meta + title + imgHtml + blocks.map(function (b) {
+        if (b.type === "li") return '<div class="txt-list"><div class="txt-bullet">' + b.text + '</div></div>';
+        return '<p class="txt-para">' + b.text + '</p>';
+      }).join("");
+    }
+
+    /* ------------------------------------------------------------------ */
+    var $ = function (id) { return document.getElementById(id); };
+    var editor = $("editor"), preview = $("preview");
+    var fType = $("fType"), fDate = $("fDate"), fTitle = $("fTitle"),
+        fImage = $("fImage"), fLink = $("fLink"), fDesc = $("fDesc"), fFile = $("fFile");
+    var btns = {
+      open: $("btnOpen"), neu: $("btnNew"), update: $("btnUpdate"),
+      del: $("btnDelete"), exp: $("btnExport"), clear: $("btnClear")
+    };
+    var statusEl = $("status"), statusText = $("statusText"), modeLabel = $("modeLabel");
+
+    var state = { mode: "idle", current: null, kind: null, index: null, file: null };
+
+    function setStatus(msg, kind) {
+      statusText.textContent = msg;
+      statusEl.className = "status" + (kind ? " " + kind : "");
+    }
+    function setMode(m) {
+      state.mode = m;
+      modeLabel.textContent = "mode: " + m;
+      var editing = (m === "new" || m === "edit" || m === "live");
+      var isLive = (m === "live");
+      var isPreview = (m === "preview");
+      editor.hidden = isPreview;
+      preview.hidden = !isPreview && !isLive;
+      if (isPreview) {
+        var item = collectMeta();
+        preview.innerHTML = previewHtml(item, editor.value);
+      }
+      if (isLive) {
+        // Initialize live preview with current content
+        var item = collectMeta();
+        preview.innerHTML = previewHtml(item, editor.value);
+        // Set up live update on input
+        editor.removeEventListener("input", liveUpdate);
+        editor.addEventListener("input", liveUpdate);
+      } else {
+        editor.removeEventListener("input", liveUpdate);
+      }
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile, editor,
+       btns.update, btns.del, btns.exp].forEach(function (el) { el.disabled = !editing; });
+      btns.open.disabled = false; btns.neu.disabled = false; btns.clear.disabled = false;
+    }
+    function liveUpdate() {
+      if (state.mode !== "live") return;
+      var item = collectMeta();
+      preview.innerHTML = previewHtml(item, editor.value);
+    }
+    function enableMeta(enabled, withFile) {
+      [fType, fDate, fTitle, fImage, fLink, fDesc].forEach(function (el) { el.disabled = !enabled; });
+      fFile.disabled = !withFile;
+    }
+
+    function collectMeta() {
+      return {
+        __kind: fType.value === "event" ? "e" : "a",
+        cat: fType.value === "event" ? "EVENT" : "ANNOUNCEMENT",
+        date: fDate.value.trim(),
+        title: fTitle.value.trim(),
+        image: fImage.value.trim(),
+        link: fLink.value.trim() || "#",
+        description: fDesc.value.trim(),
+        context: fFile.value.trim()
+      };
+    }
+
+    function buildList(filter) {
+      var data = [
+        { kind: "a", label: "Announcement", arr: (C.news && C.news.announcement) || [] },
+        { kind: "e", label: "Event", arr: (C.news && C.news.event) || [] }
+      ];
+      var ul = $("postList"); ul.innerHTML = "";
+      var count = 0;
+      filter = (filter || "").toLowerCase();
+      data.forEach(function (grp) {
+        grp.arr.forEach(function (it, i) {
+          var title = it.title || "(untitled)";
+          if (filter && title.toLowerCase().indexOf(filter) === -1) return;
+          count++;
+          var li = document.createElement("li");
+          li.dataset.kind = grp.kind; li.dataset.index = i;
+          var file = it.context || "";
+          li.innerHTML = '<span class="pl-title">' + esc(title) + '</span>' +
+            '<span class="pl-meta"><span class="pl-kind">' + grp.label.toUpperCase() +
+            '</span> · ' + esc(it.date || "") + (file ? ' · ' + esc(file) : '') + '</span>';
+          li.addEventListener("click", function () { openPost(grp.kind, i, li); });
+          ul.appendChild(li);
+        });
+      });
+      $("listCount").textContent = count + " post(s)";
+      return count;
+    }
+
+    function openPost(kind, i, li) {
+      var arr = (kind === "e") ? (C.news.event || []) : (C.news.announcement || []);
+      var it = arr[i];
+      if (!it) { setStatus("Post not found.", "warn"); return; }
+      state.current = it; state.kind = kind; state.index = i;
+      state.file = it.context || "";
+      fType.value = kind === "e" ? "event" : "announcement";
+      fDate.value = it.date || "";
+      fTitle.value = it.title || "";
+      fImage.value = it.image || "";
+      fLink.value = it.link || "";
+      fDesc.value = it.description || "";
+      fFile.value = it.context || "";
+      enableMeta(true, false);
+      var listItems = document.querySelectorAll("#postList li");
+      listItems.forEach(function (x) { x.classList.remove("active"); });
+      if (li) li.classList.add("active");
+      setStatus("Loading body from assets/content/" + (it.context || "(none)") + " …", null);
+      loadTxt(it.context, function (text) {
+        if (text == null) {
+          editor.value = it.description || "";
+          setStatus("No .txt found (or empty); loaded metadata description. Save will create " + (it.context || "the file") + ".", "warn");
+        } else {
+          editor.value = text;
+          setStatus("Opened: " + (it.title || "") + " (" + (it.context || "no file") + ").", "ok");
+        }
+        setMode("edit");
+      });
+    }
+
+    function newPost() {
+      state.current = null; state.kind = "a"; state.index = null; state.file = null;
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (el) { el.value = ""; });
+      fType.value = "announcement";
+      editor.value = "";
+      enableMeta(true, true);
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      setStatus("New post. Choose type, set metadata + a unique filename, then write the body.", null);
+      setMode("new");
+      editor.focus();
+    }
+
+    function sanitizeFile() {
+      var f = fFile.value.trim().replace(/\.txt$/i, "").replace(/[^A-Za-z0-9._-]/g, "-");
+      return f;
+    }
+
+    function download(filename, text) {
+      var blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url; a.download = filename;
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    }
+
+    function csvRow(it) {
+      var id = (it.__kind === "e" ? "event-" : "news-") + (sanitizeFile() || "new");
+      // Columns match the live CSVs: id,date,title,image,context,hide
+      var cols = [id, it.date, it.title, it.image, it.context, it.hide ? "true" : ""];
+      return cols.map(function (c) {
+        c = c == null ? "" : String(c);
+        if (/[",\n]/.test(c)) c = '"' + c.replace(/"/g, '""') + '"';
+        return c;
+      }).join(",");
+    }
+
+    function doUpdate() {
+      var file = sanitizeFile();
+      if (!file) { setStatus("Set a filename before saving.", "warn"); fFile.focus(); return; }
+      if (!fTitle.value.trim()) { setStatus("Title is required.", "warn"); fTitle.focus(); return; }
+      download(file + ".txt", editor.value.replace(/\r\n/g, "\n"));
+      var verb = (state.mode === "new") ? "Created new" : "Updated";
+      setStatus(verb + " " + file + ".txt (downloaded). Paste/overwrite into assets/content/.", "ok");
+    }
+
+    function doDelete() {
+      if (state.mode !== "edit" || !state.current) {
+        setStatus("Open an existing post first to delete.", "warn"); return;
+      }
+      var file = state.file || sanitizeFile();
+      var it = collectMeta();
+      var out = [];
+      out.push("DELETE INSTRUCTIONS (static host — cannot delete server files directly)");
+      out.push("Generated: " + new Date().toISOString());
+      out.push("");
+      out.push("1) Remove the content file: assets/content/" + file + ".txt");
+      out.push("   (download below is a copy for your records)");
+      out.push("");
+      out.push("2) Remove the matching row from " + (state.kind === "e" ? "event.csv" : "announcement.csv") + ":");
+      out.push("   " + csvRow(it));
+      out.push("");
+      out.push("3) Run: npm run build   (regenerates src/config/generated.js)");
+      download("DELETE-" + file + ".txt", out.join("\n"));
+      if (editor.value) download(file + ".txt", editor.value.replace(/\r\n/g, "\n"));
+      setStatus("Delete export ready for " + file + ".txt. Apply the 3 steps above on your build host.", "warn");
+    }
+
+    function doExport() {
+      if (!fTitle.value.trim()) { setStatus("Title is required to export metadata.", "warn"); fTitle.focus(); return; }
+      var file = sanitizeFile();
+      if (!file) { setStatus("Set a filename before exporting metadata.", "warn"); fFile.focus(); return; }
+      var it = collectMeta(); it.context = file;
+      var out = [];
+      out.push("METADATA CHANGE for " + (state.kind === "e" ? "event.csv" : "announcement.csv"));
+      out.push("Generated: " + new Date().toISOString());
+      out.push("Mode: " + (state.mode === "new" ? "NEW (add this row)" : "EDIT (replace existing row)"));
+      out.push("");
+      out.push("CSV row (columns: id,date,title,image,context):");
+      out.push(csvRow(it));
+      out.push("");
+      out.push("After editing the CSV, run: npm run build");
+      download("metadata-" + file + ".txt", out.join("\n"));
+      setStatus("Exported metadata for " + file + " (" + (state.mode === "new" ? "new" : "edit") + ").", "ok");
+    }
+
+    function clearAll() {
+      state.current = null; state.kind = null; state.index = null; state.file = null;
+      [fType, fDate, fTitle, fImage, fLink, fDesc, fFile].forEach(function (el) { el.value = ""; });
+      editor.value = "";
+      enableMeta(false, false);
+      document.querySelectorAll("#postList li").forEach(function (x) { x.classList.remove("active"); });
+      setStatus("Cleared. Select Open or New Post.", null);
+      setMode("idle");
+    }
+
+    /* ---- rich toolbar ---- */
+    function wrapSelection(prefix, suffix, placeholder) {
+      var s = editor.selectionStart, e = editor.selectionEnd;
+      var sel = editor.value.slice(s, e) || placeholder;
+      var text = prefix + sel + suffix;
+      editor.value = editor.value.slice(0, s) + text + editor.value.slice(e);
+      editor.focus();
+      editor.selectionStart = s + prefix.length;
+      editor.selectionEnd = s + prefix.length + sel.length;
+    }
+    function prefixLine(prefix) {
+      var s = editor.selectionStart;
+      var lineStart = editor.value.lastIndexOf("\n", s - 1) + 1;
+      editor.value = editor.value.slice(0, lineStart) + prefix + editor.value.slice(lineStart);
+      editor.focus();
+      editor.selectionStart = editor.selectionEnd = s + prefix.length;
+    }
+    document.getElementById("rtToolbar").addEventListener("click", function (ev) {
+      var b = ev.target.closest("button[data-rt]");
+      if (!b || editor.disabled) return;
+      var rt = b.dataset.rt;
+      if (rt === "b") wrapSelection("**", "**", "bold text");
+      else if (rt === "i") wrapSelection("*", "*", "italic text");
+      else if (rt === "u") wrapSelection("__", "__", "underlined text");
+      else if (rt === "s") wrapSelection("~~", "~~", "struck text");
+      else if (rt === "p") prefixLine("");
+      else if (rt === "bullet") prefixLine("- ");
+      else if (rt === "img") {
+        var url = prompt("Image URL or path (e.g. /images/foo.png or https://…):", "");
+        if (url) {
+          var size = prompt("Size: blank = auto, or WxH (e.g. 320x200):", "");
+          var tag = "[img]" + url + "[img]" + (size ? "[" + size + "]" : "[auto]");
+          prefixLine(tag + "\n");
+        }
+      }
+      else if (rt === "quote") wrapSelection("[quote]\n", "\n[/quote]", "quoted text");
+      else if (rt === "callout") wrapSelection("[callout]\n", "\n[/callout]", "callout content");
+      else if (rt === "code") wrapSelection("[code]", "[/code]", "code");
+      else if (rt === "table") wrapSelection("[table]\nHeader1|Header2\nValue1|Value2\n[/table]", "", "");
+      else if (rt === "col") wrapSelection("[col]\n", "\n[/col]", "column content");
+      else if (rt === "col3") wrapSelection("[col3]\n", "\n[/col3]", "column content");
+      else if (rt === "hr") prefixLine("[hr]\n");
+      else if (rt === "br") prefixLine("[br]");
+    });
+
+    /* ---- mode toggle ---- */
+    document.getElementById("modeSeg").addEventListener("click", function (ev) {
+      var b = ev.target.closest("button[data-mode]");
+      if (!b) return;
+      document.querySelectorAll("#modeSeg button").forEach(function (x) { x.classList.remove("active"); });
+      b.classList.add("active");
+      setMode(b.dataset.mode);
+    });
+
+    /* ---- wire buttons ---- */
+    btns.open.addEventListener("click", function () { buildList($("search").value); setStatus("Loaded post list from SITE_CONFIG.", "ok"); });
+    btns.neu.addEventListener("click", newPost);
+    btns.update.addEventListener("click", doUpdate);
+    btns.del.addEventListener("click", doDelete);
+    btns.exp.addEventListener("click", doExport);
+    btns.clear.addEventListener("click", clearAll);
+    $("search").addEventListener("input", function () { buildList(this.value); });
+
+    /* ---- init ---- */
+    buildList("");
+    enableMeta(false, false);
+    setMode("idle");
+  })();
+  </script>
+</body>
+</html>
+
