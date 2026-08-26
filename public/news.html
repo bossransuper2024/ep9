@@ -42,7 +42,7 @@
         <a class="btn" href="index.html">HOME</a>
       </div>
     </header>
-    <!-- News list (category filter + grid + pagination) — Main Page content is
+    <!-- News list (category filter + table + pagination) — Main Page content is
          NOT here. Each row is a real <a> to its standalone content page. -->
     <section class="section" id="news">
       <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
@@ -51,253 +51,37 @@
         <span class="eyebrow">NEWS</span>
         <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
         <p class="section-intro" id="news-intro"></p>
-        <!-- Bossran-style category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
+        <!-- Category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
              Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
              the client-side filtering (no backend required). -->
         <div class="news-tabs news-filter" id="news-tabs"></div>
-        <div class="news-grid" id="news-grid"></div>
+        <!-- Bossran-style compact list (news-row). Articles deep-link to the
+             standalone reader via news.html#id=<CSV_ID>. -->
+        <div class="news-grid" id="news-grid">
+          <div class="news-tbody" id="news-tbody"></div>
+        </div>
         <div class="news-pagination" id="news-pagination"></div>
       </div>
     </section>
 
-    <!-- Article Content Sections - All news content consolidated here -->
+    <!-- Article reader: a SINGLE live shell. Articles are rendered on demand
+         from the shared Google Sheet loader (window.NewsData) using the hash
+         route news.html#id=<CSV_ID>. No per-article HTML files. -->
     <section id="news-articles" class="news-articles-section" style="display:none;">
       <div class="wrap">
-        <!-- Article: Community Event: Tyranny Wars -->
-        <article id="community-event-tyranny-wars" class="news-article" data-category="announcement" data-date="September 10, 2026">
+        <article id="news-article" class="news-article" data-category="" data-date="">
           <header class="article-header">
-            <span class="article-cat">ANNOUNCEMENT</span>
-            <h1 class="article-title">Community Event: Tyranny Wars</h1>
+            <span class="article-cat" id="article-cat"></span>
+            <h1 class="article-title" id="article-title"></h1>
             <div class="article-meta">
-              <span class="article-date">September 10, 2026</span>
+              <span class="article-date" id="article-date"></span>
               <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
+              <span class="article-author" id="article-author">By Admin</span>
             </div>
           </header>
-          <div class="article-content">
-            <p>The first season of Tyranny Wars begins. For the first time, <u>even guilds from the same school can clash</u> for territory and supremacy.</p>
-            <p><strong>How it works</strong></p>
-            <ul>
-              <li>Form or join a warband</li>
-              <li>Capture territory nodes across the map</li>
-              <li>Hold them to earn weekly supremacy points</li>
-            </ul>
-            <p><del>Solo players cannot register alone.</del> Actually, solo registration is allowed — bring your best build.</p>
-            <p>Rewards scale with your rank at the end of the season. Good luck, commander.</p>
-          </div>
+          <div class="article-content" id="article-body"></div>
           <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Patch Notes v1.1 -->
-        <article id="patch-notes-v1-1" class="news-article" data-category="announcement" data-date="September 1, 2026">
-          <header class="article-header">
-            <span class="article-cat">ANNOUNCEMENT</span>
-            <h1 class="article-title">Patch Notes — v1.1</h1>
-            <div class="article-meta">
-              <span class="article-date">September 1, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>This patch focuses on balance, rewards and security.</p>
-            <p><strong>Highlights</strong></p>
-            <ul>
-              <li>Drop-rate tuning across all dungeon tiers</li>
-              <li>New daily login rewards</li>
-              <li>Improved anti-cheat detection</li>
-            </ul>
-            <p><strong>Bug Fixes</strong></p>
-            <ul>
-              <li>Fixed a rare crash on class selection</li>
-              <li>Resolved an issue where <strong>trade windows could desync</strong></li>
-              <li>Patched the <del>dupe exploit</del> that affected a small number of accounts</li>
-            </ul>
-            <p>Thank you for reporting issues on our Discord. Keep them coming!</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Open Beta -->
-        <article id="open-beta" class="news-article" data-category="announcement" data-date="August 20, 2026">
-          <header class="article-header">
-            <span class="article-cat">ANNOUNCEMENT</span>
-            <h1 class="article-title">Open Beta</h1>
-            <div class="article-meta">
-              <span class="article-date">August 20, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>Open Beta is LIVE! Jump in and claim your starter pack before the servers fill up.</p>
-            <p><strong>Important:</strong> Please read the rules before playing.</p>
-            <p><em>This welcome bonus is only available during Open Beta.</em></p>
-            <p><del>The old legacy launcher is no longer supported.</del> Use the new EP9 client.</p>
-            <p><strong>Server Features</strong></p>
-            <ul>
-              <li>Free to Play</li>
-              <li>Auto Skill System</li>
-              <li>Daily Rewards</li>
-              <li>Custom Events</li>
-            </ul>
-            <p>See you on the battlefield, soldier.</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Double EXP Weekend (Event) -->
-        <article id="double-exp-weekend" class="news-article" data-category="news" data-date="August 25, 2026">
-          <header class="article-header">
-            <span class="article-cat">NEWS</span>
-            <h1 class="article-title">Double EXP Weekend</h1>
-            <div class="article-meta">
-              <span class="article-date">August 25, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>Log in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.</p>
-            <ul>
-              <li>Event runs Friday 6PM through Sunday midnight (server time)</li>
-              <li>Applies to all PvE and quest EXP gains</li>
-              <li>Premium members get an extra +20% on top</li>
-            </ul>
-            <p>Stack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Founding Member Giveaway (Event) -->
-        <article id="founding-member-giveaway" class="news-article" data-category="news" data-date="September 20, 2026">
-          <header class="article-header">
-            <span class="article-cat">NEWS</span>
-            <h1 class="article-title">Founding Member Giveaway</h1>
-            <div class="article-meta">
-              <span class="article-date">September 20, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>To celebrate launch week, we're giving away exclusive founder cosmetics and a starter gear pack to the first 500 registered players.</p>
-            <ul>
-              <li>Create your account and reach level 30 before the deadline</li>
-              <li>Founder titles are permanent and account-bound</li>
-              <li>Winners are announced in the Discord community</li>
-            </ul>
-            <p>Don't miss your chance to wear the badge of a founding member. Good luck!</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: How to Install (Guide) -->
-        <article id="how-to-install" class="news-article" data-category="guide" data-date="August 25, 2026">
-          <header class="article-header">
-            <span class="article-cat">GUIDE</span>
-            <h1 class="article-title">How to Install</h1>
-            <div class="article-meta">
-              <span class="article-date">August 25, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>Follow these steps to get into the game.</p>
-            <p><strong>Step 1 — Download</strong></p>
-            <ul>
-              <li>Get the full client from the Download section</li>
-              <li>Choose the mirror closest to your region</li>
-            </ul>
-            <p><strong>Step 2 — Extract</strong></p>
-            <ul>
-              <li>Unzip the archive to a folder you can find easily</li>
-              <li><strong>Do not</strong> place it inside Program Files (Windows can block writes)</li>
-            </ul>
-            <p><strong>Step 3 — Launch</strong></p>
-            <ul>
-              <li>Run the launcher as administrator</li>
-              <li>Let it patch to the latest version</li>
-            </ul>
-            <p>If you see a virus warning, ignore it. Modern launchers are signed — if your antivirus flags it, add an exception.</p>
-            <p>You're ready to play. See you in-game!</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Beginner Class Guide (Guide) -->
-        <article id="beginner-class-guide" class="news-article" data-category="guide" data-date="August 28, 2026">
-          <header class="article-header">
-            <span class="article-cat">GUIDE</span>
-            <h1 class="article-title">Beginner Class Guide</h1>
-            <div class="article-meta">
-              <span class="article-date">August 28, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>Not sure where to start? Here's a quick breakdown of the seven classes.</p>
-            <p><strong>Melee</strong></p>
-            <ul>
-              <li>Sword Warrior — high burst, close range</li>
-              <li>Blade Specialist — fast, mobile duelist</li>
-            </ul>
-            <p><strong>Ranged</strong></p>
-            <ul>
-              <li>Archer — sustained damage from afar</li>
-              <li>Mage — area control and crowd control</li>
-            </ul>
-            <p><strong>Support</strong></p>
-            <ul>
-              <li>Priest — healing and buffs</li>
-              <li>Bard — utility and team scaling</li>
-            </ul>
-            <p><em>Pick what fits your playstyle, not just the meta.</em></p>
-            <p>Experiment in the training grounds before committing your build.</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
-          </footer>
-        </article>
-
-        <!-- Article: Safe Trading with a Middleman (Guide) -->
-        <article id="safe-trading-with-middleman" class="news-article" data-category="guide" data-date="September 5, 2026">
-          <header class="article-header">
-            <span class="article-cat">GUIDE</span>
-            <h1 class="article-title">Safe Trading with a Middleman</h1>
-            <div class="article-meta">
-              <span class="article-date">September 5, 2026</span>
-              <span class="article-sep">•</span>
-              <span class="article-author">By Admin</span>
-            </div>
-          </header>
-          <div class="article-content">
-            <p>Trade safely using a trusted middleman.</p>
-            <p><strong>How it works:</strong></p>
-            <ul>
-              <li>Both parties agree on a verified middleman</li>
-              <li>Seller gives items to middleman</li>
-              <li>Buyer confirms payment to middleman</li>
-              <li>Middleman releases items to buyer</li>
-            </ul>
-            <p>Always verify the middleman's credentials before trading. Check our <a href="#services">Services</a> section for verified middlemen.</p>
-          </div>
-          <footer class="article-footer">
-            <a href="#" class="article-back" data-back="news">← Back to News</a>
+            <a href="news.html" class="article-back" id="article-back" data-back="news">← BACK TO NEWS</a>
           </footer>
         </article>
       </div>
@@ -307,23 +91,176 @@
 
   <script src="assets/js/config.js"></script>
   <script src="assets/js/generated.js"></script>
+  <script src="assets/js/news-data.js"></script>
   <script src="assets/js/main.js"></script>
-  <!-- Backward-compat: forward legacy deep links (?slug= / ?kind=&i=) to the
-       new standalone article pages (news/<slug>.html). The list itself is
-       rendered entirely by main.js above. -->
+  <!-- Legacy deep-link forwarder + live hash-routed article reader.
+       ?slug= / ?kind=&i= URLs are forwarded to news.html#id=<slug>; the reader
+       then loads the article body from the shared Google Sheet loader. -->
   <script>
   (function () {
+    var C = window.SITE_CONFIG || {};
+    // Resolve NewsData lazily — this inline reader is loaded BEFORE
+    // assets/js/news-data.js (which defines window.NewsData). A top-level
+    // `var ND = window.NewsData` would capture `undefined`, so we read it at
+    // call time inside route()/tryRender() instead.
+    function getND() { return window.NewsData || null; }
+
+    function esc(s) { return (s == null) ? "" : String(s); }
+    function inline(t) {
+    return t
+      .replace(/\[img\](.*?)\[img\](?:\[(auto|\d+x\d+)\])?/g, function (_m, url, size) {
+        url = String(url).replace(/"/g, '"');
+        if (url.indexOf('://') === -1 && url.indexOf('/') !== 0) url = 'assets/content/' + url;
+        var dim = '';
+        if (size && size !== 'auto') { var p = size.split('x'); dim = ' width="' + p[0] + '" height="' + p[1] + '"'; }
+        return '<img class="txt-img" src="' + url + '" alt=""' + dim + '>';
+      })
+      .replace(/\[table\]([\s\S]*?)\[\/table\]/g, function (_m, content) {
+        var rows = content.trim().split('\n');
+        var html = '<table class="txt-table">';
+        rows.forEach(function (row, i) {
+          var cells = row.split('|').map(function (c) { return c.trim(); });
+          var tag = i === 0 ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+          html += '</tr>';
+        });
+        html += '</table>';
+        return html;
+      })
+      .replace(/\[callout\]([\s\S]*?)\[\/callout\]/g, '<div class="txt-callout">$1</div>')
+      .replace(/\[quote\]([\s\S]*?)\[\/quote\]/g, '<blockquote class="txt-quote">$1</blockquote>')
+      .replace(/\[code\](.*?)\[\/code\]/g, '<code class="txt-code">$1</code>')
+      .replace(/\[col\]([\s\S]*?)\[\/col\]/g, '<div class="txt-col">$1</div>')
+      .replace(/\[col3\]([\s\S]*?)\[\/col3\]/g, '<div class="txt-col3">$1</div>')
+      .replace(/\[h2\]([\s\S]*?)\[\/h2\]/g, '<h2 class="txt-h2">$1</h2>')
+      .replace(/\[h3\]([\s\S]*?)\[\/h3\]/g, '<h3 class="txt-h3">$1</h3>')
+      .replace(/\[hr\]/g, '<hr class="txt-hr">')
+      .replace(/\[br\]/g, '<br>')
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/__(.+?)__/g, "<u>$1</u>")
+      .replace(/~~(.+?)~~/g, "<del>$1</del>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
+  }
+    function renderBody(raw) {
+      if (!raw) return '<p class="article-empty">No content yet.</p>';
+      var html = "", listOpen = false, tableOpen = false, tableRows = [];
+      function closeList() { if (listOpen) { html += "</ul>"; listOpen = false; } }
+      function closeTable() {
+        if (!tableOpen) return;
+        html += '<table class="txt-table">';
+        tableRows.forEach(function (row, ri) {
+          var cells = row.split('|').map(function (c) { return c.trim(); });
+          var tag = ri === 0 ? 'th' : 'td';
+          html += '<tr>';
+          cells.forEach(function (cell) { html += '<' + tag + '>' + inline(cell) + '</' + tag + '>'; });
+          html += '</tr>';
+        });
+        html += '</table>';
+        tableOpen = false; tableRows = [];
+      }
+      raw.split(/\r?\n/).forEach(function (line) {
+        line = line.replace(/\r/g, "");
+        if (tableOpen) {
+          if (/^\s*\[\/table\]\s*$/.test(line)) { closeTable(); return; }
+          tableRows.push(line); return;
+        }
+        if (/^\s*\[table\]\s*$/.test(line)) { closeList(); tableOpen = true; return; }
+        if (!line.trim()) { closeList(); return; }
+        var img = line.match(/\[img\]([^\[]+)\[img\]/);
+        if (img) { closeList(); html += '<p><img src="' + esc(img[1].trim()) + '" alt=""></p>'; return; }
+        var b = line.match(/^\s*[-*+]\s+(.*)$/);
+        if (b) { if (!listOpen) { html += "<ul>"; listOpen = true; } html += "<li>" + inline(b[1]) + "</li>"; return; }
+        var hb = line.match(/^\s*\[h([23])\]([\s\S]*?)\[\/h\1\]\s*$/);
+        if (hb) { closeList(); html += '<h' + hb[1] + ' class="txt-h' + hb[1] + '">' + inline(hb[2]) + '</h' + hb[1] + '>'; return; }
+        closeList();
+        html += "<p>" + inline(line) + "</p>";
+      });
+      closeList(); closeTable();
+      return html;
+    }
+
+    function fillArticle(item) {
+      var art = document.getElementById("news-article");
+      var sec = document.getElementById("news-articles");
+      var list = document.getElementById("news");
+      if (!art || !sec || !item) return false;
+      document.getElementById("article-cat").textContent = item.cat || "NEWS";
+      document.getElementById("article-title").textContent = item.title || "";
+      document.getElementById("article-date").textContent = item.date || "";
+      var artAuthor = document.getElementById("article-author");
+      if (artAuthor) artAuthor.textContent = "By " + ((item.author && item.author !== "Admin") ? esc(item.author) : "Admin");
+      art.setAttribute("data-category", (item.cat || "NEWS").toLowerCase());
+      art.setAttribute("data-date", item.date || "");
+      var body = document.getElementById("article-body");
+      var html = "";
+      if (item.image) html += '<p><img src="' + esc(item.image) + '" alt=""></p>';
+      html += renderBody(item.text || item.description || "");
+      body.innerHTML = html;
+      if (list) list.style.display = "none";
+      sec.style.display = "block";
+      document.body.classList.add("show-article");
+      art.scrollIntoView({ behavior: "smooth", block: "start" });
+      return true;
+    }
+    function showList() {
+      var sec = document.getElementById("news-articles");
+      var list = document.getElementById("news");
+      if (sec) sec.style.display = "none";
+      if (list) list.style.display = "block";
+      document.body.classList.remove("show-article");
+      if (list) list.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function getHashId() {
+      // Support the babyran-style article id from either:
+      //   news.html#id=<CSV_ID>   (hash route)
+      //   news.html?articleid=<CSV_ID>  (query route, parity with show.aspx?articleid=X)
+      var q = (window.location.search || "");
+      var m = q.match(/(?:^|&)articleid=([^&]+)/);
+      if (m) return decodeURIComponent(m[1]);
+      var h = (window.location.hash || "").replace(/^#/, "");
+      m = h.match(/(?:^|&)id=([^&]+)/);
+      if (m) return decodeURIComponent(m[1]);
+      return h || "";
+    }
+    function route() {
+      var id = getHashId();
+      if (!id) { showList(); return; }
+      function tryRender() {
+        var ND = getND();
+        var item = ND && ND.getById ? ND.getById(id) : null;
+        if (item) { fillArticle(item); return true; }
+        return false;
+      }
+      if (tryRender()) return;
+      var ND = getND();
+      if (ND && typeof ND.load === "function") {
+        ND.load().then(function () { if (!tryRender()) showList(); }).catch(function () { showList(); });
+      } else {
+        showList();
+      }
+    }
+
+    // Backward-compat forwarder for old deep links (?slug= / ?kind=&i=).
     var p = new URLSearchParams(window.location.search);
     var slug = p.get("slug");
     if (!slug && p.get("i") != null) {
-      var C = window.SITE_CONFIG || {};
       var data = (C.news || {});
       var kind = p.get("kind") || "a";
       var arr = kind === "e" ? data.event : kind === "g" ? data.tutorial : data.announcement;
       var it = (arr || [])[Number(p.get("i"))];
-      slug = it && it.slug;
+      slug = it && (it.id || it.slug);
     }
-    if (slug) window.location.replace("news/" + encodeURIComponent(slug) + ".html");
+    if (slug) {
+      window.location.replace("news.html#id=" + encodeURIComponent(slug));
+      return;
+    }
+
+    window.addEventListener("hashchange", route);
+    setTimeout(route, 0);
+    window.__newsRoute = route;
+    window.__newsShowList = showList;
   })();
   </script>
 </body>

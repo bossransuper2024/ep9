@@ -70,14 +70,23 @@ try {
   const sandbox = 'var window={SITE_CONFIG:{}};' + read('public/assets/js/generated.js') + '\nreturn window.SITE_CONFIG;';
   gen = new Function(sandbox)();
 } catch (e) {}
+const gItems = (gen.news && gen.news.items) || [];
 const gAnn = (gen.news && gen.news.announcement) || [];
 const gEvt = (gen.news && gen.news.event) || [];
-ok(gAnn.length === 3, `generated announcements = 3 (got ${gAnn.length})`);
-ok(gEvt.length === 3, `generated events = 3 (got ${gEvt.length})`);
-const gCtxA = gAnn.map((x) => x.context);
-const gCtxE = gEvt.map((x) => x.context);
-ok(new Set(gCtxA).size === gCtxA.length, `no duplicate contexts within announcements (${new Set(gCtxA).size}/${gCtxA.length})`);
-ok(new Set(gCtxE).size === gCtxE.length, `no duplicate contexts within events (${new Set(gCtxE).size}/${gCtxE.length})`);
+// The news feed is driven by the live Google Sheet: C.news.sheetUrl is baked from
+// NEWS_CONFIG.SheetNews and the browser fetches it live (assets/js/news-data.js);
+// the baked C.news.items is the same-origin fallback (plus the legacy announcement/
+// event arrays). Assert the live source is wired and the canonical items are
+// well-formed (non-empty, no duplicate ids) rather than a fixed count, since live
+// staff edits change the Sheet row count without a rebuild.
+ok(!!(gen.news && gen.news.sheetUrl), 'news sheetUrl baked from NEWS_CONFIG.SheetNews (live browser fetch)');
+ok(gItems.length >= 1, `generated news items present (got ${gItems.length})`);
+const gIds = gItems.map((x) => x.id || x.slug);
+ok(new Set(gIds).size === gIds.length, `no duplicate ids within news items (${new Set(gIds).size}/${gIds.length})`);
+// Legacy per-category fallback arrays (if populated) are also de-duplicated.
+const gAll = gAnn.concat(gEvt);
+const gAllIds = gAll.map((x) => x.id || x.slug);
+ok(new Set(gAllIds).size === gAllIds.length, `no duplicate ids across announcement/event fallback (${new Set(gAllIds).size}/${gAllIds.length})`);
 
 const main = read('public/assets/js/main.js');
 const html = read('public/index.html');
@@ -89,44 +98,52 @@ ok(has(path.join('public', 'news.html')), 'standalone news.html exists in public
 const newsHtml = has('public/news.html') ? read(path.join('public', 'news.html')) : '';
 
 // =============================================================================
-// MAIN PAGE NEWS → DEEP-LINK to the standalone news.html. Clicking a Main Page
-// News row (or the "View all content" footer) navigates to news.html?kind=&i=&page=
-// — there is NO on-page #news-modal popup anymore. The standalone news.html page
-// renders the article on its own and shows a dynamic "Back to Announcements/
-// Events" link whose label matches the clicked type.
+// MAIN PAGE NEWS → SHARED LIVE NEWS (window.NewsData). Clicking a Main Page News
+// row (or the "View all content" footer) deep-links to the standalone news.html
+// via the hash route news.html#id=<CSV_ID> — there is NO on-page #news-modal
+// popup. The standalone news.html page renders the article on its own from the
+// live Google Sheet loader and shows a "Back to News" link.
 // =============================================================================
 ok(/href="news\.html"/.test(html), 'Main Page nav "News" links to standalone news.html (not #news anchor)');
 ok(!/id="news-modal"/.test(html), 'Main Page no longer carries the News popup modal markup (#news-modal removed)');
 ok(!/showNewsModal/.test(main) && !/news-modal/.test(main), 'main.js no longer opens a #news-modal popup (deep-link only)');
-ok(/location\.href\s*=\s*"news\.html/.test(main), 'standalone news.html deep-link (kind+i+page) present in main.js');
-ok(/news\.html\?kind=/.test(main), 'news row click carries kind+i deep-link to the article');
+ok(/assets\/js\/news-data\.js/.test(html), 'Main Page loads the shared live news loader (news-data.js)');
+ok(/window\.NewsData/.test(main), 'main.js consumes the shared live NewsData loader');
+ok(/news\.html#id=/.test(main), 'news row click deep-links via hash route news.html#id=<CSV_ID>');
 ok(/news-view-all/.test(html) && /view-all-link/.test(main), 'Main Page shows "View all content" footer linking to the filtered list');
 
 // =============================================================================
-// STANDALONE PAGE — news.html opens articles as its own page (NOT a popup/modal).
+// STANDALONE PAGE — news.html opens articles as its own page (NOT a popup/modal),
+// driven by the shared live loader + hash routing (news.html#id=<CSV_ID>).
 // =============================================================================
 ok(/data-page="news"/.test(newsHtml), 'news.html flagged as standalone news page (data-page=news)');
 ok(/id="news-grid"/.test(newsHtml) && /id="news-tabs"/.test(newsHtml), 'news.html has the News list (tabs + grid)');
 ok(/href="index\.html"/.test(newsHtml), 'news.html has HOME button returning to index.html');
-// Read mode on news.html must show a dynamic Back link whose label reflects the
-// clicked type (Announcement vs Event) — handled in the inline article script.
+// Read mode on news.html: a single live article shell + Back link, populated by
+// the shared loader from the hash id. No per-article HTML files.
+ok(/id="news-article"/.test(newsHtml), 'news.html has a single live article shell (#news-article)');
 ok(/id="article-back"/.test(newsHtml), 'news.html has a Back link (#article-back) for read mode');
-ok(/BACK TO /.test(newsHtml) && /ANNOUNCEMENTS/.test(newsHtml) && /EVENTS/.test(newsHtml), 'news.html Back link label is set per type (Announcements/Events)');
-ok(/is-reading/.test(newsHtml) || /is-reading/.test(css), 'read mode locks the list (body.is-reading) so only the article shows');
+ok(/news\.html#id=/.test(newsHtml) || /NewsData/.test(newsHtml), 'news.html renders articles from the shared NewsData loader via hash route');
+ok(/is-reading/.test(newsHtml) || /show-article/.test(newsHtml) || /is-reading/.test(css), 'read mode hides the list so only the article shows');
 // news.html must NOT duplicate Main Page sections.
 ['id="classes"', 'id="download"', 'id="server"', 'id="combat"', 'id="roadmap"', 'id="community"', 'id="services"', 'id="footer"'].forEach((id) => {
   ok(!newsHtml.includes(id), 'news.html excludes Main Page section: ' + id.replace(/id="|"/g, ''));
 });
 ok(!/news-popup|popup-overlay/.test(newsHtml), 'news.html has no popup/overlay markup');
+// No legacy per-article HTML files (forbidden by the live-news task).
+ok(!fs.existsSync(path.join(root, 'public', 'news')) || fs.readdirSync(path.join(root, 'public', 'news')).length === 0, 'no per-article news/<id>.html files (live hash routing instead)');
 
 // =============================================================================
 // OPTIONAL ARTICLE IMAGES (rendered inside the article, not a forced hero)
-// The article now renders on the standalone news.html page, so the image logic
-// may live in either main.js (list context) or news.html (article renderer).
+// The article now renders on the standalone news.html page from the live loader,
+// so item.image is supported in the news.html reader (and optional).
 // =============================================================================
 const imageHtml = main + newsHtml;
 ok(/item\.image/.test(imageHtml) && /<img/.test(imageHtml), 'article image rendered when configured');
-ok(/item\.image\s*\?|!item\.image|showImagesInArticle/.test(imageHtml), 'image is optional (text-only fallback exists)');
+// Image is optional: the reader only injects <img> when item.image is present
+// (the `if (item.image) html += '<p><img ...'` branch), so a text-only article
+// with no image renders no <img>.
+ok(/if\s*\(item\.image\)\s*\{?\s*[\s\S]*?<img/.test(imageHtml), 'image is optional (text-only fallback: <img> only when item.image set)');
 
 // =============================================================================
 // CONFIGURABLE PAGINATION (single source: itemsPerPage, no hardcode)

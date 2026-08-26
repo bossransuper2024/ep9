@@ -28,7 +28,7 @@ function byId(id) {
   if (!els[id]) { const e = makeEl(id); e.classList = { _o: e, add(c){this._o._cls.add(c);}, remove(c){this._o._cls.delete(c);}, toggle(c,on){ on?this._o._cls.add(c):this._o._cls.delete(c);}, contains(c){return this._o._cls.has(c);} }; els[id] = e; }
   return els[id];
 }
-['news-tabs','news-grid','news-pagination','news-bg','news-title','news-accent','news-intro','news-tab-a','news-tab-e'].forEach(byId);
+['news-tabs','news-tbody','news-pagination','news-bg','news-title','news-accent','news-intro'].forEach(byId);
 
 const gen = fs.readFileSync(path.join(__dirname, '..', 'public/assets/js/generated.js'), 'utf8');
 const cfg = fs.readFileSync(path.join(__dirname, '..', 'public/assets/js/config.js'), 'utf8');
@@ -60,6 +60,20 @@ const sandbox = `
     this.setRequestHeader = function() {};
   }
   globalThis.XMLHttpRequest = XMLHttpRequest;
+  // Stub the shared live loader so boot()/renderNews can't crash in the sandbox
+  // (no real fetch here). In the browser it fetches the published CSV; the test
+  // only exercises the baked-item rendering + pagination contract.
+  window.NewsData = {
+    load: function(){ return Promise.resolve([]); },
+    getById: function(){ return null; },
+    filter: function(){ return []; },
+    filters: function(){ return [{ key: 'all', label: 'ALL' }]; },
+    classify: function(c){ return ('' + (c == null ? '' : c)).toString().toUpperCase(); },
+    parseCsv: function(){ return []; },
+    RENDER_CACHE: {},
+    setItems: function(){},
+    get items(){ return []; }
+  };
   ${cfg}
   ${gen}
   ${main}
@@ -90,38 +104,49 @@ const data = api.C.news;
 const mainJsSrc = fs.readFileSync(path.join(__dirname, '..', 'public/assets/js/main.js'), 'utf8');
 ok(!/showNewsModal/.test(mainJsSrc) && !/news-modal/.test(mainJsSrc),
   'main.js no longer opens a #news-modal popup (deep-link only)');
-ok(/location\.href\s*=\s*"news\.html/.test(mainJsSrc),
-  'standalone news.html deep-link to news.html?kind=&i=&page= present');
-// news.html must provide a per-type Back link for read mode.
+ok(/news\.html#id=/.test(mainJsSrc),
+  'news row click deep-links via hash route news.html#id=<CSV_ID> (shared live loader)');
+ok(/window\.NewsData/.test(mainJsSrc),
+  'main.js consumes the shared live NewsData loader');
+// news.html renders the article from the shared live loader via the hash route,
+// and shows a single Back link (no per-type legacy labels required).
 const newsHtml = fs.readFileSync(path.join(__dirname, '..', 'public', 'news.html'), 'utf8');
 ok(/id="article-back"/.test(newsHtml), 'news.html has the #article-back link for read mode');
-ok(/BACK TO /.test(newsHtml) && /ANNOUNCEMENTS/.test(newsHtml) && /EVENTS/.test(newsHtml), 'news.html Back link label reflects the clicked type');
-ok(/data-back="news"/.test(newsHtml) && /setAttribute\("data-back", isEvent \? "event" : "announcement"\)/.test(newsHtml), 'news.html Back link carries the clicked type (data-back set per type)');
+ok(/news\.html#id=/.test(newsHtml) || /NewsData/.test(newsHtml), 'news.html renders articles from the shared NewsData loader via hash route');
+ok(/data-back="news"/.test(newsHtml), 'news.html Back link carries data-back=news (returns to list)');
 
+// 4) default page (perPage=10) shows at most 10 rows for the requested category.
+//    `items` is the canonical list; renderNews seeds from C.news.items when present.
 function renderedRowCount(kind) {
-  const html = byId('news-grid').innerHTML;
+  const html = byId('news-tbody').innerHTML;
   return (html.match(/class="news-row/g) || []).length;
 }
+function seedItems(arr) { api.C.news.items = arr; }
 ['a','e'].forEach(function (kind) {
+  const total = (kind === 'a' ? 4 : 4);
+  seedItems(makeItems(total, kind === 'a' ? 'ANNOUNCEMENT' : 'NEWS'));
   api.__expose.boot(); // re-render with default perPage=10
   api.__expose.renderNewsToPage(kind, 0);
   let n = renderedRowCount(kind);
-  const total = (kind === 'a' ? data.announcement : data.event).length;
   ok(n === Math.min(total, 10), `page1 (perPage=10) shows min(total,10) for ${kind}: got ${n}, total ${total}`);
 });
 
-// 5) no duplicate news within each list (Tyranny Wars legitimately appears in BOTH
-//    Announcement and Event CSVs — that is genuine old content, so check per-list).
-const au = new Set(data.announcement.map(x => x.context));
-const eu = new Set(data.event.map(x => x.context));
-ok(au.size === data.announcement.length, `no duplicates within announcements (${au.size}/${data.announcement.length})`);
-ok(eu.size === data.event.length, `no duplicates within events (${eu.size}/${data.event.length})`);
+// 5) no duplicate ids within each category list (canonical `items` source).
+function itemsByCat(cat) { return (api.C.news.items || []).filter(x => (x.cat || '').toUpperCase() === cat); }
+const au = new Set(itemsByCat('ANNOUNCEMENT').map(x => x.id));
+const eu = new Set(itemsByCat('NEWS').map(x => x.id));
+ok(au.size === itemsByCat('ANNOUNCEMENT').length, `no duplicates within announcements (${au.size}/${itemsByCat('ANNOUNCEMENT').length})`);
+ok(eu.size === itemsByCat('NEWS').length, `no duplicates within events (${eu.size}/${itemsByCat('NEWS').length})`);
 
 // 6) itemsPerPage configurable (deterministic): inject a 25-item announcement list
-//    so pagination actually appears at perPage 10 and 20.
-const big = [];
-for (let i = 0; i < 25; i++) big.push({ date: 'Sept ' + (i + 1) + ', 2026', title: 'Item ' + (i + 1), image: '', description: 'Desc ' + (i + 1), context: '', cat: 'ANNOUNCEMENT', text: '' });
-api.C.news.announcement = big;
+//    into the canonical `items` source so pagination actually appears at perPage 10 and 20.
+function makeItems(n, cat) {
+  const arr = [];
+  for (let i = 0; i < n; i++) arr.push({ id: 'gen-' + cat + '-' + i, cat: cat, date: 'Sept ' + (i + 1) + ', 2026', title: 'Item ' + (i + 1), image: '', description: 'Desc ' + (i + 1), text: '' });
+  return arr;
+}
+const big = makeItems(25, 'ANNOUNCEMENT');
+api.C.news.items = big;
 
 api.C.newsConfig.itemsPerPage = 10;
 api.__expose.boot();
@@ -138,7 +163,7 @@ ok(renderedRowCount('a') === 20, `perPage=20 shows 20 rows (got ${renderedRowCou
 ok(byId('news-pagination').innerHTML.indexOf('PAGE 1 / 2') !== -1, 'perPage=20 status shows 1/2 (25 items => 2 pages)');
 
 // restore real data for the remaining checks
-api.C.news.announcement = data.announcement;
+api.C.news.items = data.items || [];
 
 // 7) optional image (mirrors the news.html article renderer): null -> text-only;
 //    configured -> <img> INSIDE the body. Reuse the published renderer contract.
@@ -154,15 +179,16 @@ function renderArticleHtml(item, cfg) {
   }
   return img + blocks.join('');
 }
-ok(renderArticleHtml(Object.assign({}, data.announcement[0], { image: null }), api.C.newsConfig).indexOf('<img') === -1,
+const sampleItem = (api.C.news.items && api.C.news.items[0]) || { text: 'Body', description: 'Desc', image: '' };
+ok(renderArticleHtml(Object.assign({}, sampleItem, { image: null }), api.C.newsConfig).indexOf('<img') === -1,
   'text-only article when image=null (no <img>)');
-ok(renderArticleHtml(Object.assign({}, data.announcement[0], { image: 'https://example.com/x.jpg' }), api.C.newsConfig).indexOf('<img') !== -1,
+ok(renderArticleHtml(Object.assign({}, sampleItem, { image: 'https://example.com/x.jpg' }), api.C.newsConfig).indexOf('<img') !== -1,
   'article image renders INSIDE body when configured');
 
 // 8) pagination bounds: Next disabled on last page; negative/overflow clamp.
 api.C.newsConfig.itemsPerPage = 10;
 api.__expose.boot();
-api.C.news.announcement = big;            // 25 items => 3 pages
+api.C.news.items = big;            // 25 items => 3 pages
 api.__expose.renderNewsToPage('a', 2);    // last page
 let pagLast = byId('news-pagination').innerHTML;
 ok(pagLast.indexOf('disabled') !== -1, 'Next disabled on last page');
@@ -171,7 +197,7 @@ api.__expose.renderNewsToPage('a', -5);
 ok(byId('news-pagination').innerHTML.indexOf('PAGE 1 / 3') !== -1, 'negative page clamps to first page');
 api.__expose.renderNewsToPage('a', 999);
 ok(byId('news-pagination').innerHTML.indexOf('PAGE 3 / 3') !== -1, 'overflow page clamps to last page');
-api.C.news.announcement = data.announcement;
+api.C.news.items = data.items || [];
 
 const total = PASS.length + FAIL.length;
 console.log(`\n[test-news-logic] ${PASS.length}/${total} checks passed`);

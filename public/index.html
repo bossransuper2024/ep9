@@ -96,11 +96,13 @@
       <span class="eyebrow">NEWS</span>
       <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
       <p class="section-intro" id="news-intro"></p>
-      <div class="news-tabs" id="news-tabs">
-        <button class="is-active" data-kind="a" id="news-tab-a">Announcement</button>
-        <button data-kind="e" id="news-tab-e">Event</button>
+            <!-- Category filter tabs (ALL | NEWS | ANNOUNCEMENT | GUIDE) -->
+      <div class="news-tabs news-filter" id="news-tabs"></div>
+      <!-- Bossran-style compact list (news-row). Rows deep-link to the standalone
+           reader via news.html#id=<CSV_ID>. -->
+      <div class="news-grid" id="news-grid">
+        <div class="news-tbody" id="news-tbody"></div>
       </div>
-      <div class="news-grid" id="news-grid"></div>
       <!-- "View all content" footer (Main Page preview only; populated by main.js). -->
       <div class="news-view-all" id="news-view-all"></div>
     </div>
@@ -240,6 +242,7 @@
   <script src="assets/js/config.js"></script>
   <script src="assets/js/generated.js"></script>
   <script src="assets/js/downloads.js"></script>
+  <script src="assets/js/news-data.js"></script>
   <script src="assets/js/main.js"></script>
 </body>
 </html>

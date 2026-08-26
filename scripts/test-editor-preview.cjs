@@ -84,6 +84,20 @@ cases.forEach(function (c) {
   ok(gotEditor === gotMain, 'editor == main.js for [' + c.in + ']');
 });
 
+console.log('\n[2b] H2/H3 heading rendering + editor preview parity');
+const headingCases = [
+  { in: '[h2]Patch Notes[/h2]', expect: '<h2 class="txt-h2">Patch Notes</h2>' },
+  { in: '[h3]Balance Changes[/h3]', expect: '<h3 class="txt-h3">Balance Changes</h3>' },
+  { in: 'text [h2]Title Here[/h2] more', expect: 'text <h2 class="txt-h2">Title Here</h2> more' },
+  { in: '[h3]a **bold** heading[/h3]', expect: '<h3 class="txt-h3">a <strong>bold</strong> heading</h3>' },
+];
+headingCases.forEach(function (c) {
+  const gotMain = inlineMainFn(c.in);
+  const gotEditor = inlineEditorFn(c.in);
+  ok(gotMain === c.expect, 'main.js  [' + c.in + '] -> ' + gotMain);
+  ok(gotEditor === gotMain, 'editor == main.js for [' + c.in + ']');
+});
+
 console.log('\n[3] byte-identical HTML over real .txt files');
 const contentDir = path.join(root, 'public/assets/content');
 fs.readdirSync(contentDir).filter(function (f) { return /\.txt$/i.test(f); }).forEach(function (f) {

@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const root = path.resolve(__dirname, '..');
 
-function readIni(p) {
+export function readIni(p) {
   const raw = fs.readFileSync(p, 'utf8');
   const result = {};
   let cur = null;
@@ -260,11 +260,18 @@ export function build(ini) {
       ],
       discordUrl: get(ini, 'DOWNLOAD', 'DiscordUrl', ''),
       facebookUrl: get(ini, 'DOWNLOAD', 'FacebookUrl', ''),
-      // Live Google Sheet for download mirrors (published CSV). main.js fetches this
-      // in the browser so new rows added by staff appear without a rebuild.
+      // LIVE Google Sheet for download mirrors (published CSV). The browser
+      // fetches this directly at runtime (it sends `access-control-allow-origin:
+      // *`, so CORS is clear — no proxy / rebuild needed). When staff add/edit
+      // rows the page shows them on reload. Empty => live fetch disabled and the
+      // baked mirrors above (DRIVE_/MEDIAFIRE_ from config.ini, or downloads.js)
+      // are the source. NOTE: a build-time fetch of a 307-redirecting sheet would
+      // be blocked, so we only wire the URLs here; sync-sheets.mjs bakes
+      // public/data/download.json as an OFFLINE FALLBACK only.
       sheets: [
-        get(ini, 'DOWNLOAD', 'SheetDownload', '') ? { section: 'Download', url: get(ini, 'DOWNLOAD', 'SheetDownload', '') } : null
-      ].filter(Boolean)
+        get(ini, 'DOWNLOAD', 'SheetDownload', '') ? { url: get(ini, 'DOWNLOAD', 'SheetDownload', '') } : null
+      ].filter(Boolean),
+      dataUrl: 'data/download.json'
     },
     news: (function () {
       const announcement = readNewsCsv('announcement.csv', 'announcement') || [];
@@ -273,9 +280,52 @@ export function build(ini) {
       // Single chronological feed (newest first) used by the Bossran-style
       // News list + filter. Each item keeps its slug so rows link to a real
       // standalone content page (news/<slug>.html).
-      const items = announcement.concat(event, tutorial).sort(function (a, b) {
+      let items = announcement.concat(event, tutorial).sort(function (a, b) {
         return String(b.date || '').localeCompare(String(a.date || ''));
       });
+      // PRIMARY SOURCE: the published Google Sheet is fetched LIVE in the browser
+      // by assets/js/news-data.js (it sends `access-control-allow-origin: *`, so
+      // the request is NOT blocked). C.news.sheetUrl (baked from NEWS_CONFIG.SheetNews
+      // below) is the live URL; public/data/news.json (baked at build time by
+      // scripts/sync-sheets.mjs) is only the FALLBACK when that live fetch fails.
+      // If neither is available we fall back to the local announcement/event/tutorial
+      // CSVs above. See README.
+      const newsJsonPath = path.join(root, 'public', 'data', 'news.json');
+      if (fs.existsSync(newsJsonPath)) {
+        try {
+          const sheetItems = JSON.parse(fs.readFileSync(newsJsonPath, 'utf8')).items || [];
+          if (sheetItems.length) {
+            // MERGE: sheet is the primary source for anything it defines (matched
+            // by `id`), local hand-authored CSVs (matched by `slug`) fill in the
+            // rest. Sheet wins on id collision; local wins on slug collision. Staff
+            // use the sheet; hand-written long-form articles stay in /data/news/csv.
+            const byId = {}; const bySlug = {};
+            sheetItems.forEach(function (it) { byId[String(it.id)] = it; bySlug[String(it.slug || it.id)] = it; });
+            const merged = [];
+            // Add sheet items FIRST so they win on ID collision
+            sheetItems.forEach(function (it) { merged.push(it); });
+            // Add local items that don't have matching slug in sheet
+            items.forEach(function (it) {
+              const slug = String(it.slug || it.uid || '');
+              if (!bySlug[slug]) merged.push(it); // local-only (no sheet slug match)
+            });
+            // De-duplicate by id (sheet wins because it was added first) so neither the
+            // baked fallback nor the Gate sees the same id twice.
+            const seen = {};
+            items = merged.filter(function (it) {
+              var key = String(it.id || it.slug || it.uid || '');
+              if (seen[key]) return false;
+              seen[key] = true;
+              return true;
+            }).sort(function (a, b) {
+              return String(b.date || '').localeCompare(String(a.date || ''));
+            });
+          }
+        } catch (e) { console.warn('[generate-config] news.json unreadable, using local CSVs:', e.message); }
+      }
+      const splitByCat = function (cat) {
+        return items.filter(function (it) { return (it.cat || it.type || '').toUpperCase() === cat; });
+      };
       return {
         bg: get(ini, 'NEWS', 'Background', 'assets/hero-bg-08.png'),
         title: get(ini, 'NEWS', 'Title', 'THE LATEST'),
@@ -287,9 +337,16 @@ export function build(ini) {
         // many per page on the dedicated /news listing (both editable in config.ini).
         homeLimit: num(get(ini, 'NEWS', 'HomeLimit', 4), 4),
         pageSize: num(get(ini, 'NEWS', 'PageSize', 10), 10),
-        announcement: announcement,
-        event: event,
-        tutorial: tutorial,
+        announcement: splitByCat('ANNOUNCEMENT'),
+        event: splitByCat('NEWS'),
+        tutorial: splitByCat('GUIDE'),
+        // Live Google Sheet CSV the browser fetches directly (CORS `*`, so no
+        // proxy needed). window.NewsData uses this first and falls back to the
+        // baked dataUrl below on failure. Empty => live fetch disabled.
+        sheetUrl: get(ini, 'NEWS_CONFIG', 'SheetNews', '') || '',
+        dataUrl: 'data/news.json',
+        // Hidden categories (for runtime filtering of live-fetched data)
+        hiddenCategories: hiddenCategories,
         // Drop any item whose category is in HiddenCategories (NEWS/GUIDE/etc.)
         // so hidden categories never reach the feed, the Main Page preview, the
         // filter or the generated article pages.
@@ -363,14 +420,19 @@ export function build(ini) {
           return Object.assign({ img: def }, it);
         });
       })(),
-      // Live Google Sheet tabs (published CSV). main.js fetches these in the
-      // browser so new rows added by staff appear without a rebuild. Each entry
-      // pairs a tab URL with the service section it populates.
+      // Live Google Sheet tabs (published CSV). These are fetched LIVE in the
+      // browser by main.js on page load (no rebuild needed when staff add/edit/
+      // delete rows). The published CSV returns `Access-Control-Allow-Origin: *`,
+      // so the cross-origin fetch works fine on any static host. `services.sheets`
+      // below maps each [SERVICES] Sheet_* URL to its section. The baked `items`
+      // (local *.csv / Service_x) are only the OFFLINE FALLBACK if the live fetch
+      // fails. Do NOT empty this array — it is what drives the live data.
       sheets: [
         get(ini, 'SERVICES', 'SheetStreamer', '') ? { section: 'Streamer', url: get(ini, 'SERVICES', 'SheetStreamer', '') } : null,
         get(ini, 'SERVICES', 'SheetMiddleman', '') ? { section: 'Middleman', url: get(ini, 'SERVICES', 'SheetMiddleman', '') } : null,
         get(ini, 'SERVICES', 'SheetPilot', '') ? { section: 'Pilots', url: get(ini, 'SERVICES', 'SheetPilot', '') } : null
-      ].filter(Boolean)
+      ].filter(Boolean),
+      dataUrl: 'data/services.json'
     },
     facebook: {
       bg: get(ini, 'FACEBOOK', 'Background', 'assets/hero-bg-09.png'),

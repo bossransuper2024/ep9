@@ -43,8 +43,8 @@ try {
     'server-intro', 'server-stats', 'server-rates', 'classes', 'classes-bg', 'class-tabs',
     'class-panel', 'combat', 'combat-bg', 'combat-intro', 'combat-live', 'combat-modes',
     'combat-raids', 'roadmap', 'roadmap-bg', 'roadmap-intro', 'roadmap-grid', 'road-line-fill',
-    'news', 'news-bg', 'news-title', 'news-accent', 'news-intro', 'news-tabs', 'news-grid',
-    'news-tab-a', 'news-tab-e', 'download', 'download-bg', 'download-title', 'download-accent',
+        'news', 'news-bg', 'news-title', 'news-accent', 'news-intro', 'news-tabs', 'news-grid',
+    'news-tbody', 'download', 'download-bg', 'download-title', 'download-accent',
     'download-intro', 'download-grid', 'download-notes', 'community', 'community-bg', 'community-title',
     'community-accent', 'community-desc', 'community-actions', 'community-stats', 'community-discord',
     'services', 'services-bg', 'services-title', 'services-accent', 'services-intro', 'svc-tabs',
@@ -96,11 +96,13 @@ try {
   const classes = (gen && gen.classes && gen.classes.list) ? gen.classes.list.length : 0;
   check('7 classes generated', classes === 7, 'classes = ' + classes);
 
-  // 8) services + live Google Sheet wiring. At build time the Sheet URLs are
-  // copied into services.sheets (the browser fetches them at runtime so the
-  // team can add rows WITHOUT a rebuild). The gate verifies: the URLs configured
-  // in [SERVICES] actually made it into generated.js, and the offline fallback
-  // rows (local *.csv / Service_x) are present as a safety net.
+  // 8) services + live Google Sheet wiring. Services are driven LIVE from the
+  // published Google Sheet at runtime: the Sheet URLs configured in [SERVICES]
+  // are copied into services.sheets (an array of {section, url}) and main.js
+  // fetches them in the browser on page load so the team can add/edit/delete
+  // rows WITHOUT a rebuild. The gate verifies the configured URLs actually made
+  // it into generated.js services.sheets, and the offline fallback rows (local
+  // *.csv / Service_x) are present as a safety net.
   const iniText = (() => { try { return fs.readFileSync(path.join(root, 'config.ini'), 'utf8'); } catch (e) { return ''; } })();
   const sheetUrls = iniText.split(/\r?\n/).filter((l) => /^Sheet(Streamer|Middleman|Pilot)=https?:/i.test(l.trim()));
   const svc = (gen && gen.services) || {};
@@ -121,6 +123,29 @@ try {
   // static host if the live fetch is blocked/offline.
   const fallbackItems = svc.items || [];
   check('services has offline fallback rows', fallbackItems.length > 0, 'no fallback service rows in generated.js; got ' + fallbackItems.length);
+
+  // 9) DOWNLOAD live Google Sheet wiring. Mirrors the Services check above: the
+  // published CSV URL configured in [DOWNLOAD] SheetDownload must be present in
+  // generated.js download.sheets so main.js can fetch it LIVE in the browser
+  // (the sheet sends `access-control-allow-origin: *`, so no rebuild is needed
+  // when staff add rows). A regression that empties download.sheets (and so
+  // disables the live fetch) is caught here.
+  const dlSheetUrls = iniText.split(/\r?\n/).filter((l) => /^SheetDownload=https?:/i.test(l.trim()));
+  const dlCfg = (gen && gen.download) || {};
+  if (dlSheetUrls.length) {
+    const dlSheets = dlCfg.sheets || [];
+    const dlWired = new Set(dlSheets.map((x) => x && x.url));
+    dlSheetUrls.forEach((line) => {
+      const eq = line.indexOf('=');
+      const url = (eq === -1 ? '' : line.slice(eq + 1)).trim();
+      check('download.sheets includes ' + url.slice(0, 40) + '…', dlWired.has(url),
+        'config.ini SheetDownload URL missing from generated.js download.sheets');
+    });
+    check('download.sheets has ' + dlSheetUrls.length + ' entry/entries', dlSheets.length === dlSheetUrls.length,
+      'download.sheets length = ' + dlSheets.length + ', expected ' + dlSheetUrls.length);
+  } else {
+    ok.push('download sheet check skipped (no SheetDownload URL in config.ini)');
+  }
 } catch (e) {
   fail.push('GATE ERROR: ' + e.message);
 }

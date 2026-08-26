@@ -1,0 +1,166 @@
+{
+  "generated": "2026-08-26T16:32:30.106Z",
+  "sections": {
+    "Streamer": [
+      {
+        "section": "Streamer",
+        "name": "Boss Toyo",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "TOYO",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "ivana Maylawit",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "IVANA",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "Armando",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "ARMOR",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "rey b",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "lowkey3",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "rey b",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "lowkey4",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "rey b",
+        "ykc": "1",
+        "socialtype": "facebook",
+        "streamkey": "lowkey5",
+        "url": "www.fb.com/rey"
+      },
+      {
+        "section": "Streamer",
+        "name": "Streamer 1",
+        "ykc": "1",
+        "socialtype": "phub",
+        "streamkey": "MILO11",
+        "url": "WWW.FB.COM/ABC"
+      }
+    ],
+    "Middleman": [
+      {
+        "section": "Middleman",
+        "name": "rey",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      },
+      {
+        "section": "Middleman",
+        "name": "rey",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      },
+      {
+        "section": "Middleman",
+        "name": "rey",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      },
+      {
+        "section": "Middleman",
+        "name": "rey",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      },
+      {
+        "section": "Middleman",
+        "name": "rey",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      },
+      {
+        "section": "Middleman",
+        "name": "Streamer 1",
+        "ykc": "1",
+        "ign": "[midman]low",
+        "saying": "sarap ang fish",
+        "fee": "2%",
+        "social": "www.ph.com"
+      }
+    ],
+    "Pilots": [
+      {
+        "section": "Pilots",
+        "name": "boi takal",
+        "ykc": "1",
+        "saying": "tax muna bago farm mahirap yan",
+        "fee": "20",
+        "rateperh": "/Hr",
+        "social": "www.fb,cim"
+      },
+      {
+        "section": "Pilots",
+        "name": "boi takal",
+        "ykc": "1",
+        "saying": "tax muna bago farm mahirap yan",
+        "fee": "30",
+        "rateperh": "/Hr",
+        "social": "www.fb,cim"
+      },
+      {
+        "section": "Pilots",
+        "name": "boi takal",
+        "ykc": "1",
+        "saying": "tax muna bago farm mahirap yan",
+        "fee": "30",
+        "rateperh": "/Hr",
+        "social": "www.fb,cim"
+      },
+      {
+        "section": "Pilots",
+        "name": "boi takal",
+        "ykc": "1",
+        "saying": "tax muna bago farm mahirap yan",
+        "fee": "30",
+        "rateperh": "/Hr",
+        "social": "www.fb,cim"
+      },
+      {
+        "section": "Pilots",
+        "name": "boi takal",
+        "ykc": "1",
+        "saying": "tax muna bago farm mahirap yan",
+        "fee": "30",
+        "rateperh": "/Hr",
+        "social": "www.fb,cim"
+      }
+    ]
+  }
+}

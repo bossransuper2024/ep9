@@ -164,6 +164,8 @@
       .replace(/\[code\](.*?)\[\/code\]/g, '<code class="txt-code">$1</code>')
       .replace(/\[col\]([\s\S]*?)\[\/col\]/g, '<div class="txt-col">$1</div>')
       .replace(/\[col3\]([\s\S]*?)\[\/col3\]/g, '<div class="txt-col3">$1</div>')
+      .replace(/\[h2\]([\s\S]*?)\[\/h2\]/g, '<h2 class="txt-h2">$1</h2>')
+      .replace(/\[h3\]([\s\S]*?)\[\/h3\]/g, '<h3 class="txt-h3">$1</h3>')
       .replace(/\[hr\]/g, '<hr class="txt-hr">')
       .replace(/\[br\]/g, '<br>')
       .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
@@ -368,8 +370,8 @@
     // The Main Page "News" CTA opens the STANDALONE news.html page.
     var newsCta = el("news-cta");
     if (newsCta) newsCta.addEventListener("click", function () { window.location.href = "news.html"; });
-    var tabs = el("news-tabs"), grid = el("news-grid");
-    if (!grid || !tabs) return;
+    var tabs = el("news-tabs"), tbody = el("news-tbody");
+    if (!tbody || !tabs) return;
     // Build the category filter (ALL | NEWS | ANNOUNCEMENT | GUIDE) from config.
     var filterDefs = (C.newsFilter && C.newsFilter.length) ? C.newsFilter :
       [{ key: "all", label: "All" }, { key: "news", label: "News" }, { key: "announcement", label: "Announcement" }, { key: "guide", label: "Guide" }];
@@ -381,32 +383,46 @@
     var mainPage = !el("news-pagination");
     var perPage = mainPage ? (Number(n.homeLimit) || 4) : (Number(cfg.itemsPerPage) || 10);
     // Bossran-style single feed + category filter (ALL / NEWS / ANNOUNCEMENT / GUIDE).
-    var items = n.items && n.items.length ? n.items : (n.announcement || []).concat(n.event || []);
+    // Source is the SHARED live loader (window.NewsData): it fetches the published
+    // Google Sheet CSV in the browser, falling back to baked data/news.json.
+    var ND = window.NewsData;
+    var items = [];
+    // Keep a starting reference (baked items render instantly, then the live
+    // loader re-renders when/if it resolves). ND drives the canonical list.
+    if (n.items && n.items.length) items = n.items.slice();
+    else items = (n.announcement || []).concat(n.event || []).map(function (it) {
+      return { id: it.id || it.slug || it.uid, cat: (it.type || it.cat || "NEWS").toUpperCase(),
+        title: it.title || "", date: it.date || "", description: it.description || "", image: it.image || "", text: it.text || "" };
+    });
     var previewCache = {};
     var pageState = { filter: "all", page: 0 };
-    // Build one row as a real <a> so it navigates to a standalone content page
-    // (news.html?slug=... → news/<slug>.html). Never a modal / inline expand.
+    // Build one row as a real <a> so it navigates to the standalone news.html
+    // reader via the hash route news.html#id=<CSV_ID> (no per-article HTML files,
+    // no modal / inline expand).
     function rowHtml(item, idx) {
-      var cat = (cfg.showCategory === false) ? "" :
-        '<span class="row-cat cat-' + (item.cat || "NEWS").toLowerCase() + '">' + esc(item.type || item.cat || "NEWS") + "</span>";
-      var date = ((cfg.showDate === false) || !item.date) ? "" :
-        '<span class="row-date">' + esc(item.date) + "</span>";
-      var meta = "";
-      if (item.eventDate) meta = '<span class="row-event">Event ' + esc(item.eventDate) + "</span>";
-      var author = (item.author && item.author !== "Admin") ? esc(item.author) : "Admin";
-      var excerpt = "";
-      if (cfg.showExcerpt !== false) {
-        var ex = previewCache[idx] || item.description || "";
-        if (ex) excerpt = '<span class="row-exc">— ' + esc(ex) + "</span>";
-      }
-      // Use hash-based navigation for consolidated articles in news.html
-      var articleId = item.slug || item.uid || ("news-" + idx);
-      var href = "news.html#" + encodeURIComponent(articleId);
-      return '<a class="news-row reveal" href="' + href + '">' +
-        '<div class="row-head">' + cat + date + (meta ? '<span class="row-dot">•</span>' + meta : "") + '</div>' +
-        '<div class="row-main"><span class="row-title">' + esc(item.title) + "</span>" + excerpt +
-        '<span class="row-go">READ MORE →</span></div>' +
-        '<div class="row-foot"><span class="row-author">' + author + "</span></div></a>";
+      var cat = (item.cat || item.type || "NEWS").toUpperCase();
+      var catClass = "cat-" + cat.toLowerCase();
+      var date = ((cfg.showDate === false) || !item.date) ? "" : esc(item.date);
+      // Per-article link: routes into the standalone reader via hash id.
+      var articleId = item.id || item.slug || item.uid || ("news-" + idx);
+      var href = "news.html#id=" + encodeURIComponent(String(articleId));
+      var title = esc(item.title || "");
+      // Excerpt/description for the list preview; full body (.text) lives on
+      // the article page. Description is the short field, content is the long.
+      var excerpt = item.description || item.desc || "";
+      if (cfg && cfg.showExcerpt === false) excerpt = "";
+      return '<a class="news-row reveal" href="' + href + '" id="news-row-' + esc(String(articleId)) + '">' +
+        '<div class="row-head">'+
+          '<span class="row-cat ' + catClass + '">' + esc(cat) + '</span>'+
+          (date ? '<span class="row-date">' + date + '</span>' : '') +
+        '</div>'+
+        '<div class="row-main">'+
+          '<span class="row-title">' + title + '</span>'+
+          (excerpt ? '<span class="row-exc">' + esc(excerpt) + '</span>' : '') +
+          '<span class="row-go">READ \u2192</span>'+
+        '</div>'+
+        (item.author && item.author !== "Admin" ? '<div class="row-foot">By ' + esc(item.author) + '</div>' : '') +
+        '</a>';
     }
     // Re-render the list for a given filter + page.
     window.renderNewsToPage = function (filter, page) {
@@ -425,7 +441,7 @@
       tabs.querySelectorAll("button").forEach(function (b) { b.classList.toggle("is-active", b.dataset.filter === pageState.filter); });
       var start = pageState.page * perPage;
       var pageItems = list.slice(start, start + perPage);
-      grid.innerHTML = pageItems.length
+      tbody.innerHTML = pageItems.length
         ? pageItems.map(function (item, i) { return rowHtml(item, start + i); }).join("")
         : '<div class="news-empty">No articles in this category yet.</div>';
       // "View all content" footer (Main Page only): routes to the standalone list.
@@ -462,90 +478,36 @@
     }
     tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) window.renderNewsToPage(b.dataset.filter, 0); });
 
-    // ---- Article View Handler ----
-    // Handle hash-based article navigation (news.html#article-id)
-    function showArticle(articleId) {
-      var article = document.getElementById(articleId);
-      if (!article) return false;
-      
-      // Hide news list, show articles section
-      var newsSection = document.getElementById('news');
-      var articlesSection = document.getElementById('news-articles');
-      var body = document.body;
-      
-      if (newsSection) newsSection.style.display = 'none';
-      if (articlesSection) articlesSection.style.display = 'block';
-      if (body) body.classList.add('show-article');
-      
-      // Scroll to the article
-      article.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      
-      // Update URL without triggering scroll
-      if (history.replaceState) {
-        history.replaceState(null, null, '#' + articleId);
-      }
-      
-      return true;
-    }
-    
-    function showNewsList() {
-      var newsSection = document.getElementById('news');
-      var articlesSection = document.getElementById('news-articles');
-      var body = document.body;
-      
-      if (newsSection) newsSection.style.display = 'block';
-      if (articlesSection) articlesSection.style.display = 'none';
-      if (body) body.classList.remove('show-article');
-      
-      // Clear hash
-      if (history.replaceState) {
-        history.replaceState(null, null, window.location.pathname + window.location.search);
-      }
-      
-      // Scroll to top of news section
-      if (newsSection) newsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-    
-    // Handle back button clicks in articles
-    document.addEventListener('click', function (e) {
-      var backLink = e.target.closest('.article-back[data-back="news"]');
-      if (backLink) {
-        e.preventDefault();
-        showNewsList();
-      }
-    });
-    
-    // Handle hash change for article navigation
-    window.addEventListener('hashchange', function () {
-      var hash = window.location.hash.slice(1); // remove #
-      if (hash) {
-        // Check if it's an article ID
-        var article = document.getElementById(hash);
-        if (article && article.classList.contains('news-article')) {
-          showArticle(hash);
+    // ---- LIVE News from the SHARED Google Sheet loader ----
+    // window.NewsData fetches the published CSV directly in the browser (CORS `*`)
+    // and falls back to baked data/news.json on failure. When it resolves we
+    // rebuild `items` (the canonical list both pages share) and re-render.
+    if (ND && typeof ND.load === "function") {
+      ND.load().then(function (live) {
+        if (!live || !live.length) return;
+        items.length = 0;
+        live.forEach(function (it) { items.push(it); });
+        // Rebuild the category filter chips to match the live categories.
+        var hidden = (C.newsConfig && C.newsConfig.hiddenCategories) || (C.news && C.news.hiddenCategories) || [];
+        var defs = ND.filters(hidden);
+        if (tabs) {
+          tabs.innerHTML = defs.map(function (f, i) {
+            return '<button class="' + (i === 0 ? "is-active" : "") + '" data-filter="' + esc(f.key) + '">' + esc(f.label) + "</button>";
+          }).join("");
         }
-      } else {
-        // No hash - show news list
-        showNewsList();
-      }
-    });
-    
-    // Check for initial hash on load
-    var initialHash = window.location.hash.slice(1);
-    if (initialHash) {
-      // Small delay to ensure DOM is ready
-      setTimeout(function () {
-        var article = document.getElementById(initialHash);
-        if (article && article.classList.contains('news-article')) {
-          showArticle(initialHash);
-        }
-      }, 0);
+        window.renderNewsToPage(pageState.filter, pageState.page);
+      }).catch(function () { /* keep baked items already rendered */ });
     }
 
-    // Make functions globally accessible for external use
-    window.showNewsArticle = showArticle;
-    window.showNewsList = showNewsList;
+    // ---- Article View Handler ----
+    // NOTE: the actual hash-route article reader lives inline at the bottom
+    // of news.html. It uses the shared live loader (window.NewsData.getById) +
+    // fillArticle() to render the article body from the Google Sheet CSV.
+    // That reader is the source of truth for news.html#id=<CSV_ID> deep links.
+    // (Dead duplicate reader that looked up <div id=...> removed; news.html
+    // handles all hash routing.)
     var pag = el("news-pagination");
+
     if (pag) pag.addEventListener("click", function (e) {
       var b = e.target.closest(".page-btn"); if (!b || b.disabled) return;
       var p = pageState.page + (b.dataset.act === "next" ? 1 : -1);
@@ -680,7 +642,7 @@
     // section's data with the published rows when it succeeds, so the team can
     // add/remove rows without a rebuild.
     var items = (s.items || []).slice();
-    var currentSec = null;
+    var currentSec = "all";
 
     // Section-specific Service card layout:
     //   Pilot     -> [Name] [IGN/Pilot] [note] Fee: 50/hr [Social]
@@ -729,20 +691,34 @@
     }
     function paint(sec) {
       currentSec = sec;
-      var applyUrl = apply[sec];
+      // Update active tab state (fix: services filter active state not updating)
+      tabs.querySelectorAll(".svc-tab").forEach(function(t) {
+        t.classList.toggle("is-active", t.dataset.sec === sec);
+      });
+      // When "all" is selected, show all items without an apply card
+      var applyUrl = (sec === "all") ? null : apply[sec];
+      var filteredItems = (sec === "all") ? items : items.filter(function (it) { return it.section === sec; });
       // The Apply card always goes FIRST (never mid-grid or last) so visitors
       // see how to join the role immediately.
       grid.innerHTML = (applyUrl ? '<a class="svc-apply reveal" href="' + toAbs(applyUrl) + '" target="_blank" rel="noopener">+ APPLY FOR ' + esc(sec.toUpperCase()) + '</a>' : '') +
-        items.filter(function (it) { return it.section === sec; }).map(serviceCardHTML).join("");
+        filteredItems.map(serviceCardHTML).join("");
       observeReveals();
     }
     function rebuild() {
       var sc = sectionsFrom(items);
       if (!sc.sections.length) return;
+      // Default to first section if currentSec is not valid
       if (sc.sections.indexOf(currentSec) === -1) currentSec = sc.sections[0];
+      
+      // Build tabs: each section only (no ALL tab)
+      var tabDefs = [];
+      sc.sections.forEach(function (sec) {
+        tabDefs.push({ key: sec, label: sec, count: sc.counts[sec] || 0 });
+      });
+      
       // Tab label includes a live count of people in that role, e.g. "PILOTS (3)".
-      tabs.innerHTML = sc.sections.map(function (sec) {
-        return '<button class="svc-tab' + (sec === currentSec ? " is-active" : "") + '" data-sec="' + sec + '">' + esc(sec) + ' (' + (sc.counts[sec] || 0) + ')</button>';
+      tabs.innerHTML = tabDefs.map(function (tab, i) {
+        return '<button class="svc-tab' + (tab.key === currentSec ? " is-active" : "") + '" data-sec="' + esc(tab.key) + '">' + esc(tab.label) + ' (' + (tab.count || 0) + ')</button>';
       }).join("");
       paint(currentSec);
     }

@@ -6,10 +6,10 @@
   "description": "Premium static Ran Online EP9 site — vanilla HTML/CSS/JS driven by config.ini + CSV/JS data. No React, no bundler.",
   "scripts": {
     "genconfig": "node scripts/generate-config.mjs",
-    "gennews": "node scripts/gen-news-pages.mjs",
     "genplaceholders": "node scripts/generate-placeholders.mjs",
-    "build": "node scripts/generate-config.mjs && node scripts/gen-news-pages.mjs && node scripts/build-static.mjs",
-    "dev": "node scripts/generate-config.mjs && node scripts/gen-news-pages.mjs && node scripts/serve.mjs",
+    "syncsheets": "node scripts/sync-sheets.mjs",
+    "build": "node scripts/sync-sheets.mjs && node scripts/generate-config.mjs && node scripts/build-static.mjs",
+    "dev": "node scripts/sync-sheets.mjs && node scripts/generate-config.mjs && node scripts/serve.mjs",
     "preview": "node scripts/serve.mjs",
     "test": "node scripts/verify-site.mjs"
   },
