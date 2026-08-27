@@ -175,3 +175,5 @@ No server runtime or environment variables are required.
 - ✅ Production build succeeds
 - ✅ BGM audio-reactivity "bounce" (translateY + glow) working, toggleable in `config.ini`
 
+#   D e p l o y   t r i g g e r  
+ 
