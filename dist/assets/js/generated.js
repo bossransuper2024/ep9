@@ -52,7 +52,7 @@
       },
       {
         "label": "MAX CHAR LEVEL",
-        "value": "260",
+        "value": "240",
         "note": "Endgame ceiling"
       },
       {

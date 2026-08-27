@@ -27,6 +27,34 @@ body[data-page="news"] #news .bg-fx {
   opacity: 0.45; /* slightly lower than default 0.5 for lighter news theme */
 }
 
+/* Full-width 1920x212 banner background behind the news list (stretched
+   hero-bg image). Sits behind the .wrap content as a decorative band. */
+body[data-page="news"] #news {
+  position: relative;
+  overflow: hidden;
+}
+body[data-page="news"] #news::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 1920px;
+  max-width: 100%;
+  height: 212px;
+  background-image: url('assets/hero-bg-08.png');
+  background-size: 1920px 212px;
+  background-position: center center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.9;
+}
+body[data-page="news"] #news > .wrap {
+  position: relative;
+  z-index: 1;
+}
+
 /* Overlay: translucent gradient for text readability, but NOT hiding the image */
 body[data-page="news"] #news .bg-fx-overlay {
   display: block;
