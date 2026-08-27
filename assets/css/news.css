@@ -13,27 +13,41 @@ body[data-page="news"] {
   color: #191919;
 }
 
-/* Subtle 10% opacity background image (hero-bg-08) to reduce glare */
-body[data-page="news"]::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("../assets/hero-bg-08.png");
-  background-size: cover;
-  background-position: center;
-  opacity: 0.10;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Neutralise the dark hero background + overlay on the News section. */
-body[data-page="news"] #news .bg-fx,
-body[data-page="news"] #news .bg-fx-overlay { display: none; }
+/* Hero background for the News section (eyebrow → section-intro area).
+   Use the section's .bg-fx layer so it scales/sways like other sections.
+   The overlay is kept but made more transparent so the image remains visible. */
 body[data-page="news"] #news {
-  background: transparent; /* let body::before show through */
   padding-top: clamp(48px, 7vw, 96px);
   padding-bottom: clamp(64px, 9vw, 120px);
 }
+
+/* Ensure the bg-fx is visible (not hidden by the old rule) */
+body[data-page="news"] #news .bg-fx {
+  display: block;
+  opacity: 0.45; /* slightly lower than default 0.5 for lighter news theme */
+}
+
+/* Overlay: translucent gradient for text readability, but NOT hiding the image */
+body[data-page="news"] #news .bg-fx-overlay {
+  display: block;
+  background: linear-gradient(180deg,
+    rgba(7, 11, 20, 0.6) 0%,      /* darker at top for eyebrow/title readability */
+    rgba(7, 11, 20, 0.25) 35%,   /* fade quickly */
+    transparent 50%,              /* middle transparent - image visible */
+    rgba(7, 11, 20, 0.25) 65%,   /* fade in toward bottom */
+    rgba(7, 11, 20, 0.5) 100%    /* darker at bottom */
+  );
+}
+
+/* Remove the fixed body::before since we're using the section's bg-fx now */
+body[data-page="news"]::before {
+  display: none;
+}
+
+/* Text color adjustments for light news theme */
+body[data-page="news"] .section-title { color: #191919; }
+body[data-page="news"] .section-title .accent { color: #b8860b; }
+body[data-page="news"] .section-intro { color: #6b6b6b; }
 body[data-page="news"] .section-title { color: #191919; }
 body[data-page="news"] .section-title .accent { color: #b8860b; }
 body[data-page="news"] .section-intro { color: #6b6b6b; }
