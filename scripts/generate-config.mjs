@@ -430,7 +430,8 @@ export function build(ini) {
       sheets: [
         get(ini, 'SERVICES', 'SheetStreamer', '') ? { section: 'Streamer', url: get(ini, 'SERVICES', 'SheetStreamer', '') } : null,
         get(ini, 'SERVICES', 'SheetMiddleman', '') ? { section: 'Middleman', url: get(ini, 'SERVICES', 'SheetMiddleman', '') } : null,
-        get(ini, 'SERVICES', 'SheetPilot', '') ? { section: 'Pilots', url: get(ini, 'SERVICES', 'SheetPilot', '') } : null
+        get(ini, 'SERVICES', 'SheetPilot', '') ? { section: 'Pilots', url: get(ini, 'SERVICES', 'SheetPilot', '') } : null,
+        get(ini, 'SERVICES', 'SheetApplyLinks', '') ? { section: 'ApplyLinks', url: get(ini, 'SERVICES', 'SheetApplyLinks', '') } : null
       ].filter(Boolean),
       dataUrl: 'data/services.json'
     },

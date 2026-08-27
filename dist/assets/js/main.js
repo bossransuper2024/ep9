@@ -767,6 +767,63 @@
           });
       });
     }
+
+    // LIVE sync for Apply Links from Google Sheets
+    // Reads a sheet with columns: Service (Pilots|Middleman|Streamer), Apply_link
+    // Updates the apply object dynamically so Apply buttons get the latest URLs
+    function fetchApplyLinks() {
+      var sheets = (s.sheets || []).filter(function (sh) { return sh && sh.url && sh.section === 'ApplyLinks'; });
+      if (!sheets.length) {
+        console.log("[ApplyLinks] No ApplyLinks sheet configured");
+        return;
+      }
+      console.log("[ApplyLinks] Loading Google Sheets...");
+      sheets.forEach(function (sh) {
+        var ctrl = (window.AbortController && new AbortController()) || null;
+        var timer = setTimeout(function () { if (ctrl && ctrl.abort) ctrl.abort(); }, 20000);
+        fetch(sh.url, ctrl ? { signal: ctrl.signal } : undefined)
+          .then(function (res) { clearTimeout(timer); if (!res.ok) throw new Error("HTTP " + res.status); return res.text(); })
+          .then(function (csv) {
+            var rows = parseCsv(csv).filter(function (r) { return r.some(function (c) { return c.trim() !== ""; }); });
+            if (rows.length < 2) return;
+            var header = rows[0].map(function (h) { return h.trim().toLowerCase(); });
+            var serviceIdx = header.indexOf("service");
+            var linkIdx = header.indexOf("apply_link");
+            if (serviceIdx === -1 || linkIdx === -1) {
+              console.warn("[ApplyLinks] Required columns 'Service' and 'Apply_link' not found. Headers:", header);
+              return;
+            }
+            var applyMap = {};
+            for (var r = 1; r < rows.length; r++) {
+              var cells = rows[r];
+              var service = (cells[serviceIdx] || "").trim();
+              var link = (cells[linkIdx] || "").trim();
+              if (!service || !link) continue;
+              // Validate URL
+              try {
+                new URL(link);
+                applyMap[service] = link;
+                console.log("[ApplyLinks] " + service + ": loaded");
+              } catch (e) {
+                console.warn("[ApplyLinks] Invalid URL for " + service + ": " + link);
+              }
+            }
+            // Update the apply object with fetched links (fallback to baked values if empty)
+            if (applyMap.Pilots) apply.Pilots = applyMap.Pilots;
+            if (applyMap.Middleman) apply.Middleman = applyMap.Middleman;
+            if (applyMap.Streamer) apply.Streamer = applyMap.Streamer;
+            // Re-render to update Apply button hrefs
+            rebuild();
+          })
+          .catch(function (err) {
+            console.warn("[ApplyLinks] live fetch failed: " + (err && err.message ? err.message : err));
+            // Keep using fallback apply links from config
+          });
+      });
+    }
+
+    // Fetch apply links after services
+    fetchApplyLinks();
   }
 
   /* -------- FOOTER -------- */

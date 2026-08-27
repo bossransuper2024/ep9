@@ -166,7 +166,8 @@ export async function sync() {
   const svc = [
     ['services-streamer.json', get('SERVICES', 'SheetStreamer', ''), 'Streamer'],
     ['services-middleman.json', get('SERVICES', 'SheetMiddleman', ''), 'Middleman'],
-    ['services-pilot.json', get('SERVICES', 'SheetPilot', ''), 'Pilots']
+    ['services-pilot.json', get('SERVICES', 'SheetPilot', ''), 'Pilots'],
+    ['services-applylinks.json', get('SERVICES', 'SheetApplyLinks', ''), 'ApplyLinks']
   ];
   const sections = {};
   for (const [file, url, section] of svc) {
