@@ -5,7 +5,7 @@
  *
  * Clone target: bossran.online/news.html
  *   - 400px .top_kv hero (logo top-left, Homepage / News Station links top-right)
- *   - centered category filter (.news-tabs button) with an accent underline
+ *   - centered category filter (.news-tabs a + <i> underline) — bossran All/News/Announcement/Guide
  *   - .NIE-list: light (white) panel with 165px bordered rows (.news-row)
  *     each row = category badge + date + dark title + 2-line gray excerpt + READ ->
  *   - bordered pager (.news-pagination .page-btn)
@@ -14,7 +14,7 @@
  * Fonts: EP9 stack ONLY — var(--font-display) / var(--font-body) / var(--font-mono)
  *        (Rajdhani / Inter / JetBrains Mono from style.css). NO Google <link>,
  *        NO reference Microsoft YaHei fonts. Falls back cleanly to the EP9 sans
- *        stack. All JS mount hooks (.news-row, .row-*, .news-tabs button,
+ *        stack. All JS mount hooks (.news-row, .row-*, .news-tabs a + i,
  *        .news-pagination .page-btn) are preserved.
  * ========================================================================== */
 
@@ -155,8 +155,9 @@ body[data-page="news"] .news-tabs {
   gap: 4px;
   margin-top: 22px;
 }
-body[data-page="news"] .news-tabs button {
+body[data-page="news"] .news-tabs a {
   position: relative;
+  display: block;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
   font-size: 14px;
   letter-spacing: 0.5px;
@@ -166,10 +167,11 @@ body[data-page="news"] .news-tabs button {
   padding: 0 20px;
   line-height: 34px;
   cursor: pointer;
+  text-decoration: none;
   transition: color .2s ease;
 }
-body[data-page="news"] .news-tabs button::after {
-  content: "";
+/* bossran <i> underline element (scales in on hover / active). */
+body[data-page="news"] .news-tabs a i {
   position: absolute;
   left: 50%;
   top: 30px;
@@ -180,15 +182,15 @@ body[data-page="news"] .news-tabs button::after {
   transform: scaleX(0);
   transition: transform .2s ease;
 }
-body[data-page="news"] .news-tabs button:hover { color: #000; }
-body[data-page="news"] .news-tabs button:hover::after { transform: scaleX(1); }
-body[data-page="news"] .news-tabs button.is-active { color: #000; font-weight: 600; }
-body[data-page="news"] .news-tabs button.is-active::after { transform: scaleX(1); }
+body[data-page="news"] .news-tabs a:hover { color: #000; }
+body[data-page="news"] .news-tabs a:hover i { transform: scaleX(1); }
+body[data-page="news"] .news-tabs a.on { color: #000; font-weight: 600; }
+body[data-page="news"] .news-tabs a.on i { transform: scaleX(1); }
 
 /* ============================================================================
  * LIST ROWS — bossran latest.html EXACT structure:
  *   <ul class="list"> > <li> > <a class="news-row"> > <i class="row-cat">
- *                              + <p class="lside"> > .time + .title + .comment
+ *                              + direct children .time + .title (NO .lside/.comment)
  * ========================================================================== */
 body[data-page="news"] .NIE-list .list {
   list-style: none;
@@ -255,13 +257,11 @@ body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-guide { backgr
 body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-event { background: #e74c3c; }
 body[data-page="news"] .NIE-list .list li:hover a.news-row .row-cat { background: var(--news-accent); color: #191919; }
 
-/* .lside indents 100px to clear the gutter badge; date + title inline. */
-body[data-page="news"] .NIE-list .list li a.news-row .lside {
-  box-sizing: border-box;
-  padding-left: 100px;
-}
-body[data-page="news"] .NIE-list .list li a.news-row .lside .time.row-date,
-body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
+/* Date + title are direct children of the row (NO <p class="lside"> wrapper,
+   NO gray .comment excerpt — per user request). Text starts at the row's left
+   edge because the category badge sits in the negative left gutter. */
+body[data-page="news"] .NIE-list .list li a.news-row .time.row-date,
+body[data-page="news"] .NIE-list .list li a.news-row .title.row-title {
   display: inline-block;
   vertical-align: top;
   margin-top: 20px;
@@ -269,12 +269,12 @@ body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
   font-size: 20px;
   line-height: 20px;
 }
-body[data-page="news"] .NIE-list .list li a.news-row .lside .time.row-date {
+body[data-page="news"] .NIE-list .list li a.news-row .time.row-date {
   margin-right: 16px;
   font-family: var(--font-mono, monospace, sans-serif);
   letter-spacing: 0.5px;
 }
-body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
+body[data-page="news"] .NIE-list .list li a.news-row .title.row-title {
   font-family: var(--font-display, 'Rajdhani', 'Microsoft YaHei', sans-serif);
   font-weight: 700;
   text-transform: uppercase;
@@ -282,22 +282,6 @@ body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-/* 2-line gray excerpt, absolutely bossran (44px / line-clamp 2 / break-all). */
-body[data-page="news"] .NIE-list .list li a.news-row .lside .comment {
-  display: block;
-  height: 44px;
-  margin-top: 12px;
-  color: #7d7d7d;
-  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
-  font-size: 14px;
-  line-height: 22px;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  text-overflow: ellipsis;
-  word-break: break-all;
 }
 
 /* Empty state */
