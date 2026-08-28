@@ -197,6 +197,9 @@ body[data-page="news"] .NIE-list .list {
   margin: 30px 0 0;
   padding: 0;
   border-top: 1px solid #ddd;
+  /* Clips the left-gutter category badge so a long label can never push the
+     page wider and trigger horizontal scroll. */
+  overflow-x: hidden;
 }
 /* .news-grid / .news-tbody are JS mount containers; let them pass children
    straight through to the <ul>. */
@@ -233,14 +236,19 @@ body[data-page="news"] .NIE-list .list li a.news-row {
 body[data-page="news"] .NIE-list .list li:hover a.news-row {
   transform: translateX(-15px);
 }
-/* Category badge: 92px tall pill in the LEFT GUTTER (left:-100px), like bossran.
-   Keeps the .row-cat class (gate + logic test) but uses bossran's pill look. */
+/* Category badge: pill in the LEFT GUTTER, like bossran. We anchor its RIGHT
+   edge to the row's left edge (right:100% + gap) so it always grows LEFTWARD
+   into the gutter and can NEVER overlap the date/title — even when the text is
+   long ("ANNOUNCEMENT"). Keeps the .row-cat class (gate + logic test). */
 body[data-page="news"] .NIE-list .list li a.news-row .row-cat {
   position: absolute;
-  left: -100px;
+  right: 100%;
+  left: auto;
+  margin-right: 14px;
   top: 36px;
   min-width: 92px;
   width: auto;
+  max-width: 150px;
   height: 47px;
   padding: 0 14px;
   display: block;
