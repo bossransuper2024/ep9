@@ -37,7 +37,18 @@ body[data-page="news"] .top_kv {
   width: 100%;
   height: 400px;
   overflow: hidden;
-  background: #0A1020 url('../assets/hero-bg-10.png') center top / cover no-repeat;
+  background: #0A1020 url('/assets/hero-bg-10.png') center top / cover no-repeat;
+}
+/* Real <img> fallback so the hero shows even if the CSS background is cached/blocked. */
+body[data-page="news"] .top_kv .top_kv_img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  z-index: 0;
+  display: block;
 }
 body[data-page="news"] .top_kv .logo {
   position: absolute;
@@ -188,29 +199,35 @@ body[data-page="news"] .NIE-list .list {
 body[data-page="news"] .news-grid,
 body[data-page="news"] .news-tbody { display: contents; }
 
+/* Bossran latest.html divider style: each <li> = 165px row with a 1px
+   bottom divider; the whole .list also gets a top divider. */
 body[data-page="news"] .NIE-list .list .news-row {
   display: block;
   position: relative;
   box-sizing: border-box;
-  min-height: 165px;
-  padding: 40px 0;
-  border-bottom: 1px solid var(--news-line);
+  width: 100%;
+  height: 165px;
+  padding: 36px 0 0;
+  border-bottom: 1px solid #ddd;
   color: var(--news-ink);
   text-decoration: none;
   transition: background .3s ease, transform .3s ease;
 }
 body[data-page="news"] .NIE-list .list .news-row:hover {
-  background: #fafafa;
+  background: #f7f7f7;
   transform: translateX(-12px);
 }
 /* Category badge sits in the left gutter (bossran style). */
 body[data-page="news"] .NIE-list .list .news-row .row-head {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  position: absolute;
+  left: 0;
+  top: 36px;
+  width: 92px;
 }
 body[data-page="news"] .NIE-list .list .news-row .row-cat {
+  display: inline-block;
+  text-align: center;
+  width: 100%;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
   font-size: 13px;
   font-weight: 700;
@@ -218,27 +235,37 @@ body[data-page="news"] .NIE-list .list .news-row .row-cat {
   text-transform: uppercase;
   color: #fff;
   background: var(--news-accent);
-  padding: 3px 10px;
+  padding: 6px 0;
   border-radius: 3px;
 }
 body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-announcement { background: #e67e22; }
 body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-guide { background: #27ae60; }
 body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-event { background: #e74c3c; }
+/* Date + title share the inline line (bossran .lside .time / .title). */
+body[data-page="news"] .NIE-list .list .news-row .row-main {
+  box-sizing: border-box;
+  padding-left: 112px;
+}
 body[data-page="news"] .NIE-list .list .news-row .row-date {
+  display: inline-block;
+  vertical-align: top;
+  margin-top: 20px;
+  margin-right: 16px;
   font-family: var(--font-mono, monospace);
-  font-size: 15px;
-  color: #8a8a8a;
+  font-size: 20px;
+  line-height: 20px;
+  color: var(--news-ink);
   letter-spacing: 0.5px;
 }
 body[data-page="news"] .NIE-list .list .news-row .row-title {
   display: inline-block;
   vertical-align: top;
-  margin-top: 14px;
+  margin-top: 20px;
   max-width: 760px;
   font-family: var(--font-display, 'Rajdhani', 'Microsoft YaHei', sans-serif);
   font-weight: 700;
-  font-size: 22px;
-  line-height: 1.25;
+  font-size: 20px;
+  line-height: 20px;
   color: var(--news-ink);
   text-transform: uppercase;
   white-space: nowrap;
@@ -250,7 +277,9 @@ body[data-page="news"] .NIE-list .list .news-row .row-exc {
   width: 100%;
   max-width: 880px;
   height: 44px;
-  margin-top: 10px;
+  margin-top: 12px;
+  padding-left: 112px;
+  box-sizing: border-box;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
   font-size: 14px;
   line-height: 22px;
@@ -263,16 +292,18 @@ body[data-page="news"] .NIE-list .list .news-row .row-exc {
   word-break: break-all;
 }
 body[data-page="news"] .NIE-list .list .news-row .row-go {
-  display: inline-block;
-  margin-top: 8px;
+  display: block;
+  padding-left: 112px;
+  margin-top: 6px;
   font-family: var(--font-mono, monospace);
   font-size: 12px;
   letter-spacing: 1.5px;
   color: #3c3c3c;
 }
-body[data-page="news"] .NIE-list .list .news-row:hover .row-go { color: #000; }
+body[data-page="news"] .NIE-list .list .news-row:hover .row-go { color: var(--news-accent); }
 body[data-page="news"] .NIE-list .list .news-row .row-foot {
   margin-top: 6px;
+  padding-left: 112px;
   font-size: 12px;
   color: #aaa;
   letter-spacing: 0.5px;
