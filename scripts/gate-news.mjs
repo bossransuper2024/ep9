@@ -166,7 +166,7 @@ ok(/page\s*\*\s*itemsPerPage|slice\(/.test(main), 'pagination math (slice by pag
 // =============================================================================
 ok(/news-row/.test(cssAll), 'compact news list rows styled');
 ok(!/news-hero|news-banner-large|giant-banner/.test(cssAll), 'no giant top announcement banner class');
-ok(/row-date/.test(cssAll) && /row-cat/.test(cssAll) && /row-title/.test(cssAll) && /\.news-tabs a\b/.test(cssAll) && /news-tabs a i/.test(cssAll), 'list shows date/cat/title + bossran .news-tabs <a> filter (All/News/Announcement/Guide)');
+ok(/row-date/.test(cssAll) && /row-cat/.test(cssAll) && /row-title/.test(cssAll) && /row-desc/.test(cssAll) && /row-go/.test(cssAll) && /\.news-tabs a\b/.test(cssAll) && /news-tabs a i/.test(cssAll), 'list shows date/cat/title/desc/READ + bossran .news-tabs <a> filter (All/News/Announcement/Guide)');
 
 // =============================================================================
 // LOOP 14 — NO BROKEN LINKS / IMAGES
