@@ -45,22 +45,30 @@
     <!-- News list (category filter + table + pagination) — Main Page content is
          NOT here. Each row is a real <a> to its standalone content page. -->
     <section class="section" id="news">
-      <div class="bg-fx" id="news-bg" style="background-image:url('assets/hero-bg-08.png')"></div>
-      <div class="bg-fx-overlay" aria-hidden="true"></div>
-      <div class="wrap">
-        <span class="eyebrow">NEWS</span>
-        <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
-        <p class="section-intro" id="news-intro"></p>
-        <!-- Category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
-             Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
-             the client-side filtering (no backend required). -->
-        <div class="news-tabs news-filter" id="news-tabs"></div>
-        <!-- Bossran-style compact list (news-row). Articles deep-link to the
-             standalone reader via news.html#id=<CSV_ID>. -->
-        <div class="news-grid" id="news-grid">
-          <div class="news-tbody" id="news-tbody"></div>
+      <!-- ZONE 1: header (eyebrow + title + intro). Own 212px banner bg. -->
+      <div class="news-head" id="news-head">
+        <div class="bg-fx" id="news-bg-01" style="background-image:url('assets/news-bg-01.png')"></div>
+        <div class="wrap">
+          <span class="eyebrow">NEWS</span>
+          <h2 class="section-title"><span id="news-title">THE LATEST</span> <span class="accent" id="news-accent">NEWS.</span></h2>
+          <p class="section-intro" id="news-intro"></p>
         </div>
-        <div class="news-pagination" id="news-pagination"></div>
+      </div>
+      <!-- ZONE 2: list (tabs + grid + pagination). Separate 212px banner bg. -->
+      <div class="news-list" id="news-list">
+        <div class="bg-fx" id="news-bg-02" style="background-image:url('assets/news-bg-02.png')"></div>
+        <div class="wrap">
+          <!-- Category filter: ALL | NEWS | ANNOUNCEMENT | GUIDE.
+               Buttons are rebuilt by main.js from C.newsFilter; data-filter drives
+               the client-side filtering (no backend required). -->
+          <div class="news-tabs news-filter" id="news-tabs"></div>
+          <!-- Bossran-style compact list (news-row). Articles deep-link to the
+               standalone reader via news.html#id=<CSV_ID>. -->
+          <div class="news-grid" id="news-grid">
+            <div class="news-tbody" id="news-tbody"></div>
+          </div>
+          <div class="news-pagination" id="news-pagination"></div>
+        </div>
       </div>
     </section>
 

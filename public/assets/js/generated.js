@@ -3,7 +3,7 @@
   window.SITE_CONFIG = Object.assign({}, window.SITE_CONFIG, {
   "site": {
     "title": "RanOnline EP9",
-    "tagline": "Student calls. Answer it.",
+    "tagline": "Choose your school. Enter the battle.",
     "brandShort": "RAN online",
     "brandLong": "RanOnline EP9",
     "logo": "assets/logo.png",
@@ -15,7 +15,7 @@
   "hero": {
     "title": "RAN ONLINE",
     "subtitle": "RanOnline EP9",
-    "description": "A new era of RAN Online arrives. Build your legend, claim the battlefield, and answer the call of EP9.",
+    "description": "Experience Ran Online EP9 with classic school warfare, intense PvP battles, and a progression built for long-term gameplay.",
     "bg": "assets/hero-bg-01.png",
     "ctaPlay": "WATCH TRAILER",
     "ctaPlayUrl": "https://www.youtube.com/watch?v=_c15_jZiBw8",
@@ -25,7 +25,7 @@
     "enabled": true,
     "src": "assets/audio/ranmixed-clean.mp3",
     "title": "RanOnline EP9",
-    "autoplay": false,
+    "autoplay": true,
     "bounce": true,
     "aggressive": false,
     "lowGain": 0.3,
@@ -43,42 +43,42 @@
   },
   "server": {
     "bg": "assets/hero-bg-02.png",
-    "intro": "A balanced economy and progression curve tuned for hardcore raiders and casual guildmates alike. No pay-to-win — only pay-to-look-fly.",
+    "intro": "A balanced economy and progression designed for both competitive players and casual players. No pay-to-win, just fair progression and a focus on gameplay.",
     "stats": [
       {
         "label": "PLAYABLE CLASSES",
         "value": "07",
-        "note": "Each with unique skill trees"
+        "note": "Available classes"
       },
       {
         "label": "MAX CHAR LEVEL",
         "value": "240",
-        "note": "Endgame ceiling"
+        "note": "Current level cap"
       },
       {
         "label": "MAX SKILL LEVEL",
         "value": "217",
-        "note": "Mastery progression"
+        "note": "Current highest skill level"
       },
       {
         "label": "MAX UPGRADE",
         "value": "+10",
-        "note": "Unique Upgrade system"
+        "note": "Current highest equipment upgrade"
       },
       {
         "label": "LAST ARMOR",
         "value": "CELESTIAL",
-        "note": "End-game tier"
+        "note": "Current highest armor"
       },
       {
         "label": "LAST WEAPON",
         "value": "BLACK DRAGON",
-        "note": "Mythic class arsenal"
+        "note": "Current highest weapon"
       },
       {
         "label": "LAST MAP",
         "value": "SAINT POWER PLANT",
-        "note": "Endgame zone"
+        "note": "Current highest map"
       }
     ],
     "rates": [
@@ -102,78 +102,78 @@
       {
         "name": "BRAWLER",
         "role": "Melee DPS",
-        "spec": "Fist-form striker",
+        "spec": "Close Combat",
         "difficulty": 2,
         "img": "assets/class-brawler.png",
-        "playstyle": "A close-range pressure class built around fast engages, chase pressure and punishing enemies who overextend. Brawler performs best when forcing small skirmishes instead of standing in the middle of a full ranged fight.",
-        "pvpAdvantage": "Strong duelist with reliable gap-close pressure and high burst when targets are isolated.",
-        "pvpDisadvantage": "Struggles when kited by coordinated ranged classes or locked down before reaching the backline."
+        "playstyle": "A close-range fighter built for aggressive combat and direct engagements. Brawler is effective at staying on top of enemies, dealing heavy melee damage and taking advantage of openings.",
+        "pvpAdvantage": "Strong melee pressure and burst damage at close range.",
+        "pvpDisadvantage": "Can struggle against classes that maintain distance or constantly kite."
       },
       {
         "name": "ARCHER",
         "role": "Ranged DPS",
-        "spec": "Sniper / scout",
+        "spec": "Long Range",
         "difficulty": 3,
         "img": "assets/class-archer.png",
-        "playstyle": "A spacing-based marksman that wins by controlling distance, poking safely and finishing weakened enemies before they can reset. Archer rewards map awareness, target selection and clean movement.",
-        "pvpAdvantage": "Excellent range, safe poke and strong pick potential against low-health targets.",
-        "pvpDisadvantage": "Vulnerable when melee classes close the gap or when caught without room to reposition."
+        "playstyle": "A ranged class that relies on distance, accuracy and positioning. Archer can pressure enemies from afar and quickly finish targets that are already weakened.",
+        "pvpAdvantage": "Excellent attack range and consistent ranged damage.",
+        "pvpDisadvantage": "Less effective when enemies get into close range or limit its movement."
       },
       {
         "name": "SWORDSMAN",
         "role": "Tank / DPS",
-        "spec": "Frontline stopper",
+        "spec": "Frontline",
         "difficulty": 2,
         "img": "assets/class-swordsman.png",
-        "playstyle": "A durable frontline class that protects space, absorbs pressure and creates openings for the team. Swordsman is ideal for players who want to anchor pushes, peel for allies and survive extended fights.",
-        "pvpAdvantage": "High survivability and strong frontline control make it reliable in group clashes.",
-        "pvpDisadvantage": "Lower chase speed and burst compared with pure DPS classes, so mobile targets can escape."
+        "playstyle": "A durable melee class suited for holding the frontline and taking heavy pressure. Swordsman can stay in the fight while dealing solid damage and disrupting enemy movement.",
+        "pvpAdvantage": "High defense and strong performance in close-range battles.",
+        "pvpDisadvantage": "Lower mobility and burst compared with more offensive classes."
       },
       {
         "name": "SHAMAN",
         "role": "Support",
-        "spec": "Elemental binder",
+        "spec": "Support / Magic",
         "difficulty": 4,
         "img": "assets/class-shaman.png",
-        "playstyle": "A tactical support class focused on sustain, buffs and fight control. Shaman shines when playing behind the frontline, keeping key allies alive and turning long fights through timing and positioning.",
-        "pvpAdvantage": "Valuable in organized PvP because utility and sustain can swing extended team fights",
-        "pvpDisadvantage": "Needs protection and careful positioning; focused burst or silence pressure can shut it down quickly."
+        "playstyle": "A support-oriented class that uses healing, buffs and magic abilities to assist the party. Shaman is most effective when staying behind the frontline and supporting teammates during fights.",
+        "pvpAdvantage": "Strong support skills and useful party utility.",
+        "pvpDisadvantage": "Can be vulnerable when caught alone or focused by enemies."
       },
       {
         "name": "EXTREME",
         "role": "Hybrid",
-        "spec": "Heavy ordnance",
+        "spec": "Heavy Combat",
         "difficulty": 3,
         "img": "assets/class-extreme.png",
-        "playstyle": "A flexible combatant with heavy pressure tools and enough utility to adapt between offense and disruption. Extreme is best for players who like switching targets and creating chaos during crowded fights.",
-        "pvpAdvantage": "Versatile damage profile and disruptive pressure work well in messy group battles.",
-        "pvpDisadvantage": "Can feel less specialized than pure classes, and poor cooldown timing leaves it exposed."
+        "playstyle": "A versatile combat class that combines strong attacks with useful utility. Extreme can adapt to different situations and perform well during both PvE and large-scale PvP encounters.",
+        "pvpAdvantage": "Good mix of damage and utility for different situations.",
+        "pvpDisadvantage": "Requires proper skill timing and positioning to perform consistently."
       },
       {
         "name": "GUNNER",
         "role": "Ranged DPS",
-        "spec": "Tech-augment vanguard",
+        "spec": "Heavy Ranged",
         "difficulty": 3,
         "img": "assets/class-gunner.png",
-        "playstyle": "A ranged damage dealer built around steady pressure, burst windows and disciplined positioning. Gunner thrives when firing from protected angles and punishing enemies who commit too deep.",
-        "pvpAdvantage": "Strong sustained ranged damage and good backline threat in team fights.",
-        "pvpDisadvantage": "Needs space and protection; collapses quickly when surrounded or forced into close combat."
+        "playstyle": "A ranged combat class focused on sustained firepower and strong ranged attacks. Gunner performs best when maintaining distance and attacking from a safe position.",
+        "pvpAdvantage": "High ranged damage and strong pressure against enemy targets.",
+        "pvpDisadvantage": "Can be vulnerable when enemies reach close range."
       },
       {
         "name": "ASSASSIN",
         "role": "Burst DPS",
-        "spec": "Shadow operative",
+        "spec": "Close Range Burst",
         "difficulty": 5,
         "img": "assets/class-assassin.png",
-        "playstyle": "A high-risk burst class that specializes in flanking, target deletion and escaping before the enemy can respond. Assassin rewards patience, timing and reading the fight before committing.",
-        "pvpAdvantage": "Exceptional burst and backline threat against supports, archers and isolated carries.",
-        "pvpDisadvantage": "Punishing to misplay; if the opening burst fails, it can be controlled and eliminated fast."
+        "playstyle": "A fast melee class designed to quickly engage vulnerable targets and deal heavy burst damage. Assassin relies on timing, movement and choosing the right target before entering combat.",
+        "pvpAdvantage": "Excellent burst damage and strong target elimination potential.",
+        "pvpDisadvantage": "Low margin for error when engaging and can be punished after missing its attack window."
       }
     ]
   },
   "combat": {
     "bg": "assets/hero-bg-04.png",
-    "intro": "Competitive PvP modes and flagship PvE pillars. EP9 rewards aggression — but only the disciplined survive Forbidden Tower and Outer Wall.",
+    "intro": "Competitive PvP and challenging PvE content designed for different playstyles. Take on intense battles and work your way through areas like Forbidden Tower and Outer Wall.",
     "liveEvent": {
       "tag": "LIVE EVENT",
       "title": "Tyranny Wars: Season 01",

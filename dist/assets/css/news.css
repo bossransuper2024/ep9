@@ -13,72 +13,76 @@ body[data-page="news"] {
   color: #191919;
 }
 
-/* Hero background for the News section (eyebrow → section-intro area).
-   Use the section's .bg-fx layer so it scales/sways like other sections.
-   The overlay is kept but made more transparent so the image remains visible. */
-body[data-page="news"] #news {
-  padding-top: clamp(48px, 7vw, 96px);
-  padding-bottom: clamp(64px, 9vw, 120px);
-}
+/* ============================================================================
+   Two-zone News layout:
+     ZONE 1 (.news-head) -> header: eyebrow + title + intro, 212px banner bg.
+     ZONE 2 (.news-list) -> tabs + grid + pagination, separate 212px banner bg.
+   Each zone has its own .bg-fx layer (fixed 212px tall band) so the image
+   never stretches to the full section height (~667px). The section itself no
+   longer carries a full-height background.
+   ========================================================================== */
 
-/* Ensure the bg-fx is visible (not hidden by the old rule) */
-body[data-page="news"] #news .bg-fx {
+/* Section: no full-height bg, just vertical rhythm between the two zones. */
+body[data-page="news"] #news {
+  padding: 0;
+  background: transparent;
   display: block;
-  opacity: 0.45; /* slightly lower than default 0.5 for lighter news theme */
 }
 
-/* Full-width 1920x212 banner background behind the news list (stretched
-   hero-bg image). Sits behind the .wrap content as a decorative band. */
-body[data-page="news"] #news {
+/* Each zone is a positioned band with its own .bg-fx + content. */
+body[data-page="news"] #news .news-head,
+body[data-page="news"] #news .news-list {
   position: relative;
   overflow: hidden;
 }
-body[data-page="news"] #news::before {
-  content: "";
+body[data-page="news"] #news .news-head {
+  padding-top: clamp(48px, 7vw, 96px);
+  padding-bottom: clamp(32px, 4vw, 56px);
+  min-height: 212px;
+}
+body[data-page="news"] #news .news-list {
+  padding-top: clamp(28px, 4vw, 48px);
+  padding-bottom: clamp(64px, 9vw, 120px);
+}
+
+/* The .bg-fx layer in each zone is locked to a 212px tall banner. */
+body[data-page="news"] #news .news-head .bg-fx,
+body[data-page="news"] #news .news-list .bg-fx {
+  display: block;
   position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 1920px;
-  max-width: 100%;
-  height: 212px;
-  background-image: url('assets/hero-bg-08.png');
-  background-size: 1920px 212px;
+  inset: 0;
+  height: 212px;            /* fixed banner height (was stretching to ~667px) */
+  background-size: cover;   /* stretch the 1920x212 banner across the band */
   background-position: center center;
   background-repeat: no-repeat;
+  opacity: 1;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0.9;
 }
-body[data-page="news"] #news > .wrap {
+/* header banner sits a touch lower so the dark part anchors the title area */
+body[data-page="news"] #news .news-head .bg-fx {
+  background-position: center top;
+}
+
+/* Keep content above the banner image. */
+body[data-page="news"] #news .news-head > .wrap,
+body[data-page="news"] #news .news-list > .wrap {
   position: relative;
   z-index: 1;
 }
 
-/* Overlay: translucent gradient for text readability, but NOT hiding the image */
-body[data-page="news"] #news .bg-fx-overlay {
-  display: block;
-  background: linear-gradient(180deg,
-    rgba(7, 11, 20, 0.6) 0%,      /* darker at top for eyebrow/title readability */
-    rgba(7, 11, 20, 0.25) 35%,   /* fade quickly */
-    transparent 50%,              /* middle transparent - image visible */
-    rgba(7, 11, 20, 0.25) 65%,   /* fade in toward bottom */
-    rgba(7, 11, 20, 0.5) 100%    /* darker at bottom */
-  );
-}
+/* Remove the old full-section overlay (no longer used). */
+body[data-page="news"] #news .bg-fx-overlay { display: none; }
 
-/* Remove the fixed body::before since we're using the section's bg-fx now */
+/* Remove the fixed body::before since the section has no full-height bg now */
 body[data-page="news"]::before {
   display: none;
 }
 
 /* Text color adjustments for light news theme */
-body[data-page="news"] .section-title { color: #191919; }
-body[data-page="news"] .section-title .accent { color: #b8860b; }
-body[data-page="news"] .section-intro { color: #6b6b6b; }
-body[data-page="news"] .section-title { color: #191919; }
-body[data-page="news"] .section-title .accent { color: #b8860b; }
-body[data-page="news"] .section-intro { color: #6b6b6b; }
+body[data-page="news"] .section-title { color: #ffffff; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+body[data-page="news"] .section-title .accent { color: var(--accent, #FFD60A); }
+body[data-page="news"] .section-intro { color: rgba(255,255,255,.82); text-shadow: 0 1px 8px rgba(0,0,0,.5); }
+body[data-page="news"] .eyebrow { color: var(--accent, #FFD60A); text-shadow: 0 1px 8px rgba(0,0,0,.5); }
 
 /* ---- Minimal top bar: keep brand + HOME readable on light bg ----------- */
 body[data-page="news"] .news-nav {
@@ -94,7 +98,7 @@ body[data-page="news"] .news-nav .btn:hover { border-color: var(--accent, #FFD60
 body[data-page="news"] .news-tabs {
   display: flex;
   justify-content: center;
-  gap: 0;
+  gap: 8px;
   margin: 34px auto 0;
   border: none;
   background: transparent;
@@ -103,24 +107,28 @@ body[data-page="news"] .news-tabs {
   flex-wrap: wrap;
 }
 body[data-page="news"] .news-tabs button {
-  color: #191919;
-  background: transparent;
-  border-radius: 0;
+  color: rgba(255,255,255,.82);
+  background: rgba(7, 11, 20, 0.55);   /* dark translucent, not blinding white */
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
   font-size: 13px;
   letter-spacing: 2px;
   padding: 0 22px;
   line-height: 34px;
   position: relative;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
 }
-body[data-page="news"] .news-tabs button:hover { color: var(--accent, #FFD60A); }
-body[data-page="news"] .news-tabs button.is-active { color: #191919; background: transparent; }
-body[data-page="news"] .news-tabs button.is-active::after {
-  content: "";
-  position: absolute;
-  left: 16px; right: 16px; bottom: 0;
-  height: 2px;
+body[data-page="news"] .news-tabs button:hover {
+  color: #fff;
+  border-color: var(--accent, #FFD60A);
+  background: rgba(7, 11, 20, 0.75);
+}
+body[data-page="news"] .news-tabs button.is-active {
+  color: #070B14;
   background: var(--accent, #FFD60A);
+  border-color: var(--accent, #FFD60A);
 }
+body[data-page="news"] .news-tabs button.is-active::after { display: none; }
 
 /* ---- Table-based list (PHP-style: Title | Author | Date) --------------- */
 body[data-page="news"] .news-table-wrap {
@@ -209,20 +217,6 @@ body[data-page="news"] .news-table .news-empty {
   text-align: center;
   padding: 40px 0;
 }
-
-/* Empty state + pagination + "view all" on light bg. */
-body[data-page="news"] .news-empty { color: #8a8a8a; text-align: center; padding: 40px 0; }
-body[data-page="news"] .news-pagination .page-btn {
-  background: #fff; color: #191919; border-color: #d9d9d9;
-}
-body[data-page="news"] .news-pagination .page-btn:hover:not([disabled]) {
-  border-color: var(--accent, #FFD60A); color: var(--accent, #FFD60A);
-}
-body[data-page="news"] .news-pagination .page-status { color: #8a8a8a; }
-body[data-page="news"] .view-all-link {
-  color: #b8860b; border-color: rgba(184,134,11,.4); background: rgba(255,214,10,.06);
-}
-body[data-page="news"] .view-all-link:hover { border-color: var(--accent, #FFD60A); color: var(--accent, #FFD60A); }
 
 @media (max-width: 640px) {
   body[data-page="news"] .news-table th,
@@ -328,23 +322,44 @@ body[data-page="news"] .news-row .row-foot {
   letter-spacing: 0.5px;
 }
 
-/* Empty state + pagination + "view all" on light bg. */
-body[data-page="news"] .news-empty { color: #8a8a8a; text-align: center; padding: 40px 0; }
-body[data-page="news"] .news-pagination .page-btn {
-  background: #fff; color: #191919; border-color: #d9d9d9;
-}
-body[data-page="news"] .news-pagination .page-btn:hover:not([disabled]) {
-  border-color: var(--accent, #FFD60A); color: var(--accent, #FFD60A);
-}
-body[data-page="news"] .news-pagination .page-status { color: #8a8a8a; }
-body[data-page="news"] .view-all-link {
-  color: #b8860b; border-color: rgba(184,134,11,.4); background: rgba(255,214,10,.06);
-}
-body[data-page="news"] .view-all-link:hover { border-color: var(--accent, #FFD60A); color: var(--accent, #FFD60A); }
-
 @media (max-width: 640px) {
   body[data-page="news"] .news-row:hover { transform: none; }
 }
+
+/* Empty state + pagination + "view all" — dark translucent (no glare). */
+body[data-page="news"] .news-empty { color: rgba(255,255,255,.7); text-align: center; padding: 40px 0; }
+body[data-page="news"] .news-pagination .page-btn {
+  background: rgba(7, 11, 20, 0.55); color: rgba(255,255,255,.82); border-color: rgba(255,255,255,.18);
+}
+body[data-page="news"] .news-pagination .page-btn:hover:not([disabled]) {
+  border-color: var(--accent, #FFD60A); color: #fff; background: rgba(7, 11, 20, 0.75);
+}
+body[data-page="news"] .news-pagination .page-status { color: rgba(255,255,255,.7); }
+body[data-page="news"] .view-all-link {
+  color: var(--accent, #FFD60A); border-color: rgba(255,214,10,.4); background: rgba(7,11,20,.45);
+}
+body[data-page="news"] .view-all-link:hover { border-color: var(--accent, #FFD60A); color: #fff; }
+
+/* ---- List readability: dark translucent panel behind the grid ------------ */
+/* The banner (news-bg-02) shows through a semi-transparent dark panel so the
+   list content stays readable without a blinding white background. */
+body[data-page="news"] #news .news-list > .wrap {
+  background: rgba(7, 11, 20, 0.55);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 14px;
+  padding: clamp(18px, 3vw, 32px);
+  backdrop-filter: blur(4px);
+  box-shadow: 0 18px 50px rgba(0,0,0,.35);
+}
+body[data-page="news"] .news-grid { margin-top: 24px; }
+/* Keep row text light now that it sits on a dark panel. */
+body[data-page="news"] .news-row { color: rgba(255,255,255,.92); }
+body[data-page="news"] .news-row .row-title { color: #fff; }
+body[data-page="news"] .news-row .row-cat { color: #070B14; }
+body[data-page="news"] .news-row .row-date { color: rgba(255,255,255,.6); }
+body[data-page="news"] .news-row .row-exc { color: rgba(255,255,255,.66); }
+body[data-page="news"] .news-row .row-foot { color: rgba(255,255,255,.5); }
+body[data-page="news"] .news-row:hover { background: rgba(255, 214, 10, 0.08); }
 
 /* ============================================================================
  * News Article Sections - Styling for consolidated article content
