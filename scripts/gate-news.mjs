@@ -91,7 +91,8 @@ ok(new Set(gAllIds).size === gAllIds.length, `no duplicate ids across announceme
 const main = read('public/assets/js/main.js');
 const html = read('public/index.html');
 const css = read('public/assets/css/style.css');
-// Bossran list markup (.list > li > a > .lside/.comment) lives in the scoped
+// Bossran list markup (.list > li > a > .row-cat + .time + .title, tabs = .news-tabs a)
+// lives in the scoped
 // news.css skin that news.html loads; include it so the rows checks run against
 // the real News-page styles (style.css only covers the Main Page dark preview).
 const newsCss = read('public/assets/css/news.css');
@@ -165,7 +166,7 @@ ok(/page\s*\*\s*itemsPerPage|slice\(/.test(main), 'pagination math (slice by pag
 // =============================================================================
 ok(/news-row/.test(cssAll), 'compact news list rows styled');
 ok(!/news-hero|news-banner-large|giant-banner/.test(cssAll), 'no giant top announcement banner class');
-ok(/row-date/.test(cssAll) && /row-cat/.test(cssAll) && /row-title/.test(cssAll) && /\.lside/.test(cssAll) && /\.comment/.test(cssAll), 'list shows date/cat/title/excerpt (bossran .lside + .comment)');
+ok(/row-date/.test(cssAll) && /row-cat/.test(cssAll) && /row-title/.test(cssAll) && /\.news-tabs a\b/.test(cssAll) && /news-tabs a i/.test(cssAll), 'list shows date/cat/title + bossran .news-tabs <a> filter (All/News/Announcement/Guide)');
 
 // =============================================================================
 // LOOP 14 — NO BROKEN LINKS / IMAGES

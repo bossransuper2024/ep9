@@ -87,7 +87,7 @@
     if (fxConfig.enabled !== true) return; // Disabled by default - set audioFx.enabled=true in config.ini to enable
     // Click sounds for buttons, links with .btn class, nav links, tabs
     document.addEventListener('click', function (e) {
-      var target = e.target.closest('button, .btn, .nav-links a, .class-tab, .svc-tab, .news-tabs button, .page-btn, .view-all-link, .svc-apply, .music-toggle, .nav-cta, .hero-actions button, .hero-actions a');
+      var target = e.target.closest('button, .btn, .nav-links a, .class-tab, .svc-tab, .news-tabs a, .page-btn, .view-all-link, .svc-apply, .music-toggle, .nav-cta, .hero-actions button, .hero-actions a');
       if (target) {
         ensureAudioInit();
         AudioFX.playClick();
@@ -96,7 +96,7 @@
     
     // Hover sounds for buttons, cards, nav links
     document.addEventListener('mouseenter', function (e) {
-      var target = e.target.closest('button, .btn, .nav-links a, .class-tab, .svc-tab, .news-tabs button, .page-btn, .view-all-link, .stat-card, .mode-card, .svc-card, .class-tab, .rate-chip, .news-row, .diff-block, .info-card');
+      var target = e.target.closest('button, .btn, .nav-links a, .class-tab, .svc-tab, .news-tabs a, .page-btn, .view-all-link, .stat-card, .mode-card, .svc-card, .class-tab, .rate-chip, .news-row, .diff-block, .info-card');
       if (target && !target.classList.contains('music-toggle')) {
         ensureAudioInit();
         AudioFX.playHover();
@@ -372,11 +372,13 @@
     if (newsCta) newsCta.addEventListener("click", function () { window.location.href = "news.html"; });
     var tabs = el("news-tabs"), tbody = el("news-tbody");
     if (!tbody || !tabs) return;
-    // Build the category filter (ALL | NEWS | ANNOUNCEMENT | GUIDE) from config.
+    // Build the category filter (ALL | NEWS | ANNOUNCEMENT | GUIDE) from config,
+    // using bossran latest.html's EXACT tab markup: <a href> + <i> underline.
     var filterDefs = (C.newsFilter && C.newsFilter.length) ? C.newsFilter :
       [{ key: "all", label: "All" }, { key: "news", label: "News" }, { key: "announcement", label: "Announcement" }, { key: "guide", label: "Guide" }];
     tabs.innerHTML = filterDefs.map(function (f, i) {
-      return '<button class="' + (i === 0 ? "is-active" : "") + '" data-filter="' + esc(f.key) + '">' + esc(f.label) + "</button>";
+      var href = (f.key === "all") ? "news.html" : "news.html#cat=" + esc(f.key);
+      return '<a href="' + href + '" class="' + (i === 0 ? "on" : "") + '" data-filter="' + esc(f.key) + '">' + esc(f.label) + '<i></i></a>';
     }).join("");
     var cfg = C.newsConfig || {};
     // The Main Page is a capped preview; the standalone news.html paginates fully.
@@ -412,16 +414,14 @@
       var excerpt = item.description || item.desc || "";
       if (cfg && cfg.showExcerpt === false) excerpt = "";
       // On the standalone news.html page we emit bossran latest.html's EXACT
-      // markup — <li><a class="news-row"><i class="row-cat"> + <p class="lside">
-      // with .time/.title/.comment — so it is pixel-identical to bossran.
+      // markup — <li><a class="news-row"><i class="row-cat"> + direct children
+      // .time + .title (NO wrapper <p class="lside">, NO gray .comment excerpt —
+      // per user request). Each row is a real link into the standalone reader.
       if (!mainPage) {
         return '<li><a class="news-row" href="' + href + '" id="news-row-' + esc(String(articleId)) + '">' +
           '<i class="row-cat ' + catClass + '">' + esc(cat) + '</i>' +
-          '<p class="lside">' +
-            (date ? '<span class="time row-date">' + date + '</span>' : '') +
-            '<span class="title row-title">' + title + '</span>' +
-            (excerpt ? '<span class="comment row-exc">[Admin] ' + esc(excerpt) + '</span>' : '') +
-          '</p>' +
+          (date ? '<span class="time row-date">' + date + '</span>' : '') +
+          '<span class="title row-title">' + title + '</span>' +
         '</a></li>';
       }
       // Main Page preview: a compact dark card (unchanged — its own style.css skin).
@@ -451,7 +451,7 @@
       var totalPages = Math.max(1, Math.ceil(list.length / perPage));
       if (pageState.page >= totalPages) pageState.page = totalPages - 1;
       if (pageState.page < 0) pageState.page = 0;
-      tabs.querySelectorAll("button").forEach(function (b) { b.classList.toggle("is-active", b.dataset.filter === pageState.filter); });
+      tabs.querySelectorAll("a").forEach(function (b) { b.classList.toggle("on", (b.dataset.filter || "all") === pageState.filter); });
       var start = pageState.page * perPage;
       var pageItems = list.slice(start, start + perPage);
       tbody.innerHTML = pageItems.length
@@ -489,7 +489,14 @@
         if (item.context) loadTxt(item.context, function (txt) { previewCache[i] = previewFromTxt(txt); window.renderNewsToPage(pageState.filter, pageState.page); });
       });
     }
-    tabs.addEventListener("click", function (e) { var b = e.target.closest("button"); if (b) window.renderNewsToPage(b.dataset.filter, 0); });
+    // Tabs are bossran-style <a> links. Clicking filters in place (no navigation),
+    // so we preventDefault to stop the href hash from reaching the article router.
+    tabs.addEventListener("click", function (e) {
+      var b = e.target.closest("a");
+      if (!b || !tabs.contains(b)) return;
+      e.preventDefault();
+      window.renderNewsToPage(b.dataset.filter, 0);
+    });
 
     // ---- LIVE News from the SHARED Google Sheet loader ----
     // window.NewsData fetches the published CSV directly in the browser (CORS `*`)
@@ -500,12 +507,16 @@
         if (!live || !live.length) return;
         items.length = 0;
         live.forEach(function (it) { items.push(it); });
-        // Rebuild the category filter chips to match the live categories.
+        // Rebuild the category filter chips to match the live categories, using
+        // bossran latest.html's EXACT tab markup: <a href> links with an <i>
+        // underline element (active state = `on`, not a <button>). Clicking a tab
+        // sets pageState.filter via the existing delegation handler (no nav).
         var hidden = (C.newsConfig && C.newsConfig.hiddenCategories) || (C.news && C.news.hiddenCategories) || [];
         var defs = ND.filters(hidden);
         if (tabs) {
           tabs.innerHTML = defs.map(function (f, i) {
-            return '<button class="' + (i === 0 ? "is-active" : "") + '" data-filter="' + esc(f.key) + '">' + esc(f.label) + "</button>";
+            var href = (f.key === "all") ? "news.html" : "news.html#cat=" + esc(f.key);
+            return '<a href="' + href + '" class="' + (i === 0 ? "on" : "") + '" data-filter="' + esc(f.key) + '">' + esc(f.label) + '<i></i></a>';
           }).join("");
         }
         window.renderNewsToPage(pageState.filter, pageState.page);
