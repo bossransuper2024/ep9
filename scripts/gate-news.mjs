@@ -91,6 +91,11 @@ ok(new Set(gAllIds).size === gAllIds.length, `no duplicate ids across announceme
 const main = read('public/assets/js/main.js');
 const html = read('public/index.html');
 const css = read('public/assets/css/style.css');
+// Bossran list markup (.list > li > a > .lside/.comment) lives in the scoped
+// news.css skin that news.html loads; include it so the rows checks run against
+// the real News-page styles (style.css only covers the Main Page dark preview).
+const newsCss = read('public/assets/css/news.css');
+const cssAll = css + '\n' + newsCss;
 
 // Standalone news.html must exist (root + public) and be served as a real page.
 ok(has('news.html'), 'standalone news.html exists at repo root');
@@ -158,9 +163,9 @@ ok(/page\s*\*\s*itemsPerPage|slice\(/.test(main), 'pagination math (slice by pag
 // =============================================================================
 // LOOP 10/11 — HOME NEWS LIST compact (no giant top banner)
 // =============================================================================
-ok(/news-row/.test(css), 'compact news list rows styled');
-ok(!/news-hero|news-banner-large|giant-banner/.test(css), 'no giant top announcement banner class');
-ok(/row-date/.test(css) && /row-cat/.test(css) && /row-title/.test(css) && /row-go|READ/.test(css), 'list shows date/cat/title/read');
+ok(/news-row/.test(cssAll), 'compact news list rows styled');
+ok(!/news-hero|news-banner-large|giant-banner/.test(cssAll), 'no giant top announcement banner class');
+ok(/row-date/.test(cssAll) && /row-cat/.test(cssAll) && /row-title/.test(cssAll) && /\.lside/.test(cssAll) && /\.comment/.test(cssAll), 'list shows date/cat/title/excerpt (bossran .lside + .comment)');
 
 // =============================================================================
 // LOOP 14 — NO BROKEN LINKS / IMAGES

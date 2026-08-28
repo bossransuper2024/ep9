@@ -411,18 +411,31 @@
       // the article page. Description is the short field, content is the long.
       var excerpt = item.description || item.desc || "";
       if (cfg && cfg.showExcerpt === false) excerpt = "";
+      // On the standalone news.html page we emit bossran latest.html's EXACT
+      // markup — <li><a class="news-row"><i class="row-cat"> + <p class="lside">
+      // with .time/.title/.comment — so it is pixel-identical to bossran.
+      if (!mainPage) {
+        return '<li><a class="news-row" href="' + href + '" id="news-row-' + esc(String(articleId)) + '">' +
+          '<i class="row-cat ' + catClass + '">' + esc(cat) + '</i>' +
+          '<p class="lside">' +
+            (date ? '<span class="time row-date">' + date + '</span>' : '') +
+            '<span class="title row-title">' + title + '</span>' +
+            (excerpt ? '<span class="comment row-exc">[Admin] ' + esc(excerpt) + '</span>' : '') +
+          '</p>' +
+        '</a></li>';
+      }
+      // Main Page preview: a compact dark card (unchanged — its own style.css skin).
       return '<a class="news-row reveal" href="' + href + '" id="news-row-' + esc(String(articleId)) + '">' +
-        '<div class="row-head">'+
-          '<span class="row-cat ' + catClass + '">' + esc(cat) + '</span>'+
+        '<div class="row-head">' +
+          '<span class="row-cat ' + catClass + '">' + esc(cat) + '</span>' +
           (date ? '<span class="row-date">' + date + '</span>' : '') +
-        '</div>'+
-        '<div class="row-main">'+
-          '<span class="row-title">' + title + '</span>'+
+        '</div>' +
+        '<div class="row-main">' +
+          '<span class="row-title">' + title + '</span>' +
           (excerpt ? '<span class="row-exc">' + esc(excerpt) + '</span>' : '') +
-          '<span class="row-go">READ \u2192</span>'+
-        '</div>'+
-        (item.author && item.author !== "Admin" ? '<div class="row-foot">By ' + esc(item.author) + '</div>' : '') +
-        '</a>';
+          '<span class="row-go">READ →</span>' +
+        '</div>' +
+      '</a>';
     }
     // Re-render the list for a given filter + page.
     window.renderNewsToPage = function (filter, page) {
