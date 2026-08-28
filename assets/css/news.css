@@ -224,6 +224,10 @@ body[data-page="news"] .NIE-list .list li a.news-row {
   padding: 36px 0 0;
   color: var(--news-ink);
   text-decoration: none;
+  /* Override the Main Page dark preview skin (.news-row rgba(8,12,24,.55)) that
+     leaks in via style.css — rows on the standalone News page are light. */
+  background: transparent;
+  border: 0;
   transition: transform .3s ease;
 }
 body[data-page="news"] .NIE-list .list li:hover a.news-row {
@@ -235,8 +239,10 @@ body[data-page="news"] .NIE-list .list li a.news-row .row-cat {
   position: absolute;
   left: -100px;
   top: 36px;
-  width: 92px;
+  min-width: 92px;
+  width: auto;
   height: 47px;
+  padding: 0 14px;
   display: block;
   font-style: normal;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
@@ -282,6 +288,33 @@ body[data-page="news"] .NIE-list .list li a.news-row .title.row-title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+/* One-line description (the user-requested excerpt, brought back after the
+   gray .comment was removed). Dark, readable on the light row (not the dark
+   bossran gray) — sits under the title. */
+body[data-page="news"] .NIE-list .list li a.news-row .desc.row-desc {
+  display: block;
+  max-width: 690px;
+  margin-top: 10px;
+  color: #444;
+  font-family: var(--font-body, 'Inter', system-ui, sans-serif);
+  font-size: 14px;
+  line-height: 20px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+/* Read-more arrow at the right end of the row (bossran READ ->). */
+body[data-page="news"] .NIE-list .list li a.news-row .go.row-go {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-mono, monospace, sans-serif);
+  font-size: 13px;
+  letter-spacing: 2px;
+  color: var(--news-accent);
+  text-transform: uppercase;
 }
 
 /* Empty state */
@@ -394,6 +427,8 @@ body[data-page="news"] .news-footer-bottom {
   body[data-page="news"] .NIE-list .list .news-row { transform: none; }
   body[data-page="news"] .NIE-list .list .news-row:hover { transform: none; background: #fafafa; }
   body[data-page="news"] .NIE-list .list .news-row .row-title { font-size: 19px; white-space: normal; }
+  body[data-page="news"] .NIE-list .list .news-row .desc.row-desc { white-space: normal; -webkit-line-clamp: 2; line-clamp: 2; display: -webkit-box; -webkit-box-orient: vertical; }
+  body[data-page="news"] .NIE-list .list .news-row .go.row-go { position: static; transform: none; float: right; margin-top: 12px; }
 }
 @media (max-width: 560px) {
   body[data-page="news"] .top_kv { height: 260px; }

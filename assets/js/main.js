@@ -422,6 +422,8 @@
           '<i class="row-cat ' + catClass + '">' + esc(cat) + '</i>' +
           (date ? '<span class="time row-date">' + date + '</span>' : '') +
           '<span class="title row-title">' + title + '</span>' +
+          (excerpt ? '<span class="desc row-desc">' + esc(excerpt) + '</span>' : '') +
+          '<span class="go row-go">READ →</span>' +
         '</a></li>';
       }
       // Main Page preview: a compact dark card (unchanged — its own style.css skin).
