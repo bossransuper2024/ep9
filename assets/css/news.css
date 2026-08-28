@@ -186,127 +186,118 @@ body[data-page="news"] .news-tabs button.is-active { color: #000; font-weight: 6
 body[data-page="news"] .news-tabs button.is-active::after { transform: scaleX(1); }
 
 /* ============================================================================
- * LIST ROWS — .list > .news-row (165px bossran bordered rows)
+ * LIST ROWS — bossran latest.html EXACT structure:
+ *   <ul class="list"> > <li> > <a class="news-row"> > <i class="row-cat">
+ *                              + <p class="lside"> > .time + .title + .comment
  * ========================================================================== */
 body[data-page="news"] .NIE-list .list {
   list-style: none;
-  margin: 28px 0 0;
+  margin: 30px 0 0;
   padding: 0;
-  border-top: 1px solid var(--news-line);
+  border-top: 1px solid #ddd;
 }
 /* .news-grid / .news-tbody are JS mount containers; let them pass children
    straight through to the <ul>. */
 body[data-page="news"] .news-grid,
 body[data-page="news"] .news-tbody { display: contents; }
 
-/* Bossran latest.html divider style: each <li> = 165px row with a 1px
-   bottom divider; the whole .list also gets a top divider. */
-body[data-page="news"] .NIE-list .list .news-row {
-  display: block;
-  position: relative;
-  box-sizing: border-box;
+/* Each <li> = 165px row with a 1px #ddd bottom divider (bossran). */
+body[data-page="news"] .NIE-list .list li {
   width: 100%;
   height: 165px;
-  padding: 36px 0 0;
   border-bottom: 1px solid #ddd;
+  transition: background .3s ease;
+}
+body[data-page="news"] .NIE-list .list li:hover {
+  background: #f7f7f7;
+}
+/* The 800px centered content block (bossran). Slides left on hover. */
+body[data-page="news"] .NIE-list .list li a.news-row {
+  display: block;
+  width: 800px;
+  height: 100%;
+  margin: 0 auto;
+  position: relative;
+  box-sizing: border-box;
+  padding: 36px 0 0;
   color: var(--news-ink);
   text-decoration: none;
-  transition: background .3s ease, transform .3s ease;
+  transition: transform .3s ease;
 }
-body[data-page="news"] .NIE-list .list .news-row:hover {
-  background: #f7f7f7;
-  transform: translateX(-12px);
+body[data-page="news"] .NIE-list .list li:hover a.news-row {
+  transform: translateX(-15px);
 }
-/* Category badge sits in the left gutter (bossran style). */
-body[data-page="news"] .NIE-list .list .news-row .row-head {
+/* Category badge: 92px tall pill in the LEFT GUTTER (left:-100px), like bossran.
+   Keeps the .row-cat class (gate + logic test) but uses bossran's pill look. */
+body[data-page="news"] .NIE-list .list li a.news-row .row-cat {
   position: absolute;
-  left: 0;
+  left: -100px;
   top: 36px;
   width: 92px;
-}
-body[data-page="news"] .NIE-list .list .news-row .row-cat {
-  display: inline-block;
-  text-align: center;
-  width: 100%;
+  height: 47px;
+  display: block;
+  font-style: normal;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 47px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
+  text-align: center;
   color: #fff;
-  background: var(--news-accent);
-  padding: 6px 0;
+  background: #9a9a9a;
   border-radius: 3px;
+  transition: background .3s ease, color .3s ease;
 }
-body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-announcement { background: #e67e22; }
-body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-guide { background: #27ae60; }
-body[data-page="news"] .NIE-list .list .news-row .row-cat.cat-event { background: #e74c3c; }
-/* Date + title share the inline line (bossran .lside .time / .title). */
-body[data-page="news"] .NIE-list .list .news-row .row-main {
+body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-news { background: #4a7ec0; }
+body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-announcement { background: #e67e22; }
+body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-guide { background: #27ae60; }
+body[data-page="news"] .NIE-list .list li a.news-row .row-cat.cat-event { background: #e74c3c; }
+body[data-page="news"] .NIE-list .list li:hover a.news-row .row-cat { background: var(--news-accent); color: #191919; }
+
+/* .lside indents 100px to clear the gutter badge; date + title inline. */
+body[data-page="news"] .NIE-list .list li a.news-row .lside {
   box-sizing: border-box;
-  padding-left: 112px;
+  padding-left: 100px;
 }
-body[data-page="news"] .NIE-list .list .news-row .row-date {
+body[data-page="news"] .NIE-list .list li a.news-row .lside .time.row-date,
+body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
   display: inline-block;
   vertical-align: top;
   margin-top: 20px;
-  margin-right: 16px;
-  font-family: var(--font-mono, monospace);
+  color: #191919;
   font-size: 20px;
   line-height: 20px;
-  color: var(--news-ink);
+}
+body[data-page="news"] .NIE-list .list li a.news-row .lside .time.row-date {
+  margin-right: 16px;
+  font-family: var(--font-mono, monospace, sans-serif);
   letter-spacing: 0.5px;
 }
-body[data-page="news"] .NIE-list .list .news-row .row-title {
-  display: inline-block;
-  vertical-align: top;
-  margin-top: 20px;
-  max-width: 760px;
+body[data-page="news"] .NIE-list .list li a.news-row .lside .title.row-title {
   font-family: var(--font-display, 'Rajdhani', 'Microsoft YaHei', sans-serif);
   font-weight: 700;
-  font-size: 20px;
-  line-height: 20px;
-  color: var(--news-ink);
   text-transform: uppercase;
-  white-space: nowrap;
+  max-width: 690px;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
-body[data-page="news"] .NIE-list .list .news-row .row-exc {
+/* 2-line gray excerpt, absolutely bossran (44px / line-clamp 2 / break-all). */
+body[data-page="news"] .NIE-list .list li a.news-row .lside .comment {
   display: block;
-  width: 100%;
-  max-width: 880px;
   height: 44px;
   margin-top: 12px;
-  padding-left: 112px;
-  box-sizing: border-box;
+  color: #7d7d7d;
   font-family: var(--font-body, 'Inter', system-ui, sans-serif);
   font-size: 14px;
   line-height: 22px;
-  color: var(--news-gray);
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   text-overflow: ellipsis;
   word-break: break-all;
-}
-body[data-page="news"] .NIE-list .list .news-row .row-go {
-  display: block;
-  padding-left: 112px;
-  margin-top: 6px;
-  font-family: var(--font-mono, monospace);
-  font-size: 12px;
-  letter-spacing: 1.5px;
-  color: #3c3c3c;
-}
-body[data-page="news"] .NIE-list .list .news-row:hover .row-go { color: var(--news-accent); }
-body[data-page="news"] .NIE-list .list .news-row .row-foot {
-  margin-top: 6px;
-  padding-left: 112px;
-  font-size: 12px;
-  color: #aaa;
-  letter-spacing: 0.5px;
 }
 
 /* Empty state */
