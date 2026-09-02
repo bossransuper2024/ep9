@@ -1,0 +1,20 @@
+{
+  "generated": "2026-09-02T09:21:13.605Z",
+  "items": [
+    {
+      "section": "ApplyLinks",
+      "name": "streamer_link",
+      "link": "https://docs.google.com/forms/d/e/1FAIpQLSdeM1RRx7Ec_aXaF2ANUV7ST9tAuacAwwb7Qj9a_l8sjHQvJQ/viewform"
+    },
+    {
+      "section": "ApplyLinks",
+      "name": "mm_link",
+      "link": "https://docs.google.com/spreadsheets/u/0/1"
+    },
+    {
+      "section": "ApplyLinks",
+      "name": "pilot_link",
+      "link": "https://docs.google.com/spreadsheets/u/0/2"
+    }
+  ]
+}
