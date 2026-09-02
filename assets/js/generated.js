@@ -25,7 +25,7 @@
     "enabled": true,
     "src": "assets/audio/ranmixed-clean.mp3",
     "title": "RanOnline EP9",
-    "autoplay": true,
+    "autoplay": false,
     "bounce": true,
     "aggressive": false,
     "lowGain": 0.3,
@@ -214,7 +214,7 @@
       {
         "n": "Eternal Towers",
         "t": "5 Man Dungeon raid — 8 floors, If party gets wiped , need to restart the run",
-        "limit": "1 raid limit per Week"
+        "limit": "TBA"
       },
       {
         "n": "OUTER WALL",
@@ -320,14 +320,14 @@
         "slug": "2",
         "cat": "ANNOUNCEMENT",
         "type": "ANNOUNCEMENT",
-        "title": "PATCH TEST111",
-        "date": "08-25-26",
+        "title": "ANNOUNCEMENT",
+        "date": "09-01-26",
         "eventDate": "",
         "author": "Admin",
         "image": "",
-        "description": "this is descriptionthis is description",
-        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
-        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
+        "description": "loremloremlorem",
+        "content": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
+        "text": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
         "hide": false
       }
     ],
@@ -343,8 +343,8 @@
         "author": "Admin",
         "image": "",
         "description": "this is description",
-        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
-        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
+        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
+        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
         "hide": false
       }
     ],
@@ -391,6 +391,21 @@
         "text": "Safe Trading with a Middleman\r\n\r\nAlways use a __verified middleman__ for big trades. It only takes a minute and prevents scams.\r\n\r\n**The process**\r\n\r\n- Both players agree on a verified middleman\r\n- The seller hands the item to the middleman\r\n- The buyer sends payment to the middleman\r\n- The middleman releases item and payment at the same time\r\n\r\n~~Never trade directly with someone you don't trust.~~ Even friends can be compromised — use a middleman for high-value deals.\r\n\r\nOpen a ticket in our Discord to request a middleman."
       },
       {
+        "id": "2",
+        "slug": "2",
+        "cat": "ANNOUNCEMENT",
+        "type": "ANNOUNCEMENT",
+        "title": "ANNOUNCEMENT",
+        "date": "09-01-26",
+        "eventDate": "",
+        "author": "Admin",
+        "image": "",
+        "description": "loremloremlorem",
+        "content": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
+        "text": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
+        "hide": false
+      },
+      {
         "id": "1",
         "slug": "1",
         "cat": "NEWS",
@@ -401,23 +416,8 @@
         "author": "Admin",
         "image": "",
         "description": "this is description",
-        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
-        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
-        "hide": false
-      },
-      {
-        "id": "2",
-        "slug": "2",
-        "cat": "ANNOUNCEMENT",
-        "type": "ANNOUNCEMENT",
-        "title": "PATCH TEST111",
-        "date": "08-25-26",
-        "eventDate": "",
-        "author": "Admin",
-        "image": "",
-        "description": "this is descriptionthis is description",
-        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
-        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
+        "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
+        "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
         "hide": false
       }
     ]
@@ -475,10 +475,16 @@
     "title": "OUR",
     "accent": "SERVICES.",
     "intro": "Run by players, for players — every service below is staff-verified and backed by the Ran Online EP9 team.",
+    "visibility": {
+      "Services": "1",
+      "Streamer": "1",
+      "Pilots": "0",
+      "Middleman": "0"
+    },
     "apply": {
-      "Pilots": "https://www.facebook.com/ranonlineix",
-      "Middleman": "https://www.facebook.com/ranonlineix",
-      "Streamer": "https://www.facebook.com/ranonlineix",
+      "Pilots": "",
+      "Middleman": "",
+      "Streamer": "",
       "Services": ""
     },
     "items": [
@@ -544,6 +550,10 @@
       {
         "section": "Pilots",
         "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0VR0xFeBPfB2vFwepHAMdIk_OVHpr-8Hae9FZPyY1zbZX8iLP0esSEphwR1tJI3eubpO65ON5NsyD/pub?output=csv&gid=275874110"
+      },
+      {
+        "section": "ApplyLinks",
+        "url": "https://docs.google.com/spreadsheets/d/e/2PACX-1vS0VR0xFeBPfB2vFwepHAMdIk_OVHpr-8Hae9FZPyY1zbZX8iLP0esSEphwR1tJI3eubpO65ON5NsyD/pub?output=csv&gid=950567531"
       }
     ],
     "dataUrl": "data/services.json"

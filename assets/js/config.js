@@ -181,6 +181,7 @@
       accent: "SERVICES.",
       intro: "Run by players, for players — every service below is staff-verified and backed by the RAN GS ep9 team.",
       apply: { Pilots: "https://www.facebook.com/ranonlineix", Middleman: "https://www.facebook.com/ranonlineix", Streamer: "https://www.facebook.com/ranonlineix", Services: "https://www.facebook.com/ranonlineix" },
+      visibility: { Streamer: "1", Pilot: "1", Middleman: "1" },
       items: [
         { section: "Pilots", name: "Reymart Bello", ykc: "1", saying: "dito free rosa", fee: "50", rateperh: "/hr", social: "www.fb.com/rey", img: "assets/service-pilots.png" },
         { section: "Middleman", name: "Reymart Bello", ykc: "1", ign: "[midman]low", saying: "dito free rosa", fee: "2%", social: "www.fb.com/rey", img: "assets/service-middleman.png" },

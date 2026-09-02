@@ -1,5 +1,5 @@
 {
-  "generated": "2026-08-28T06:01:15.989Z",
+  "generated": "2026-09-02T09:21:08.546Z",
   "items": [
     {
       "id": "1",
@@ -12,8 +12,8 @@
       "author": "Admin",
       "image": "",
       "description": "this is description",
-      "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
-      "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\n[hr][h3]Heading 2[/h3]\n[br]",
+      "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
+      "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)as\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +1000% on top\n[hr][h3]Heading 2[/h3]\n[br]",
       "hide": false
     },
     {
@@ -21,14 +21,14 @@
       "slug": "2",
       "cat": "ANNOUNCEMENT",
       "type": "ANNOUNCEMENT",
-      "title": "PATCH TEST111",
-      "date": "08-25-26",
+      "title": "ANNOUNCEMENT",
+      "date": "09-01-26",
       "eventDate": "",
       "author": "Admin",
       "image": "",
-      "description": "this is descriptionthis is description",
-      "content": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
-      "text": "Doublex2 EXP Weekend\nLog in this weekend and earn double EXP across every map — the perfect time to push a new character or catch up on levels.\n- Event runs Friday 6PM through Sunday midnight (server time)\n- Applies to all PvE and quest EXP gains\n- Premium members get an extra +20% on top\nStack the bonus with the daily login reward and climb the ladder fast. See you on the battlefield!",
+      "description": "loremloremlorem",
+      "content": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
+      "text": "[h3]LOOKING FOR STREAMERS[/h3]\n- Para sa mga interested maging Streamer ng RAN Online EP9, kindly fill out the application form below. [br]\n- Once ma-review ng admins at pasok ka sa aming criteria, we will reach out to you again for the next step.\n\nThank you, mga Boss! [br]",
       "hide": false
     }
   ]

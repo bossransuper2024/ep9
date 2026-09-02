@@ -668,6 +668,14 @@
     // section's data with the published rows when it succeeds, so the team can
     // add/remove rows without a rebuild.
     var items = (s.items || []).slice();
+    // Apply visibility toggles: 0 = hide, 1 = show (default show)
+    var vis = s.visibility || {};
+    items = items.filter(function (it) {
+      var sec = it.section || '';
+      var v = vis[sec];
+      if (v === '0') return false;
+      return true;
+    });
     var currentSec = "all";
 
     // Section-specific Service card layout:
@@ -698,8 +706,27 @@
         feeHTML = it.fee ? '<div class="svc-fee">Fee: ' + esc(it.fee) + esc(it.rateperh || "") + '</div>' : "";
         cta = link ? '<a class="act" href="' + toAbs(link) + '" target="_blank" rel="noopener">' + esc(it.cta || "CONTACT") + '</a>' : "";
       }
-      return '<div class="svc-card reveal"><div class="top"><div class="nm">' + esc(it.name || "") +
-        (verified ? '<span class="verified" title="Verified by admin">✓</span>' : "") + '</div></div>' +
+
+      // Build profile image for Streamer section
+      var profileImgHTML = "";
+      if (it.section === "Streamer") {
+        // Check for image URL from Google Sheets (various possible column names)
+        var imgUrl = it.imageurl || it.gameurl || it.imgurl || it["game url"] || it["image url"] || "";
+        if (imgUrl && imgUrl.trim() !== "") {
+          // Use actual image from Google Sheets
+          profileImgHTML = '<div class="svc-avatar"><img src="' + esc(imgUrl) + '" alt="' + esc(it.name || "") + '" loading="lazy" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"></div>';
+        }
+        // Fallback avatar with first letter of first name
+        var firstName = (it.name || "").trim().split(/\s+/)[0] || "";
+        var initial = firstName ? firstName.charAt(0).toUpperCase() : "?";
+        profileImgHTML += '<div class="svc-avatar fallback" style="display:' + (imgUrl && imgUrl.trim() !== "" ? "none" : "flex") + ';">' + esc(initial) + '</div>';
+      }
+
+      return '<div class="svc-card reveal"><div class="top">' +
+        profileImgHTML +
+        '<div class="nm">' + esc(it.name || "") +
+        (verified ? '<span class="verified" title="Verified by admin">✓</span>' : "") + '</div>' +
+        '</div>' +
         '<div class="meta">' +
           (sub ? '<div class="svc-sub">' + esc(sub) + '</div>' : "") +
           (note ? '<div class="svc-note">' + esc(note) + '</div>' : "") +
@@ -710,6 +737,8 @@
       var sections = [], counts = {};
       list.forEach(function (it) {
         var sec = it.section || "Services";
+        // Exclude ApplyLinks from tabs - it's a data source for apply links, not a service section
+        if (sec === "ApplyLinks") return;
         if (sections.indexOf(sec) === -1) sections.push(sec);
         counts[sec] = (counts[sec] || 0) + 1;
       });
@@ -758,7 +787,7 @@
     fetchLiveServices();
 
     function fetchLiveServices() {
-      var sheets = (s.sheets || []).filter(function (sh) { return sh && sh.url; });
+      var sheets = (s.sheets || []).filter(function (sh) { return sh && sh.url && sh.section !== 'ApplyLinks'; });
       if (!sheets.length) return;
       sheets.forEach(function (sh) {
         var ctrl = (window.AbortController && new AbortController()) || null;
@@ -782,10 +811,22 @@
               // Google Sheet uses 'streamer' column for the code (local CSV uses 'streamkey')
               if (row.streamer != null && row.streamkey == null) row.streamkey = row.streamer;
               if (row.social != null && row.url == null) row.url = row.social;
+              // Map ImageURL / Game URL columns for Streamer profile images
+              if (row.imageurl != null && row.imgurl == null) row.imgurl = row.imageurl;
+              if (row.gameurl != null && row.imgurl == null) row.imgurl = row.gameurl;
+              if (row["image url"] != null && row.imgurl == null) row.imgurl = row["image url"];
+              if (row["game url"] != null && row.imgurl == null) row.imgurl = row["game url"];
               live.push(row);
             }
             // Replace just this section's baked rows with the live ones.
             items = items.filter(function (it) { return it.section !== sh.section; }).concat(live);
+            // Re-apply visibility filter after live update
+            var vis = s.visibility || {};
+            items = items.filter(function (it) {
+              var v = vis[it.section || ''];
+              if (v === '0') return false;
+              return true;
+            });
             rebuild();
           })
           .catch(function (err) {
@@ -795,7 +836,7 @@
     }
 
     // LIVE sync for Apply Links from Google Sheets
-    // Reads a sheet with columns: Service (Pilots|Middleman|Streamer), Apply_link
+    // Reads a sheet with columns: name (pilot_link|mm_link|streamer_link), link (URL)
     // Updates the apply object dynamically so Apply buttons get the latest URLs
     function fetchApplyLinks() {
       var sheets = (s.sheets || []).filter(function (sh) { return sh && sh.url && sh.section === 'ApplyLinks'; });
@@ -813,33 +854,42 @@
             var rows = parseCsv(csv).filter(function (r) { return r.some(function (c) { return c.trim() !== ""; }); });
             if (rows.length < 2) return;
             var header = rows[0].map(function (h) { return h.trim().toLowerCase(); });
-            var serviceIdx = header.indexOf("service");
-            var linkIdx = header.indexOf("apply_link");
-            if (serviceIdx === -1 || linkIdx === -1) {
-              console.warn("[ApplyLinks] Required columns 'Service' and 'Apply_link' not found. Headers:", header);
+            var nameIdx = header.indexOf("name");
+            var linkIdx = header.indexOf("link");
+            if (nameIdx === -1 || linkIdx === -1) {
+              console.warn("[ApplyLinks] Required columns 'name' and 'link' not found. Headers:", header);
               return;
             }
             var applyMap = {};
             for (var r = 1; r < rows.length; r++) {
               var cells = rows[r];
-              var service = (cells[serviceIdx] || "").trim();
+              var name = (cells[nameIdx] || "").trim();
               var link = (cells[linkIdx] || "").trim();
-              if (!service || !link) continue;
+              if (!name || !link) continue;
+              // Map name to section
+              var section = null;
+              if (name === "pilot_link" || name === "pilots") section = "Pilots";
+              else if (name === "mm_link" || name === "middleman") section = "Middleman";
+              else if (name === "streamer_link" || name === "streamer") section = "Streamer";
+              if (!section) {
+                console.warn("[ApplyLinks] Unknown name: " + name);
+                continue;
+              }
               // Validate URL
               try {
                 new URL(link);
-                applyMap[service] = link;
-                console.log("[ApplyLinks] " + service + ": loaded");
+                applyMap[section] = link;
+                console.log("[ApplyLinks] " + section + ": loaded");
               } catch (e) {
-                console.warn("[ApplyLinks] Invalid URL for " + service + ": " + link);
+                console.warn("[ApplyLinks] Invalid URL for " + section + ": " + link);
               }
             }
             // Update the apply object with fetched links (fallback to baked values if empty)
             if (applyMap.Pilots) apply.Pilots = applyMap.Pilots;
             if (applyMap.Middleman) apply.Middleman = applyMap.Middleman;
             if (applyMap.Streamer) apply.Streamer = applyMap.Streamer;
-            // Re-render to update Apply button hrefs
-            rebuild();
+            // Update apply button hrefs live — no full rebuild needed
+            updateApplyButtonHrefs();
           })
           .catch(function (err) {
             console.warn("[ApplyLinks] live fetch failed: " + (err && err.message ? err.message : err));

@@ -440,7 +440,7 @@ body.is-reading { overflow: hidden; background: var(--bg); }
 .community-discord iframe { max-width: 100%; border: 0; border-radius: 10px; background: transparent; }
 
 /* Services */
-.svc-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin: 30px 0; }
+.svc-tabs { display: flex; flex-wrap: nowrap; gap: 10px; margin: 30px 0; }
 .svc-tab { font-family: var(--font-mono); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; padding: 11px 16px; border: 1px solid var(--line); border-radius: 10px; background: rgba(0,0,0,0.15); color: var(--text-dim); transition: all .2s; }
 .svc-tab:hover { color: var(--text); }
 .svc-tab.is-active { color: #0A1020; background: var(--accent); border-color: var(--accent); }
@@ -456,6 +456,14 @@ body.is-reading { overflow: hidden; background: var(--bg); }
 .svc-card .top { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
 .svc-card .top .nm { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-transform: uppercase; line-height: 1; color: #fff; }
 .svc-card .verified { display: inline-flex; align-items: center; justify-content: center; width: 16px; height: 16px; border-radius: 50%; background: #7CFFB0; color: #0A1020; font-family: var(--font-mono); font-size: 10px; font-weight: 700; flex: none; }
+
+/* Streamer Profile Image / Avatar */
+.svc-card .top { display: flex; align-items: center; gap: 8px; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.svc-card .top .nm { font-family: var(--font-display); font-weight: 700; font-size: 18px; text-transform: uppercase; line-height: 1; color: #fff; flex: 1 1 auto; min-width: 0; }
+.svc-avatar { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; flex: 0 0 40px; background: rgba(255,255,255,.08); border: 1px solid var(--line); display: flex; align-items: center; justify-content: center; }
+.svc-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.svc-avatar.fallback { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--accent); background: rgba(var(--accent-rgb), .15); border-color: rgba(var(--accent-rgb), .5); }
+
 .svc-card .meta { display: flex; flex-direction: column; gap: 6px; padding: 12px; border-bottom: 1px solid var(--line); flex: 1 1 auto; }
 .svc-card .meta .row { display: flex; gap: 8px; font-family: var(--font-mono); font-size: 11px; line-height: 1.4; }
 .svc-card .meta .row .k { color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: 1px; min-width: 46px; flex: none; }
